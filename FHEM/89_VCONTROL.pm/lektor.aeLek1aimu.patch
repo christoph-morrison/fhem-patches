@@ -1,0 +1,22 @@
+Index: FHEM/89_VCONTROL.pm
+===================================================================
+--- FHEM/89_VCONTROL.pm	(Revision 12872)
++++ FHEM/89_VCONTROL.pm	(Arbeitskopie)
+@@ -1621,7 +1621,7 @@
+     <a href="http://http://openv.wikispaces.com/">http://openv.wikispaces.com/</a><br><br>
+     
+     Zus&auml;tzlich m&uuml;ssen f&uuml;r die verschiedenen Heizungstypen (z.B. V200KW1, VScotHO1, VPlusHO1 ....) Speicher-Adressen bekannt sein,<br>
+-    unter denen die Messwerte abgefragt oder aber auch Stati gesetzt werden k&ouml;nnen.<br>
++    unter denen die Messwerte abgefragt oder aber auch Status gesetzt werden k&ouml;nnen.<br>
+     Informationen hierzu findet man im Forum <a href="http://http://openv.wikispaces.com/">http://openv.wikispaces.com/</a> und auf der wiki Seite <a href="http://http://openv.wikispaces.com/">http://openv.wikispaces.com/</a><br><br><br>
+     
+     <a name="VCONTROLdefine"><b>Define</b></a>
+@@ -1663,7 +1663,7 @@
+         get &lt;name&gt; CONFIG<br><br>
+         Mit diesem Befehl wird das Modul spezifische configfile nachgeladen.<br><br>
+          
+-        Diese anderen Befehler m&uuml;ssen &uuml;ber das configfile konfiguriert werden.
++        Diese anderen Befehle m&uuml;ssen &uuml;ber das configfile konfiguriert werden.
+     </ul>
+     <br><br>
+ 

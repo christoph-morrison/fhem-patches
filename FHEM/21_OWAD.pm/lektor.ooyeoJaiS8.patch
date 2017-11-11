@@ -1,0 +1,13 @@
+Index: FHEM/21_OWAD.pm
+===================================================================
+--- FHEM/21_OWAD.pm	(Revision 12872)
++++ FHEM/21_OWAD.pm	(Arbeitskopie)
+@@ -776,7 +776,7 @@
+   RemoveInternalTimer($hash);
+   InternalTimer(time()+$hash->{INTERVAL}, "OWAD_GetValues", $hash, 0);
+    
+-  #-- Get readings, alarms and stati according to interface type
++  #-- Get readings, alarms and status according to interface type
+   if( $interface eq "OWX" ){
+     #-- max 3 tries
+     #for(my $try=0; $try<3; $try++){

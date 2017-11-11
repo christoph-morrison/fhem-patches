@@ -1,0 +1,35 @@
+Index: docs/commandref_frame.html
+===================================================================
+--- docs/commandref_frame.html	(Revision 14352)
++++ docs/commandref_frame.html	(Arbeitskopie)
+@@ -1260,7 +1260,7 @@
+   specified time. The unit is seconds, with millisecond accuracy, as you can
+   specify decimal places.<br><br>
+ 
+-  A sleep with an &lt;id&lt; will replace a sleep with the same &lt;id&lt;
++  A sleep with an &lt;id&gt; will replace a sleep with the same &lt;id&gt;
+   and can be canceled by <a href="#cancel">cancel</a>.
+ 
+   When called in a notify/at/etc, then nonempty return values of the following
+Index: docs/commandref_frame_DE.html
+===================================================================
+--- docs/commandref_frame_DE.html	(Revision 14352)
++++ docs/commandref_frame_DE.html	(Arbeitskopie)
+@@ -1352,7 +1352,7 @@
+ <a name="sleep"></a>
+ <h3>sleep</h3>
+ <ul>
+-  <code>sleep &lt;sec&gt; [quiet]</code>
++  <code>sleep &lt;sec&gt; [&lt;id&gt;] [quiet]</code>
+   <br><br>
+   sleep gefolgt von weiteren Befehlen ist vergleichbar mit einem namenlosen <a
+   href="#at">at</a> Kommando, es f&uuml;hrt die nachfolgenden Befehle aus,
+@@ -1360,7 +1360,7 @@
+   Sekunde, Millisekunden genau, da man Nachkommastellen spezifizieren
+   kann.<br><br>
+ 
+-  Ein sleep mit einer &lt;id&lt; ersetzt ein sleep mit der gleichen &lt;id&lt;
++  Ein sleep mit einer &lt;id&gt; ersetzt ein sleep mit der gleichen &lt;id&gt;
+   and can mit <a href="#cancel">cancel</a> entfernt werden.
+ 
+   Falls sleep in at/notify/etc aufgerufen wurde, und die nachfolgenden

@@ -1,0 +1,16 @@
+Index: FHEM/01_FHEMWEB.pm
+===================================================================
+--- FHEM/01_FHEMWEB.pm	(Revision 12872)
++++ FHEM/01_FHEMWEB.pm	(Arbeitskopie)
+@@ -3190,9 +3190,9 @@
+         Second form:<br>
+         <ul>
+         Perl regexp enclosed in {}. If the code returns undef, then the default
+-        icon is used, if it retuns a string enclosed in <>, then it is
++        icon is used, if it returns a string enclosed in <>, then it is
+         interpreted as an html string. Else the string is interpreted as a
+-        devStateIcon of the first fom, see above.
++        devStateIcon of the first form, see above.
+         Example:<br>
+         {'&lt;div
+          style="width:32px;height:32px;background-color:green"&gt;&lt;/div&gt;'}

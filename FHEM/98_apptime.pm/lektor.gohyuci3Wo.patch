@@ -1,0 +1,78 @@
+Index: FHEM/98_apptime.pm
+===================================================================
+--- FHEM/98_apptime.pm	(Revision 13547)
++++ FHEM/98_apptime.pm	(Arbeitskopie)
+@@ -186,23 +186,23 @@
+   <br>
+   <br>
+     apptime provides information about application procedure execution time. 
+-    It is designed to identify long runner jobs causing latency as well as 
+-    overall high cpu usage jobs<br>
+-    No information about FHEM kernel times and delays will be provided.  <br>
+-    Once started apptime monitors tasks. User may reset counter during operation. 
+-    apptime adds about 1% CPU load in average to FHEM. 
+-    in order to remove apptime shutdown restart is necessary.
++    It is designed to identify long running jobs causing latency as well as
++    general high cpu usage jobs.<br>
++    No information about <abbr>FHEM</abbr> kernel times and delays will be provided.  <br>
++    Once started, apptime monitors tasks. User may reset counter during operation.
++    apptime adds about 1% <abbr>CPU</abbr> load in average to <abbr>FHEM</abbr>.
++    In order to remove apptime, shutdown restart is necessary.
+   <br>
+   <br>
+     <b>Features:</b><br>
+     <ul>
+       <li><code>apptime</code><br>
+-          apptime is started with the its first call nad continously monitor operation.<br>
+-          To unload apptime shutdown restart is necessary<br> </li>
++          apptime is started with the its first call and continously monitor operations.<br>
++          To unload apptime, shutdown restart is necessary.<br> </li>
+       <li><code>apptime clear</code><br>
+-          reset all counter and start fom Zero<br>      </li>
++          Reset all counter and start from zero.<br>      </li>
+       <li><code>apptime [count|funktion|average|clear|max|name|total] [all]</code><br>
+-          display a table sorted by the field selected<br>
++          Display a table sorted by the field selected.<br>
+           <b>all</b> will display the complete table while by default only the top lines are printed. <br></li>
+     </ul>
+     <br>
+@@ -209,27 +209,27 @@
+     <b>Columns:</b><br>
+     <ul>
+       <li><b>name</b><br>
+-          name of the entity executing the procedure<br>
+-          if it is a function called by InternalTimer the name starts with <b>tmr-</b>.
+-          by then it gives the name of the funktion to be called<br>
++          Name of the entity executing the procedure.<br>
++          If it is a function called by InternalTimer the name starts with <b>tmr-</b>.
++          By then it gives the name of the function to be called.<br>
+           </li>
+-      <li><b>function</b><br>
+-          procedure name which was executed<br>
+-          if it is an InternalTimer call it gives its calling parameter <br>
++      <li><b>funktion</b><br>
++          Procedure name which was executed.<br>
++          If it is an InternalTimer call it gives its calling parameter.<br>
+           </li>
+       <li><b>max</b><br>
+-          longest duration measured for this procedure in ms <br> </li>
++          Longest duration measured for this procedure in <abbr>ms</abbr>.<br> </li>
+       <li><b>count</b><br>
+-          number of calls for this procedure<br> </li>
++          Number of calls for this procedure.<br> </li>
+       <li><b>total</b><br>
+-          accumulated duration of this procedure over all calls monitored<br> </li>
++          Accumulated duration of this procedure over all calls monitored.<br> </li>
+       <li><b>average</b><br>
+-          average time a call of this procedure takes<br> </li>
++          Average time a call of this procedure takes.<br> </li>
+       <li><b>maxDly</b><br>
+-          maximum delay of a timer call to its schedules time. This column is not relevant 
++          Maximum delay of a timer call to its schedules time. This column is not relevant
+           for non-timer calls.<br> </li>
+       <li><b>param Max call</b><br>
+-          gives the parameter of the call with the max duration<br> </li>
++          Gives the parameter of the call with the longest duration.<br> </li>
+     </ul>
+     <br>
+ </ul>

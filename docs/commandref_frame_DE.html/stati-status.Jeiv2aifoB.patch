@@ -1,0 +1,31 @@
+Index: docs/commandref_frame_DE.html
+===================================================================
+--- docs/commandref_frame_DE.html	(Revision 12872)
++++ docs/commandref_frame_DE.html	(Arbeitskopie)
+@@ -1017,7 +1017,7 @@
+   ver&auml;ndern, dann wird nur der f&uuml;r die Zeit zust&auml;ndige Teil
+   ge&auml;ndert. Im Falle der Ver&auml;nderung einer Definition vom Typ
+   &quot;notify&quot; wird nur der&nbsp; regex Teil ge&auml;ndert. Alle anderen
+-  Werte (Stati, Attribute,&nbsp; etc) bleiben erhalten.
++  Werte (Status, Attribute,&nbsp; etc) bleiben erhalten.
+   After modify, the global event "MODIFIED" will be generated.
+   Nach der Durchf&uuml;hrung das globale Ereignis "MODIFIED" wird generiert.
+   <br><br>
+@@ -1296,7 +1296,7 @@
+   <code>shutdown [restart|exitValue]</code>
+   <br><br>
+   Der Befehl f&auml;hrt den Server herunter (nach dem sichern aller <a
+-  href="#statefile">Ger&auml;testati</a>). Er triggert das global:SHUTDOWN
++  href="#statefile">Ger&auml;testatus</a>). Er triggert das global:SHUTDOWN
+   Ereignis.  Mit der optionalen Parameter restart startet FHEM danach neu.
+   exitValue ist bei bestimmten Start-programmen von n&oulm;ten.
+   <br><br>
+@@ -1753,7 +1753,7 @@
+     </li>
+ 
+   <li>
+-    Um auf die Ger&auml;testati/Attribute zuzugreifen benutzen Sie bitte die 
++    Um auf die Ger&auml;testatus/Attribute zuzugreifen benutzen Sie bitte die 
+     folgenden Funktionen:
+     <br>
+     <ul>

@@ -1,0 +1,67 @@
+Index: FHEM/01_FHEMWEB.pm
+===================================================================
+--- FHEM/01_FHEMWEB.pm	(Revision 12872)
++++ FHEM/01_FHEMWEB.pm	(Arbeitskopie)
+@@ -4062,9 +4062,9 @@
+ 
+     <a name="longpoll"></a>
+     <li>longpoll<br>
+-        Dies betrifft die Aktualisierung der Ger&auml;testati in der
++        Dies betrifft die Aktualisierung der Ger&auml;testatus in der
+         Weboberfl&auml;che. Ist longpoll aktiviert, werden
+-        Status&auml;nderungen sofort im Browser dargestellt. ohne die Seite
++        Status&auml;nderungen sofort im Browser dargestellt, ohne die Seite
+         manuell neu laden zu m&uuml;ssen. Standard ist aktiviert.
+         </li><br>
+ 
+@@ -4073,10 +4073,10 @@
+     <li>longpollSVG<br>
+         L&auml;dt SVG Instanzen erneut, falls ein Ereignis dessen Inhalt
+         &auml;ndert. Funktioniert nur, falls die dazugeh&ouml;rige Definition
+-        der Quelle in der .gplot Datei folgenden Form hat: deviceName.Event
++        der Quelle in der .gplot Datei folgende Form hat: deviceName.Event
+         bzw. deviceName.*. Wenn man den <a href="#plotEditor">Plot Editor</a>
+         benutzt, ist das &uuml;brigens immer der Fall. Die SVG Datei wird bei
+-        <b>jedem</b> ausl&ouml;senden Event dieses Ger&auml;tes neu geladen.
++        <b>jedem</b> ausl&ouml;senden Event des G&auml;tes neu geladen.
+         Die Voreinstellung ist aus.
+         </li><br>
+ 
+@@ -4113,7 +4113,7 @@
+ 
+     <a name="nrAxis"></a>
+     <li>nrAxis<br>
+-        (bei mehrfach-Y-Achsen im SVG-Plot) Die Darstellung der Y Achsen
++        (bei mehrfach-Y-Achsen im SVG-Plot) Die Darstellung der Y-Achsen
+         ben&ouml;tigt Platz. Hierdurch geben Sie an wie viele Achsen Sie
+         links,rechts [useLeft,useRight] ben&ouml;tigen. Default ist 1,1 (also 1
+         Achse links, 1 Achse rechts).
+@@ -4121,8 +4121,8 @@
+ 
+     <a name="ploteditor"></a>
+     <li>ploteditor<br>
+-        Gibt an ob der <a href="#plotEditor">Plot Editor</a> in der SVG detail
+-        ansicht angezeigt werden soll.  Kann auf always, onClick oder never
++        Gibt an ob der <a href="#plotEditor">Plot Editor</a> in der SVG-Detailansicht 
++	angezeigt werden soll. Kann auf always, onClick oder never
+         gesetzt werden. Der Default ist always.
+         </li><br>
+ 
+@@ -4129,7 +4129,7 @@
+     <a name="plotEmbed"></a>
+     <li>plotEmbed 0<br>
+         SVG Grafiken werden als Teil der &lt;embed&gt; Tags dargestellt, da
+-        fr&uuml;her das der einzige Weg war SVG darzustellen, weiterhin
++        fr&uuml;her das der einzige Weg war, SVG darzustellen, weiterhin
+         erlaubt es das parallele Berechnen via plotfork (s.o.)
+         Falls plotEmbed auf 0 gesetzt wird, dann werden die SVG Grafiken als
+         Teil der HTML-Seite generiert, was leider das plotfork Attribut
+@@ -4170,7 +4170,7 @@
+ 
+     <a name="plotsize"></a>
+     <li>plotsize<br>
+-        gibt die Standardbildgr&ouml;&szlig;e aller erzeugten Plots an als
++        gibt die Standardbildgr&ouml;&szlig;e aller erzeugten Plots als
+         Breite,H&ouml;he an. Um einem individuellen Plot die Gr&ouml;&szlig;e zu
+         &auml;ndern muss dieses Attribut bei der entsprechenden SVG Instanz
+         gesetzt werden.  Default sind 800,160 f&uuml;r Desktop und 480,160
