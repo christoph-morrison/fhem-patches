@@ -1,0 +1,18 @@
+diff --git a/fhem/www/images/fhemSVG/it_remote_folder.svg b/fhem/www/images/fhemSVG/it_remote_folder.svg
+index 047d81777..7c5a9c17c 100644
+--- a/fhem/www/images/fhemSVG/it_remote_folder.svg
++++ b/fhem/www/images/fhemSVG/it_remote_folder.svg
+@@ -12,6 +12,7 @@
+ </style>
+ <sodipodi:namedview  bordercolor="#666666" borderopacity="1" gridtolerance="10" guidetolerance="10" id="namedview96" inkscape:current-layer="svg97" inkscape:cx="-3.3321393" inkscape:cy="21.938889" inkscape:pageopacity="0" inkscape:pageshadow="2" inkscape:window-height="1027" inkscape:window-maximized="1" inkscape:window-width="1618" inkscape:window-x="54" inkscape:window-y="-8" inkscape:zoom="13.906433" objecttolerance="10" pagecolor="#ffffff" showgrid="false">
+ 	</sodipodi:namedview>
++<g fill="#000000">
+ <g id="rect255">
+ 	<rect x="5.4" y="43.3" width="36.5" height="1"/>
+ </g>
+@@ -106,4 +107,5 @@
+ </g>
+ <g id="layer2">
+ </g>
++</g>
+ </svg>

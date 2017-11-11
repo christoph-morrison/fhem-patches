@@ -1,0 +1,13 @@
+diff --git a/fhem/www/images/fhemSVG/rc_GREEN.svg b/fhem/www/images/fhemSVG/rc_GREEN.svg
+index 312a6e6c4..25fcab5a7 100644
+--- a/fhem/www/images/fhemSVG/rc_GREEN.svg
++++ b/fhem/www/images/fhemSVG/rc_GREEN.svg
+@@ -27,7 +27,7 @@ Created by potrace 1.8, written by Peter Selinger 2001-2007
+   </cc:Work>
+ </rdf:RDF>
+ </metadata>
+-  <g
++  <g fill="#000000"
+      transform="matrix(0.189474,0,0,-0.189474,0,468)"
+      id="g6">
+     <path

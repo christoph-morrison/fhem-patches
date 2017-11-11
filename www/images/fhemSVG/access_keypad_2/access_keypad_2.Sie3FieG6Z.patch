@@ -1,0 +1,13 @@
+diff --git a/fhem/www/images/fhemSVG/access_keypad_2.svg b/fhem/www/images/fhemSVG/access_keypad_2.svg
+index e90d02b4b..25b9f525c 100644
+--- a/fhem/www/images/fhemSVG/access_keypad_2.svg
++++ b/fhem/www/images/fhemSVG/access_keypad_2.svg
+@@ -26,7 +26,7 @@
+       </cc:Work>
+     </rdf:RDF>
+   </metadata>
+-  <g
++  <g fill="#000000"
+      transform="translate(109.47721,-567.27496)"
+      id="layer1">
+     <path

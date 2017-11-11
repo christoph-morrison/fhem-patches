@@ -1,0 +1,13 @@
+diff --git a/fhem/www/images/fhemSVG/building_outside.svg b/fhem/www/images/fhemSVG/building_outside.svg
+index 3afe9a330..8e16c869a 100644
+--- a/fhem/www/images/fhemSVG/building_outside.svg
++++ b/fhem/www/images/fhemSVG/building_outside.svg
+@@ -27,7 +27,7 @@ Created by potrace 1.8, written by Peter Selinger 2001-2007
+   </cc:Work>
+ </rdf:RDF>
+ </metadata>
+-  <g
++  <g fill="#000000"
+      transform="matrix(0.158108,0,0,-0.158108,0,470)"
+      id="g6">
+     <path

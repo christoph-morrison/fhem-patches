@@ -1,0 +1,13 @@
+diff --git a/fhem/www/images/fhemSVG/muelltonne.svg b/fhem/www/images/fhemSVG/muelltonne.svg
+index ea62ac66f..0b78e5270 100644
+--- a/fhem/www/images/fhemSVG/muelltonne.svg
++++ b/fhem/www/images/fhemSVG/muelltonne.svg
+@@ -29,7 +29,7 @@
+          </cc:Work>
+       </rdf:RDF>
+    </metadata>
+-   <g
++   <g fill="#000000"
+        id="layer_Paper"
+        style="fill-opacity:1;stroke-opacity:1;fill-rule:nonzero;stroke-linecap:square;stroke-linejoin:miter;stroke-width:1;stroke-miterlimit:10">
+       <polyline
