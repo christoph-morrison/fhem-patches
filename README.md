@@ -17,13 +17,15 @@ becomes
 docs/commandref_frame_DE.html/<patch>
 ```
 
+## Example script
+
 I.e. this little script will patch every affected file with it's subseqient patches:
 
-## Prerequisits
+### Prerequisits
 * Replace `_FHEM_DIR` with your FHEM installation directory
 * Replace `_PATCHES_DIR` with the path to this files)
 
-## Script
+### Source
 ```bash
 #!/usr/bin/env bash
 
