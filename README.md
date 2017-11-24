@@ -23,7 +23,7 @@ I.e. this little script will patch every affected file with it's subseqient patc
 
 ### Prerequisits
 * Replace `_FHEM_DIR` with your FHEM installation directory
-* Replace `_PATCHES_DIR` with the path to this files)
+* Replace `_PATCHES_DIR` with the path to this files
 
 ### Source
 ```bash
