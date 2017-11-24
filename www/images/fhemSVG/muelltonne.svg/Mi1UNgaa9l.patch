@@ -1,0 +1,14 @@
+diff --git a/fhem/www/images/fhemSVG/muelltonne.svg b/fhem/www/images/fhemSVG/muelltonne.svg
+index 0b78e52..0477a0b 100644
+--- a/fhem/www/images/fhemSVG/muelltonne.svg
++++ b/fhem/www/images/fhemSVG/muelltonne.svg
+@@ -13,8 +13,7 @@
+     height="108.865735169"
+     viewBox="0, 0, 75.19404, 108.865735169"
+     preserveAspectRatio="none"
+-    fill="FHEM_COLOR"
+-    stroke="FHEM_COLOR"
++    fill="#000000"
+     id="svg2">
+    <defs
+        id="defs_CA598402"/>
