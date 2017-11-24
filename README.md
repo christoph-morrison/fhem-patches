@@ -19,12 +19,15 @@ docs/commandref_frame_DE.html/<patch>
 
 I.e. this little script will patch every affected file with it's subseqient patches:
 
-(Just replace `_FHEM_DIR` with your FHEM installation directory)
+## Prerequisits
+* Replace `_FHEM_DIR` with your FHEM installation directory
+* Replace `_PATCHES_DIR` with the path to this files)
 
+## Script
 ```bash
 #!/usr/bin/env bash
 
-# automatically filled
+# replace this with the path to this files
 _PATCHES_DIR="$(realpath $(dirname $0)/../source/patches)"
 
 # replace this with your FHEM installation directory
