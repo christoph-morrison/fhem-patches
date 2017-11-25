@@ -30,7 +30,7 @@ It mostly depends on how you got FHEM. If using `svn`, `svn diff <file>` is a pr
 * git
 * diff
 
-(You probably noticed that i'm not very much a fan of the manual thing. Guess you are right.)
+(You probably noticed that i'm [not very much a fan of the manual thing](http://www.catb.org/esr/faqs/hacker-howto.html#believe3). Guess you are right.)
 
 ## Example script
 
