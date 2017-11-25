@@ -25,7 +25,8 @@ I added `create-fhem-patches` to this repository. `create-fhem-patches` creates 
 Invoke `create-fhem-patches -h` to get a manual.
 
 ### Manually
-It mostly depends on how you got FHEM. If using `svn`, `svn diff <file>` is a proper start, as well as `git diff <file>` for git. Just consult the manuals for
+It mostly depends on how you got FHEM. If using Subversion, `svn diff <file>` is a proper start, as well as `git diff <file>` for Git. Just consult the manuals for
+
 * svn
 * git
 * diff
