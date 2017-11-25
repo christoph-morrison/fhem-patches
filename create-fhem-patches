@@ -1,0 +1,214 @@
+#! /bin/bash
+
+#   create patches for fhem changes
+#       (c) Christoph Jeschke, 2017
+#
+
+#   prepare environment
+#       See http://www.davidpashley.com/articles/writing-robust-shell-scripts/
+set -o nounset
+set -o errexit
+cwd=$(pwd)
+trap "cd $cwd" INT TERM EXIT
+
+#   check if colours are supported
+#       tput colors returns the supported amount of colours by the current shell, i.e. 256 or 2
+#       if 8 or more colours are supported, set a true flag
+_coloursSupportedAmount=$(tput colors)
+
+if test -n "${_coloursSupportedAmount}" && test "${_coloursSupportedAmount}" -ge 8; then
+    _coloursAreSupported=true
+fi
+
+bold()          { ansi  1 "$@"; }
+italic()        { ansi  3 "$@"; }
+underline()     { ansi  4 "$@"; }
+strike()        { ansi  9 "$@"; }
+gray()          { ansi 90 "$@"; }
+red()           { ansi 31 "$@"; }
+green()         { ansi 32 "$@"; }
+yellow()        { ansi 33 "$@"; }
+purple()        { ansi 35 "$@"; }
+cyan()          { ansi 36 "$@"; }
+white()         { ansi 37 "$@"; }
+
+ansi() {
+    if [ "${_coloursAreSupported}" = true ]; then
+        printf "\e[${1}m${*:2}\e[0m";
+    else
+        echo ${*:2}
+    fi
+}
+
+
+#   pre-defined variables
+#
+basepath=""
+patchpath=""
+fhem_executable="fhem.pl"
+git_executable="git"
+uid_executable="pwgen"
+uid_length="10"
+((verbose=$(echo ${BASH_ARGV[@]} | grep -o "\-v" | wc -w)))
+((count_patches = 0));
+lines=();
+summary="";
+
+#   echo a red coloured warning
+#       for a better visiablity, put a red formatted warning string into STDERR
+
+error() {
+    echo $(red "$@") 1>&2;
+}
+
+warning() {
+    echo $(cyan "$@") 1>&2;
+}
+
+debug() {
+    echo $(gray "$@") 1>&2;
+}
+
+info() {
+    echo "$@";
+}
+
+usage() {
+    info
+    info "$(purple $(basename $0)) [options]"
+    info  "create patches for modifications to FHEM"
+    info
+    info $(underline Options)
+    info "  -b $(yellow \<path\>) path to FHEM base directory"
+    info "  -p $(yellow \<path\>) path to patch directory"
+    info "  -g $(yellow \<path\>) path to the git executable, defaults to $(yellow git)"
+    info "  -u $(yellow \<path\>) path to a executable who creates a unique id, defaults to $(yellow pwgen)"
+    info '        ' "The executable who creates the unique MUST support a argument who defines"
+    info '        ' "the length of the id as $(underline first) argument!"
+    info "  -e $(yellow \<int\>) how long should the unique id be, defaults to $(yellow 10)"
+    info "  -s print a summary at the end: a line for every created patch with $(yellow path)"
+    info "  -v for verbosity whilst working"
+    info "  -h print this help"
+    info
+    info $(underline Copyright)
+    info " (c) by Christoph Morrison, 2017"
+    info " See <http://christoph-morrison.de>"
+    info 
+    info
+}
+
+if (( $(echo ${BASH_ARGV[@]} | grep -o "\-h" | wc -w) > 0 )); then
+    usage
+    echo usage
+    exit 0;
+fi
+
+verbose() {
+    if (( "${verbose}" > 0 )); then debug "$@"; fi
+}
+
+#   handle options
+#       since we need some options for this, we have to handle them
+while getopts "shvb:p:e:g:u:" opt; do    
+    case $opt in
+        h)
+            # help is handled above
+        ;;
+        v)
+            # debug is handled above
+            verbose " o verbose is set to ${verbose}"
+        ;;
+        b)
+            verbose " o FHEM base path is set to $(yellow $(realpath $OPTARG))";  
+            basepath="$(realpath $OPTARG)"
+        ;;
+        p)
+            verbose " o Patches are written to $(yellow $(realpath $OPTARG))";   
+            patchpath="$(realpath $OPTARG)"
+        ;;
+        e)
+            verbose " o Unique ID length is set to $(yellow $OPTARG)";
+            uid_length="$OPTARG"
+        ;;
+        g)
+            verbose " o Git executable is located at $(yellow $OPTARG)";
+            git_executable="$OPTARG"
+        ;;
+        u)
+            verbose " o Unique ID executable is located at $(yellow $OPTARG)";
+            uid_executable="$OPTARG"
+        ;;
+        s)
+            verbose " o Create a summary";
+            summary="1"
+        ;;
+    esac
+done
+
+if [ "${basepath}" ]; then
+    cd "${basepath}"
+fi
+
+#   sanity checks
+#
+test -e "${fhem_executable}" || {
+    error " !!! ${fhem_executable} does not exist at $(yellow $(pwd)/fhem)$(red '; this seems not like a legit fhem root!')"
+    usage
+    exit 1;
+}
+
+test "${patchpath}" || {
+    error " !!! \$patchpath is not set. Use the $(green -p) $(yellow \<path to your patches\>) $(red flag) $(red to set one.)"
+    usage
+    exit 2;
+}
+
+command -v "${git_executable}" > /dev/null || {
+    error " !!! $(cyan ${git_executable}) $(red executable was not found.)"
+    usage
+    exit 4;
+}
+
+command -v "${uid_executable}" > /dev/null || {
+    error " !!! $(cyan ${uid_executable}) $(red executable was not found.)"
+    usage
+    exit 8;
+}
+
+for modified_file in $(${git_executable} status |grep svg|grep modified |gawk '{print $2}'); do
+    verbose  ""
+    verbose  " - Working on $(yellow ${modified_file})"
+
+    uniqid=$(${uid_executable} ${uid_length} 1)
+    verbose " - uniqid is set to $(yellow $uniqid)"
+
+    target_directory="${patchpath}/$(dirname ${modified_file})/$(basename ${modified_file})" 
+    verbose " - dirname is set to $(yellow $target_directory)"
+    
+    test -d "${target_directory}" || {
+        mkdir -p "${target_directory}"
+        verbose " - target directory did not exist, created it"
+    }
+    
+    target_file="${target_directory}/${uniqid}.patch"
+    verbose " - patch is saved to $(yellow $target_file)"
+    
+    $(${git_executable} diff ${modified_file} > ${target_file})
+    verbose " - Executed: ${git_executable} diff ${modified_file} > ${target_file}"
+    
+    ((count_patches++))
+    
+    test "${summary}" && {
+        lines+=("${target_file}")
+    }
+    
+done
+
+test "${summary}" && {
+    for line in "${lines[@]}"; do
+        info "${line}";
+    done
+}
+
+warning "$count_patches patches are created at ${patchpath}"
+cd ${cwd}
