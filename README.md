@@ -17,10 +17,20 @@ becomes
 docs/commandref_frame_DE.html/<patch>
 ```
 
-## Create a patch
+## How to create a patch
 
-I added `create-fhem-patches` to this repository. `create-fhem-patches` creates patches based on the [FHEM Git Mirror](https://github.com/mhop/fhem-mirror).
+### By script
+I added `create-fhem-patches` to this repository. `create-fhem-patches` creates patches based on the [FHEM Github Mirror](https://github.com/mhop/fhem-mirror).
+
 Invoke `create-fhem-patches -h` to get a manual.
+
+### Manually
+It mostly depends on how you got FHEM. If using `svn`, `svn diff <file>` is a proper start, as well as `git diff <file>` for git. Just consult the manuals for
+* svn
+* git
+* diff
+
+(You probably noticed that i'm not very much a fan of the manual thing. Guess you are right.)
 
 ## Example script
 
