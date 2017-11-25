@@ -17,6 +17,11 @@ becomes
 docs/commandref_frame_DE.html/<patch>
 ```
 
+## Create a patch
+
+I added `create-fhem-patches` to this repository. `create-fhem-patches` creates patches based on the [FHEM Git Mirror](https://github.com/mhop/fhem-mirror).
+Invoke `create-fhem-patches -h` to get a manual.
+
 ## Example script
 
 I.e. this little script will patch every affected file with it's subseqient patches:
