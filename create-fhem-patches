@@ -11,6 +11,9 @@ set -o errexit
 cwd=$(pwd)
 trap "cd $cwd" INT TERM EXIT
 
+#   set to a more international environment
+LANG="C"
+
 #   check if colours are supported
 #       tput colors returns the supported amount of colours by the current shell, i.e. 256 or 2
 #       if 8 or more colours are supported, set a true flag
@@ -175,7 +178,7 @@ command -v "${uid_executable}" > /dev/null || {
     exit 8;
 }
 
-for modified_file in $(${git_executable} status |grep svg|grep modified |gawk '{print $2}'); do
+for modified_file in $(${git_executable} status |grep modified |gawk '{print $2}'); do
     verbose  ""
     verbose  " - Working on $(yellow ${modified_file})"
 
