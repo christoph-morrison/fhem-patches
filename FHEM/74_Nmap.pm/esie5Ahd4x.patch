@@ -1,0 +1,1023 @@
+diff --git a/fhem/FHEM/74_Nmap.pm b/fhem/FHEM/74_Nmap.pm
+index 7c986c486..97300444f 100644
+--- a/fhem/FHEM/74_Nmap.pm
++++ b/fhem/FHEM/74_Nmap.pm
+@@ -832,280 +832,749 @@ sub Nmap_updateUptime($$;$) {
+ 
+ =end html
+ 
++<a name="Nmap"></a>
++<h3>Nmap</h3>
++( <a href="commandref.html#Nmap"><u>en</u></a> | de )
++<div>
++    <blockquote>
++        <p>
++            Nmap ist ein <abbr lang="de">FHEM</abbr>-Modul um einen Netzwerkscan mit Nmap durchf&uuml;hren
++            und Informationen &uuml;ber die erreichbaren Netzwerkger&auml;te darstellen zu k&ouml;nnen.
++        </p>
++        <p>
++            Wird ein neues Gerät mit bisher unbekannter MAC-Adresse erkannt, wird
++            folgender Event erzeugt:
++            <br>
++            <code><var>devicename</var> new host: <var>hostname</var> (<var>IPv4</var>)</code>
++        </p>
++        <p>
++            Wird erkannt, dass ein Gerät mit bekannter <abbr lang="en">MAC</abbr>-Adresse eine
++            neue <abbr lang="en">IPv4</abbr>-Adresse erhalten hat, wird folgender Event erzeugt:
++            <br>
++            <code><var>devicename</var> new <abbr>IP</abbr>: <var>hostname</var> (<var>IPv4</var>)</code>
++        </p>
++
++        <h4>
++            Vorraussetzungen
++        </h4>
++            <blockquote>
++                Das ausführbare Programm <code>nmap</code> wird benötigt und kann unter Debian-basierten
++                Systemen mit Hilfe von <code>apt</code> oder <code>apt-get</code> installiert werden:
++                <br>
++                <code>apt-get install nmap libnmap-parser-perl</code> (bis Debian Stretch)
++                <br>
++                <code>apt install nmap libnmap-parser-perl</code> (ab Debian Stretch)
++            </blockquote>
++
++        <a name="Nmapdefine"></a>
++        <h4 id="Nmapdefine">
++            Define
++        </h4>
++            <blockquote>
++                <p>
++                    <code>define <var>devicename</var> Nmap <var>target specification</var></code>
++                </p>
++                <dl>
++                    <dt>
++                        <var>target specification</var>
++                    </dt>
++                    <dd>
++                        <p>
++                            Die Ziel-Hosts, die gescannt werden sollen.
++                        </p>
++                        <p>
++                            Der einfachste Fall ist die Angabe einer <abbr lang="en">IP</abbr>-Adresse
++                            oder eines Hostnamens.
++                        </p>
++                        <p>
++                            Um ein ganzes Netzwerk benachbarter <span lang="en">Hosts</span> zu scannen
++                            unterst&uuml;tzt <span lang="en">Nmap</span>-Adressen im
++                            <abbr lang="en" title="Classless Interdomain Routing">CIDR</abbr>-Stil.
++                            Es k&ouml;nnen <var>/numbits</var> an eine <abbr lang="en">IPv4</abbr>-Adresse
++                            oder an einen Hostnamen angef&uuml;gt werden, und <span lang="en">Nmap</span> wird alle
++                            <abbr lang="en">IPv4</abbr>-Adressen scannen, bei denen die ersten <var>numbits</var>
++                            mit denen der angegebenen <abbr lang="en">IPv4</abbr>-Adresse oder des angegebenen
++                            Hostnamens &uuml;bereinstimmen.
++                        </p>
++                        <h5>
++                            Beispiel
++                        </h5>
++                            <p>
++                                <var>192.168.10.0/24</var> würde die 256 Hosts zwischen 192.168.10.0 und
++                                192.168.10.255 scannen. Dies gilt beispielsweise ebenso für
++                                <var>192.168.10.40/24</var>.
++                            </p>
++                            <p>
++                                Es ist auch möglich mehrere Netzwerke zur gleichen Zeit zu
++                                scannen. <var>192.168.1.0/24 192.168.2.0/24</var> würde die 512
++                                Hosts zwischen 192.168.1.0 und 192.168.2.255 scannen.
++                            </p>
++                        <p>
++                            Siehe auch die
++                            <a href="https://nmap.org/man/de/man-target-specification.html">Nmap Man Page (Angabe
++                                von Zielen)</a>.
++                        </p>
++                    </dd>
++                </dl>
++            </blockquote>
++
++        <a name="Nmapset"></a>
++        <h4 id="Nmapset">
++            Set
++        </h4>
++        <blockquote>
++            <dl>
++                <dt><p><code>clear readings</code></p></dt>
++                <dd>
++                    L&ouml;scht alle Readings außer <var>state</var>.
++                </dd>
++
++                <dt><p><code>deleteOldReadings <var>t</var></code></p></dt>
++                <dd>
++                    L&ouml;scht alle Readings die älter sind als <var>t</var> Sekunden.
++                </dd>
++
++                <dt><p><code>interrupt</code></p></dt>
++                <dd>
++                    Bricht einen laufenden Scan ab.
++                </dd>
++
++                <dt><p><code>statusRequest</code></p></dt>
++                <dd>
++                    Startet einen Netzwerkscan.
++                </dd>
++            </dl>
++        </blockquote>
++
++
++        <a name="Nmapreadings"></a>
++        <h4 id="Nmapreadings">
++            Readings
++        </h4>
++        <blockquote>
++            <h5>Allgemeine <span lang="en">Readings</span></h5>
++
++            <dl>
++                <dt><p><code>NmapVersion</code></p></dt>
++                <dd>
++                    Die Versionsnummer des installierten Nmap Programms.
++                </dd>
++
++                <dt><p><code>hostsScanned</code></p></dt>
++                <dd>
++                    Die Anzahl der gescannten Adressen.
++                </dd>
++
++                <dt><p><code>hostsUp</code></p></dt>
++                <dd>
++                    Die Anzahl der erreichbaren Netzwerkger&auml;te.
++                </dd>
++
++                <dt><p><code>knownHosts</code></p></dt>
++                <dd>
++                    Die Anzahl der bekannten Netzwerkger&auml;te.
++                </dd>
++
++                <dt><p><code>scanDuration</code></p></dt>
++                <dd>
++                    Die Dauer des Scans in Sekunden.
++                </dd>
++
++                <dt><p><code>state</code></p></dt>
++                <dd>
++                    <dl>
++                        <dt><p><code>initialized</code></p></dt>
++                        <dd>
++                            Device wurde definiert oder <span lang="en">enabled</span>.
++                        </dd>
++
++                        <dt><p><code>running</code></p></dt>
++                        <dd>
++                            Aktuell wird ein Netzwerkscan wird ausgef&uuml;hrt.
++                        </dd>
++
++                        <dt><p><code>done</code></p></dt>
++                        <dd>
++                            Der Netzwerkscan wurde erfolgreich abgeschlossen.
++                        </dd>
++
++                        <dt><p><code>aborted</code></p></dt>
++                        <dd>
++                            Der Netzwerkscan wurde aufgrund einer Zeit&uuml;berschreitung oder
++                            durch den Benutzer abgebrochen.
++                        </dd>
++
++                        <dt><p><code>disabled</code></p></dt>
++                        <dd>
++                            Device wurde deaktiviert.
++                        </dd>
++                    </dl>
++                </dd>
++            </dl>
++
++            <h5><span lang="en">Host</span>-spezifische <span lang="en">Readings</span></h5>
++            <dl>
++                <dt><p><code><var>hostName</var>_alias</code></p></dt>
++                <dd>
++                    Generierter Alias, welcher unter dem Attribut <var>devAlias</var> für das Netzwerkger&auml;t
++                    angegeben ist. Ist kein Alias angegeben, wird der Hostname angezeigt.
++                </dd>
++
++                <dt><p><code><var>hostName</var>_hostname</code></p></dt>
++                <dd>
++                    Hostname des Netzwerkger&auml;ts. Kann dieser nicht ermittelt werden,
++                    wird die IPv4-Adresse angezeigt.
++                </dd>
++
++                <dt><p><code><var>hostName</var>_ip</code></p></dt>
++                <dd>
++                    <abbr lang="en">IPv4</abbr>-Adresse des Netzwerkger&auml;ts.
++                </dd>
++
++                <dt><p><code><var>hostName</var>_lastSeen</code></p></dt>
++                <dd>
++                    Der Zeitpunkt, zu dem das Netzwerkger&auml;t das letzte Mal gescannt wurde.
++                </dd>
++
++                <dt><p><code><var>hostName</var>_macAddress</code></p></dt>
++                <dd>
++                    <abbr lang="en">MAC</abbr>-Adresse des Netzwerkger&auml;ts. Diese kann nur ermittelt werden,
++                    wenn der Scan mit Root-Rechten ausgef&uuml;hrt wird.
++                </dd>
++
++                <dt><p><code><var>hostName</var>_macVendor</code></p></dt>
++                <dd>
++                    Vermutlicher Hersteller des Netzwerkger&auml;ts. Dieser kann nur
++                    ermittelt werden, wenn der Scan mit Root-Rechten ausgef&uuml;hrt wird.
++                </dd>
++
++                <dt><p><code><var>hostName</var>_state</code></p></dt>
++                <dd>
++                    Status des Netzwerkger&auml;ts. Kann entweder <var lang="en">absent</var> oder
++                    <var lang="en">present</var>
++                    sein.
++                </dd>
++
++                <dt><p><code><var>hostName</var>_uptime</code></p></dt>
++                <dd>
++                    Zeit in Sekunden seit der das Netzwerkger&auml;t erreichbar ist.
++                </dd>
++
++                <dt><p><code><var>hostName</var>_uptimeText</code></p></dt>
++                <dd>
++                    Zeit in
++                    <var>d</var> <span lang="en">days</span>,
++                    <var>hh</var> <span lang="en">hours</span>, <var>mm</var> <span lang="en">minutes</span>, <var>ss</var> <span lang="en">seconds</span>,
++                    seit der das Netzwerkger&auml;t erreichbar ist.
++                </dd>
++            </dl>
++        </blockquote>
++
++        <a name="Nmapattr"></a>
++        <h4 id="Nmapattr">
++            Attribute
++        </h4>
++        <blockquote>
++            <dl>
++                <dt><p><code>absenceThreshold <var>n</var></code></p></dt>
++                <dd>
++                    <var>n</var> ist die Anzahl an Netzwerkscans, welche
++                    in <var lang="en">absent</var>resultieren
++                    m&uuml;ssen, bevor der Status eines Netzwerkger&auml;ts auf <var lang="en">absent</var>
++                    wechselt. Mit dieser Funktion kann man die Abwesenheit eines
++                    Ger&auml;tes verifizieren bevor der Status final auf <var lang="en">absent</var>
++                    ge&auml;ndert wird. Wenn dieses Attribut auf den Wert <var>1</var> gesetzt
++                    ist, verbleibt das Reading <code><var lang="en">state</var></code>
++                    auf <var lang="en">present</var>,
++                    bis der Status final auf <var lang="en">absent</var> wechselt.
++                </dd>
++
++                <dt><p><code>args <var>args</var></code></p></dt>
++                <dd>
++                    Argumente für den Nmap-Scan. Die Vorgabe ist <code><var>-sn</var></code>.
++                </dd>
++
++                <dt><p><code>deleteOldReadings <var>t</var></code></p></dt>
++                <dd>
++                    Nach einem Netzwerkscan werden alle hostspezifischen Readings, die
++                    älter sind  <var>t</var> Sekunden sind, gelöscht.
++                </dd>
++
++                <dt>
++                    <p>
++                        <code>
++                            devAlias    <var>id<sub>1</sub></var>:<var>alias<sub>1</sub></var>
++                                        <var>id<sub>2</sub></var>:<var>alias<sub>2</sub></var>
++                                        &hellip;
++                                        <var>id<sub>n</sub></var>:<var>alias<sub>n</sub></var>
++                        </code>
++                    </p>
++                </dt>
++                <dd>
++                    <p>
++                        Eine Leerzeichen-getrennte getrennte Liste von <var>id</var>:<var>alias</var>-Wertpaaren,
++                        die dazu genutzt werden kann, um Netzwerkger&auml;ten einen Alias zuzuweisen.
++                    </p>
++                    <p><strong>Beispiele</strong></p>
++                    <dl>
++                        <dt><p><abbr lang="en">MAC</abbr>-Adresse</p></dt>
++                        <dd>
++                            <code>attr <var>devicename</var> devAlias 5C:51:88:A5:94:1F:Michaels_Handy_byMAC</code>
++                        </dd>
++
++                        <dt><p lang="en">Hostname</p></dt>
++                        <dd>
++                            <code>attr <var>devicename</var> devAlias android-87c7a6221093d830:Michaels_Handy_byHOST</code>
++                        </dd>
++
++                        <dt><p><abbr lang="en">IPv4</abbr>-Adresse</p></dt>
++                        <dd>
++                            <code>attr <var>devicename</var> devAlias 192.168.1.130:Michaels_Handy_byIP</code>
++                        </dd>
++                    </dl>
++                </dd>
++
++                <dt><p><code>disable 1</code></p></dt>
++                <dd>
++                    Ein laufender Scan wird abgebrochen und es werden keine neuen Scans gestartet.
++                </dd>
++
++                <dt><p><code>excludeHosts <var>target specification</var></code></p></dt>
++                <dd>
++                    In der <var>target specification</var> stehen alle Zielhosts, die beim Scan &uuml;bersprungen werden sollen.
++                </dd>
++
++                <dt><p><code>interval <var>t</var></code></p></dt>
++                <dd>
++                    Intervall in <var>t</var> Sekunden in dem der Scan durchgef&uuml;hrt wird. Der Vorgabewert ist 900 Sekunden und der Mindestwert 30 Sekunden.
++                </dd>
++
++                <dt><p><code>keepReadings 1</code></p></dt>
++                <dd>
++                    Wird für ein Gertät mit bekannter MAC-Adresse eine neue IP-Adresse erkannt, werden die ungültig
++                    gewordenen Readings gelöscht es sei denn dieses Attribut ist gesetzt.
++                </dd>
++
++                <dt><p><code>leadingZeros 1</code></p></dt>
++                <dd>
++                    Bei den Readings-Namen werden die IPv4-Adressen mit f&uuml;hrenden Nullen dargestellt.
++                </dd>
++
++                <dt><p><code>metaReading <var>metaReading</var></code></p></dt>
++                <dd>
++                    Als <var lang="en">metaReading</var> kann <var lang="en">alias</var>,
++                    <var lang="en">hostname</var>, <abbr><var>ip</var></abbr> oder
++                    <var lang="en">macAddress</var> angegeben werden und ist der Bezeichner für die
++                    Readings. Die Vorgabe is <abbr lang="en"><var>ip</var></abbr>.
++                </dd>
++
++                <dt><p><code>path</code></p></dt>
++                <dd>
++                    Pfad unter dem das Nmap Programm zu erreichen ist. Die Vorgabe ist <kbd>/urs/bin/nmap</kbd>.
++                </dd>
++
++                <dt><p><code>readingFnAttributes</code></p></dt>
++                <dd>
++                    Siehe <a href="#readingFnAttributes">readingFnAttributes</a>
++                </dd>
++
++                <dt><p><code>sudo 1</code></p></dt>
++                <dd>
++                    <p>Der Scan wird mit root-Rechten ausgeführt.</p>
++                    <p>
++                        Voraussetzung ist, dass der Benutzer, unter dem <abbr lang="de">FHEM</abbr> ausgef&uuml;hrt wird,
++                        diese Rechte besitzt oder annehmen darf.
++                    </p>
++                    <p>
++                        F&uuml;r den Benutzer <var>fhem</var>, auf einem Debian (basierten) System, lassen sich diese
++                        in der Datei <kbd>/etc/sudoers</kbd> festlegen, welche mit dem Programm <kbd>visudo</kbd>
++                        editiert werden sollte.
++                    </p>
++                    <p>
++                        Daf&uuml;r muss im Abschnitt "# User privilege specification" die Zeile<br>
++                        <code>fhem    ALL=(ALL) NOPASSWD: /usr/bin/nmap</code><br>
++                        eingef&uuml;gt werden.
++                    </p>
++                </dd>
++            </dl>
++        </blockquote>
++    </blockquote>
++</div>
++
+ =begin html_DE
+ 
++=pod
++=item device
++=item summary    Results of a Nmap network scan
++=item summary_DE Auswertung eines Nmap-Netzwerkscans
++
++=begin html
++
+ <a name="Nmap"></a>
+ <h3>Nmap</h3>
+ ( <a href="commandref.html#Nmap"><u>en</u></a> | de )
+ <div>
+-  <ul>
+-    Nmap ist das FHEM Modul um einen Netzwerkscan mit Nmap durchzuf&uuml;hren
+-    und Informationen &uuml;ber die erreichbaren Netzwerkger&auml;te
+-    darzustellen.<br>
+-    Wird ein neues Gerät erkannt wird ein Event
+-    <code>"&lt;name&gt; new host: &lt;hostname&gt; (&lt;IPv4&gt;)"</code>
+-    erzeugt.<br>
+-    Wird erkannt, dass ein Gerät mit bekannter MAC-Adresse eine neue IP
+-    erhalten hat wird ein Event
+-    <code>"&lt;name&gt; new IP: &lt;hostname&gt; (&lt;IPv4&gt;)"</code>
+-    erzeugt.<br>
+-    <br>
+-    Vorraussetzungen:
+-    <ul>
+-      Das Programm "Nmap" sowie das Perl-Modul "Nmap::Parser" werden
+-      ben&ouml;tigt.<br>
+-      Unter Debian (basierten) System, k&ouml;nnen diese mittels
+-      <code>"apt-get install nmap libnmap-parser-perl"</code>
+-      installiert werden.
+-    </ul>
+-    <br>
+-    <a name="Nmapdefine"></a>
+-    <b>Define</b>
+-    <ul>
+-      <code>define &lt;name&gt; Nmap &lt;target specification&gt;</code><br>
+-      In der &lt;target specification&gt; stehen alle Zielhosts, die gescannet
+-      werden sollen. <br>
+-      Der einfachste Fall ist die Beschreibung einer IP-Zieladresse oder eines
+-      Zielhostnamens zum Scannen. <br>
+-      Um ein ganzes Netzwerk benachbarter Hosts zu scannen unterst&uuml;tzt
+-      Nmap Adressen im CIDR-Stil. Es k&ouml;nnen /numbits an eine IPv4-Adresse
+-      oder an einen Hostnamen angef&uuml;gt werden, und Nmap wird alle
+-      IP-Adressen scannen, bei denen die ersten numbits mit denen der gegebenen
+-      IP oder des gegebenen Hostnamens &uuml;bereinstimmen. Zum Beispiel
+-      w&uuml;rde 192.168.10.0/24 die 256 Hosts zwischen 192.168.10.0 und
+-      192.168.10.255 scannen. 192.168.10.40/24 w&uuml;rde genau dieselben Ziele
+-      scannen. Es ist auch möglich mehrere Netzwerke zur gleichen Zeit zu
+-      scannen. Zum Beispiel w&uuml;rde 192.168.1.0/24 192.168.2.0/24 die 512
+-      Hosts zwischen 192.168.1.0 und 192.168.2.255 scannen.<br>
+-      Siehe
+-      <a href="https://nmap.org/man/de/man-target-specification.html">
+-        <u>Nmap Man Page (Angabe von Zielen)</u>
+-      </a>.
+-    </ul><br>
+-    <a name="Nmapset"></a>
+-    <b>Set</b>
+-    <ul>
+-      <li>
+-        <code>clear readings</code><br>
+-        L&ouml;scht alle Readings außer "state".
+-      </li>
+-      <li>
+-        <code>deleteOldReadings &lt;s&gt;</code><br>
+-        Löscht alle Readings die älter sind als &lt;s&gt; Sekunden.
+-      </li>
+-      <li>
+-        <code>interrupt</code><br>
+-        Bricht einen laufenden Scan ab.
+-      </li>
+-      <li>
+-        <code>statusRequest</code><br>
+-        Startet einen Netzwerkscan.
+-      </li>
+-    </ul><br>
+-    <a name="Nmapreadings"></a>
+-    <b>Readings</b><br>
+-    <ul>
+-      Allgemeine Readings:
+-      <ul>
+-        <li>
+-          <code>NmapVersion</code><br>
+-          Die Versionsnummer des installierten Nmap Programms.
+-        </li>
+-        <li>
+-          <code>hostsScanned</code><br>
+-          Die Anzahl der gescannten Adressen.
+-        </li>
+-        <li>
+-          <code>hostsUp</code><br>
+-          Die Anzahl der erreichbaren Netzwerkger&auml;te.
+-        </li>
+-        <li>
+-          <code>knownHosts</code><br>
+-          Die Anzahl der bekannten Netzwerkger&auml;te.
+-        </li>
+-        <li>
+-          <code>scanDuration</code><br>
+-          Die Scan-Dauer in Sekunden.
+-        </li>
+-        <li>
+-          <code>state</code><br>
+-          <ul>
+-            <li>
+-              <code>Initialized</code><br>
+-              Nmap wurde definiert oder enabled.
+-            </li>
+-            <li>
+-              <code>running</code><br>
+-              Ein Netzwerkscan wird ausgef&uuml;hrt.
+-            </li>
+-            <li>
+-              <code>done</code><br>
+-              Der Netzwerkscan wurde erfolgreich abgeschlossen.
+-            </li>
+-            <li>
+-              <code>aborted</code><br>
+-              Der Netzwerkscan wurde aufgrund einer Zeit&uuml;berschreitung oder
+-              durch den Benutzer abgebrochen.
+-            </li>
+-            <li>
+-              <code>disabled</code><br>
+-              Nmap wurde deaktiviert.
+-            </li>
+-          </ul>
+-        </li>
+-      </ul>
+-      <br>
+-      Hostspezifische Readings:
+-      <ul>
+-        <li>
+-          <code>&lt;metaReading&gt;_alias</code><br>
+-          Alias welcher unter dem Attribut "devAlias" für das Netzwerkger&auml;t
+-          angegeben ist. Ist kein Alias angegeben wird der Hostname angezeigt.
+-        </li>
+-        <li>
+-          <code>&lt;metaReading&gt;_hostname</code><br>
+-          Hostname des Netzwerkger&auml;ts. Kann dieser nicht ermittel werden
+-          wird die IPv4-Adresse angezeigt.
+-        </li>
+-        <li>
+-          <code>&lt;metaReading&gt;_ip</code><br>
+-          IPv4-Adresse des Netzwerkger&auml;ts.
+-        </li>
+-        <li>
+-          <code>&lt;metaReading&gt;_lastSeen</code><br>
+-          Der Zeitpunkt zu dem das Netzwerkger&auml;t das letzte mal als gesehen
+-          wurde.
+-        </li>
+-        <li>
+-          <code>&lt;metaReading&gt;_macAddress</code><br>
+-          MAC-Adresse des Netzwerkger&auml;ts. Diese kann nur ermittelt werden,
+-          wenn der Scan mit Root-Rechten ausgef&uuml;hrt wird.
+-        </li>
+-        <li>
+-          <code>&lt;metaReading&gt;_macVendor</code><br>
+-          Vermutlicher Hersteller des Netzwerkger&auml;ts. Dieser kann nur
+-          ermittelt werden, wenn der Scan mit Root-Rechten ausgef&uuml;hrt wird.
+-        </li>
+-        <li>
+-          <code>&lt;metaReading&gt;_state</code><br>
+-          Status des Netzwerkger&auml;ts. Kann entweder "absent" oder "present"
+-          sein.
+-        </li>
+-        <li>
+-          <code>&lt;metaReading&gt;_uptime</code><br>
+-          Zeit in Sekunden seit der das Netzwerkger&auml;t erreichbar ist.
+-        </li>
+-        <li>
+-          <code>&lt;metaReading&gt;_uptimeText</code><br>
+-          Zeit in "d days, hh hours, mm minutes, ss seconds" seit der das
+-          Netzwerkger&auml;t erreichbar ist.
+-        </li>
+-      </ul>
+-    </ul><br>
+-    <a name="Nmapattr"></a>
+-    <b>Attribute</b>
+-    <ul>
+-      <li>
+-        <code>absenceThreshold &lt;n&gt;</code><br>
+-        Die Anzahl an Netzwerkscans, welche in "absent" resultieren
+-        m&uuml;ssen, bevor der Status eines Netzwerkger&auml;ts auf "absent"
+-        wechselt. Mit dieser Funktion kann man die Abwesenheit eines
+-        Ger&auml;tes verifizieren bevor der Status final auf "absent"
+-        ge&auml;ndert wird. Wenn dieses Attribut auf einen Wert &gt;1 gesetzt
+-        ist, verbleibt das Reading "&lt;metaReading&gt;_state" auf "present",
+-        bis der Status final auf "absent" wechselt.
+-      </li>
+-      <li>
+-        <code>args &lt;args&gt;</code><br>
+-        Argumente für den Nmap-Scan.<br>
+-        Die Vorgabe ist "-sn".
+-      </li>
+-      <li>
+-        <code>deleteOldReadings &lt;s&gt;</code><br>
+-        Nach einem Netzwerkscan werden alle hostspezifischen Readings, die
+-        älter sind als &lt;s&gt; Sekunden, gelöscht
+-      </li>
+-      <li>
+-        <code>
+-          devAlias &lt;ID&gt;:&lt;ALIAS&gt; &lt;ID2&gt;:&lt;ALIAS2&gt; ...
+-        </code><br>
+-        Eine Leerzeichen-getrennte getrennte Liste von &lt;ID&gt;:&lt;ALIAS&gt;
+-        Paaren, die dazu genutzt werden kann um Netzwerkger&auml;ten einen
+-        Alias zu geben.<br>
+-        Die ID kann dabei MAC-Adresse, hostname oder IPv4-Adresse sein.<br>
+-        Beispiele:
+-        <ul>
+-          MAC-Adresse:
+-          <code>
+-            attr &lt;name&gt; devAlias 5C:51:88:A5:94:1F:Michaels_Handy_byMAC
+-          </code><br>
+-          hostname:
+-          <code>
+-            attr &lt;name&gt; devAlias
+-            android-87c7a6221093d830:Michaels_Handy_byHOST
+-          </code><br>
+-          IPv4-Adresse:
+-          <code>
+-            attr &lt;name&gt; devAlias 192.168.1.130:Michaels_Handy_byIP
+-          </code><br>
+-        </ul>
+-      </li>
+-      <li>
+-        <code>disable 1</code><br>
+-        Ein laufender Scan wird abgebrochen und es werden keine neuen Scans
+-        gestartet.
+-      </li>
+-      <li>
+-        <code>excludeHosts &lt;target specification&gt;</code><br>
+-        In der &lt;target specification&gt; stehen alle Zielhosts, die beim
+-        Scan &uuml;bersprungen werden sollen.
+-      </li>
+-      <li>
+-        <code>interval &lt;seconds&gt;</code><br>
+-        Intervall in Sekunden in dem der Scan durchgef&uuml;hrt wird.<br>
+-        Der Vorgabewert ist 900 Sekunden und der Mindestwert 30 Sekunden.
+-      </li>
+-      <li>
+-        <code>keepReadings 1</code><br>
+-        Wird für ein Gertät mit bekannter MAC-Adresse eine neue IP-Adresse
+-        erkannt, werden die ungültig gewordenen Readings gelöscht es sei denn
+-        dieses Attribut ist gesetzt.
+-      </li>
+-      <li>
+-        <code>leadingZeros 1</code><br>
+-        Bei den Readings-Namen werden die IPv4-Adressen mit f&uuml;hrenden
+-        Nullen dargestellt.
+-      </li>
+-      <li>
+-        <code>metaReading &lt;metaReading&gt;</code><br>
+-        Als &lt;metaReading&gt; kann "alias", "hostname", "ip" oder
+-        "macAddress" angegeben werden und ist der Bezeichner für die
+-        Readings.<br>
+-        Die Vorgabe is "ip".
+-      </li>
+-      <li>
+-        <code>path</code><br>
+-        Pfad unter dem das Nmap Programm zu erreichen ist.<br>
+-        Die Vorgabe ist "/urs/bin/nmap".
+-      </li>
+-      <li>
+-        <a href="#readingFnAttributes">
+-          <u><code>readingFnAttributes</code></u>
+-        </a>
+-      </li>
+-      <li>
+-        <code>sudo 1</code><br>
+-        Der Scan wird mit Root-Rechten ausgef&uuml;hrt.<br>
+-        Voraussetzung ist, dass der Benutzer unter dem FHEM ausgef&uuml;hrt
+-        diese Rechte besitzt. F&uuml;r den Benutzer "fhem", auf einem Debian
+-        (basierten) System, lassen sich diese in der Datei "/etc/sudoers"
+-        festlegen. Daf&uuml;r muss im Abschnitt "# User privilege
+-        specification" die Zeile "fhem    ALL=(ALL) NOPASSWD: /usr/bin/nmap"
+-        eingef&uuml;gt werden.
+-      </li>
+-    </ul>
+-  </ul>
++    <blockquote>
++        <p>
++            Nmap is a <abbr lang="de">FHEM</abbr> module to perform network scans with Nmap
++            and display its results and further informations.
++        </p>
++        <p>
++            If a new device is detected, Nmap generates an event, similar to this example:
++            <br>
++            <code><var>devicename</var> new host: <var>hostname</var> (<var>IPv4</var>)</code>
++        </p>
++        <p>
++            If a already by <abbr lang="en">MAC</abbr> address known device got a new
++            <abbr lang="en">IPv4</abbr> address, Nmap generates an event, similar to this example:
++            <br>
++            <code><var>devicename</var> new <abbr>IP</abbr>: <var>hostname</var> (<var>IPv4</var>)</code>
++        </p>
++
++        <h4>
++            Prerequisites
++        </h4>
++        <blockquote>
++            <p>
++                To use Nmap, the program <kbd>nmap</kbd> and the Perl module <kbd><span lang="en">Nmap::Parser</span></kbd> are required.
++            </p>
++            <p>
++                On Debian based operating systems these can be installed via
++            </p>
++            <p>
++                <code>apt-get install nmap libnmap-parser-perl</code> (to Debian Stretch),
++                <br>
++                or
++                <br>
++                <code>apt install nmap libnmap-parser-perl</code> (after Debian Stretch).
++            </p>
++        </blockquote>
++
++        <a name="Nmapdefine"></a>
++        <h4 id="Nmapdefine">
++            Define
++        </h4>
++        <blockquote>
++            <p>
++                <code>define <var>devicename</var> Nmap <var>target specification</var></code>
++            </p>
++            <dl>
++                <dt>
++                    <var>target specification</var>
++                </dt>
++                <dd>
++                    <p>
++                        Target hosts to be scanned.
++                    </p>
++                    <p>
++                        The simplest case is the description of an <abbr lang="en">IPv4</abbr> destination address or a target host name for scanning.
++                    </p>
++                    <p>
++                        To scan an entire network of neighboring hosts, Nmap supports <abbr lang="en"
++                        title="Classless Interdomain Routing">CIDR</abbr> style addresses. <var>/numbits</var>
++                        can be appended to an <abbr lang="en">IPv4</abbr> address or to a hostname. Nmap will scan all
++                        <abbr lang="en">IPv4</abbr> addresses where the first <var>numbits</var> match those of the
++                        given <abbr lang="en">IPv4</abbr> address or host name.
++                    </p>
++                    <p>
++                        The <var>target specification</var> <var>192.168.10.0/24</var> would address 256 hosts
++                        from 192.168.10.0 to 192.168.10.255. Even so <var>192.168.10.40/24</var>.
++                    </p>
++                    <p>
++                        It's also possible to scan multiple networks at the same time.
++                        For example <var>192.168.1.0/24 192.168.2.0/24</var> would scan the 512 hosts between 192.168.1.0 and 192.168.2.255.
++                    </p>
++                    <p>
++                        See also <a href="https://nmap.org/man/de/man-target-specification.html">Nmap Man Page (Specifying Destinations)</a>.
++                    </p>
++                </dd>
++            </dl>
++        </blockquote>
++
++        <a name="Nmapset"></a>
++        <h4 id="Nmapset">
++            Set
++        </h4>
++        <blockquote>
++            <dl>
++                <dt><p><code>clear readings</code></p></dt>
++                <dd>
++                    Deletes all readings except <var>state</var>.
++                </dd>
++
++                <dt><p><code>deleteOldReadings <var>t</var></code></p></dt>
++                <dd>
++                    Deletes all readings older than <code><var>t</var></code> seconds.
++                </dd>
++
++                <dt><p><code>interrupt</code></p></dt>
++                <dd>
++                    Aborts a running scan.
++                </dd>
++
++                <dt><p><code>statusRequest</code></p></dt>
++                <dd>
++                    Start a new network scan.
++                </dd>
++            </dl>
++        </blockquote>
++
++
++        <a name="Nmapreadings"></a>
++        <h4 id="Nmapreadings">
++            Readings
++        </h4>
++        <blockquote>
++            <h5>General readings</h5>
++
++            <dl>
++                <dt><p><code>NmapVersion</code></p></dt>
++                <dd>
++                    Version of the installed Nmap executable.
++                </dd>
++
++                <dt><p><code>hostsScanned</code></p></dt>
++                <dd>
++                    Quantity of scanned hosts.
++                </dd>
++
++                <dt><p><code>hostsUp</code></p></dt>
++                <dd>
++                    Quantity of available hosts.
++                </dd>
++
++                <dt><p><code>knownHosts</code></p></dt>
++                <dd>
++                    Quantity of known hosts.
++                </dd>
++
++                <dt><p><code>scanDuration</code></p></dt>
++                <dd>
++                    Duration in seconds of the last scan.
++                </dd>
++
++                <dt><p><code>state</code></p></dt>
++                <dd>
++                    <dl>
++                        <dt><p><code>initialized</code></p></dt>
++                        <dd>
++                            Device was initialized oder (re-)enabled.
++                        </dd>
++
++                        <dt><p><code>running</code></p></dt>
++                        <dd>
++                            Running network scan.
++                        </dd>
++
++                        <dt><p><code>done</code></p></dt>
++                        <dd>
++                            Network scan was successful completed.
++                        </dd>
++
++                        <dt><p><code>aborted</code></p></dt>
++                        <dd>
++                            Network scan was aborted by the user or encountered a time out.
++                        </dd>
++
++                        <dt><p><code>disabled</code></p></dt>
++                        <dd>
++                            Device was deactivated.
++                        </dd>
++                    </dl>
++                </dd>
++            </dl>
++
++            <h5><span lang="en">Host</span> specific <span lang="en">readings</span></h5>
++            <p>
++                See the <code>metaReading</code> attribute below for the value of <var>identifier</var>.
++            </p>
++            <dl>
++                <dt><p><code><var>identifier</var>_alias</code></p></dt>
++                <dd>
++                    Alias ​​which is specified under the attribute <var>devAlias</var> for the network device.
++                    If no alias is specified, the hostname is displayed.
++                </dd>
++
++                <dt><p><code><var>identifier</var>_hostname</code></p></dt>
++                <dd>
++                    Hostname of the network device. If this can not be determined, the IPv4 address is displayed.
++                </dd>
++
++                <dt><p><code><var>identifier</var>_ip</code></p></dt>
++                <dd>
++                    <abbr lang="en">IPv4</abbr> address of the network device.
++                </dd>
++
++                <dt><p><code><var>identifier</var>_lastSeen</code></p></dt>
++                <dd>
++                    Timestamp at which the network device was last seen.
++                </dd>
++
++                <dt><p><code><var>identifier</var>_macAddress</code></p></dt>
++                <dd>
++                    <abbr lang="en">MAC</abbr> address of the network device (can only be determined if the scan is executed with root privileges).
++                </dd>
++
++                <dt><p><code><var>identifier</var>_macVendor</code></p></dt>
++                <dd>
++                    Presumed vendor of the network device, based on the <abbr lang="en">MAC</abbr> address (can only be determined if the scan is executed with root privileges).
++                </dd>
++
++                <dt><p><code><var>identifier</var>_state</code></p></dt>
++                <dd>
++                    State of the network device, values <var>absent</var> and <var>present</var>.
++                </dd>
++
++                <dt><p><code><var>identifier</var>_uptime</code></p></dt>
++                <dd>
++                    Duration in seconds since the network device is reachable.
++                </dd>
++
++                <dt><p><code><var>identifier</var>_uptimeText</code></p></dt>
++                <dd>
++                    Duration in
++                    <var>d</var> <span lang="en">days</span>,
++                    <var>hh</var> <span lang="en">hours</span>, <var>mm</var> <span lang="en">minutes</span>, <var>ss</var> <span lang="en">seconds</span>,
++                    since the network device is reachable.
++                </dd>
++            </dl>
++        </blockquote>
++
++        <a name="Nmapattr"></a>
++        <h4 id="Nmapattr">
++            Attributes
++        </h4>
++        <blockquote>
++            <dl>
++                <dt><p><code>absenceThreshold <var>n</var></code></p></dt>
++                <dd>
++                    <p>
++                        The number of network cans that must result in <var>absent</var> before the state
++                        of a network device changes to <var>absent</var>. This could be used to verify the
++                        absence of a device.
++                    </p>
++                    <p>
++                        If this attribute is set to a value &gt;1, <var>state</var> remains on <var>present</var>,
++                        until the status changes final to <var>absent</var>.
++                    </p>
++                </dd>
++
++                <dt><p><code>args <var>args</var></code></p></dt>
++                <dd>
++                    Arguments passed to <kbd>nmap</kbd> for scanning. Defaults to <code><var>-sn</var></code>
++                </dd>
++
++                <dt><p><code>deleteOldReadings <var>t</var></code></p></dt>
++                <dd>
++                    After a network scan, all host-specific readings older than <var>t</var> seconds are deleted.
++                </dd>
++
++                <dt>
++                    <p>
++                        <code>
++                            devAlias    <var>id<sub>1</sub></var>:<var>alias<sub>1</sub></var>
++                                        <var>id<sub>2</sub></var>:<var>alias<sub>2</sub></var>
++                                        &hellip;
++                                        <var>id<sub>n</sub></var>:<var>alias<sub>n</sub></var>
++                        </code>
++                    </p>
++                </dt>
++                <dd>
++                    <p>
++                        A whitespace separated list of <var>id</var>:<var>alias</var> pairs that can be used to give an alias to network devices.
++                    </p>
++                    <p>
++                        <var>id</var> can be a <abbr lang="en">MAC</abbr> address, hostname or <abbr lang="en">IPv4</abbr> address.
++                    </p>
++                    <p><strong>Examples</strong></p>
++                    <dl>
++                        <dt><p><abbr lang="en">MAC</abbr>-Adresse</p></dt>
++                        <dd>
++                            <code>attr <var>devicename</var> devAlias 5C:51:88:A5:94:1F:Michaels_Mobile_byMAC</code>.
++                        </dd>
++
++                        <dt><p lang="en">Hostname</p></dt>
++                        <dd>
++                            <code>attr <var>devicename</var> devAlias android-87c7a6221093d830:Michaels_Mobile_byHOST</code>.
++                        </dd>
++
++                        <dt><p><abbr lang="en">IPv4</abbr>-Adresse</p></dt>
++                        <dd>
++                            <code>attr <var>devicename</var> devAlias 192.168.1.130:Michaels_Mobile_byIP</code>.
++                        </dd>
++                    </dl>
++                </dd>
++
++                <dt><p><code>disable 1</code></p></dt>
++                <dd>
++                    A running scan is canceled and no new scans are started
++                </dd>
++
++                <dt><p><code>excludeHosts <var>target specification</var></code></p></dt>
++                <dd>
++                    All target hosts in the <var>target specification</var> are skipped during the scan
++                </dd>
++
++                <dt><p><code>interval <var>t</var></code></p></dt>
++                <dd>
++                    Interval in seconds in which the scan is performed. Default is <var>900</var> seconds, minimum is <var>30</var>.
++                </dd>
++
++                <dt><p><code>keepReadings 1</code></p></dt>
++                <dd>
++                    If a new <abbr lang="en">IPv4</abbr> address is recognized for a device with a known
++                    <abbr lang="en">MAC</abbr> address, the invalid readings are deleted unless this attribute is set.
++                </dd>
++
++                <dt><p><code>leadingZeros 1</code></p></dt>
++                <dd>
++                    <p>
++                        At the host specific readings, the <abbr lang="en">IPv4</abbr> address octets are prefixed with
++                        zeros so that are three digits in every octet.
++                    </p>
++                    <p>
++                        For example, <var>192.168.0.1</var> will be displayed as <var>192.168.000.001</var> if
++                        <code>leadingZeros</code> is set to 1.
++                    </p>
++                </dd>
++
++                <dt><p><code>metaReading <var>metaReading</var></code></p></dt>
++                <dd>
++                    <p>
++                        Which <var>identifier</var> is used as prefix for the host specific readings. The options
++                        <var>alias</var>, <var>hostname</var>, <var>ip</var> oder <var>macAddress</var> are available.
++                        Default is <var>ip</var>.
++                    </p>
++                    <p>
++                        <var>macAddress</var> is only available, if root privileges are given. If set and root privileges are not available, <var>ip</var> is used instead.
++                    </p>
++                    <p>
++                        After changing this attribute to another value, the readings must be cleared manually and a new scan must be started.
++                    </p>
++                </dd>
++
++                <dt><p><code>path</code></p></dt>
++                <dd>
++                    Path to the <kbd>nmap</kbd> executable. Default is <var>/urs/bin/nmap</var>.
++                </dd>
++
++                <dt><p><code>readingFnAttributes</code></p></dt>
++                <dd>
++                    See <a href="#readingFnAttributes">readingFnAttributes</a>.
++                </dd>
++
++                <dt><p><code>sudo 1</code></p></dt>
++                <dd>
++                    <p>Run scan as user <kbd>root</kbd></p>
++                    <p>
++                        To do this, the <abbr lang="en">FHEM</abbr> requires root privileges or is allowed to impersonate root via <kbd>sudo</kbd>. See <kbd>man sudo</kbd>
++                        for further system dependend informations.
++                    </p>
++                </dd>
++            </dl>
++        </blockquote>
++    </blockquote>
+ </div>
+ 
+ =end html_DE
+-=cut
++=cut
+\ No newline at end of file
