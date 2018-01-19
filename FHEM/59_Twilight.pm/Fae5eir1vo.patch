@@ -1,0 +1,44 @@
+diff --git a/fhem/FHEM/59_Twilight.pm b/fhem/FHEM/59_Twilight.pm
+index 05abb8682..7fb653d16 100644
+--- a/fhem/FHEM/59_Twilight.pm
++++ b/fhem/FHEM/59_Twilight.pm
+@@ -899,7 +899,7 @@ Example:
+     <br><br>
+   <b>indoor_horizon</b>
+   <br>
+-	   Der Parameter <b>indoor_horizon</b> bestimmt einen virtuellen Horizont, der f&uuml;r die Berechnung der D&auml;mmerung innerhalb von R&auml;men genutzt werden kann. Minimalwert ist -6 (ergibt gleichen Wert wie Zivile D&auml;mmerung). Bei 0 fallen 
++	   Der Parameter <b>indoor_horizon</b> bestimmt einen virtuellen Horizont, der f&uuml;r die Berechnung der D&auml;mmerung innerhalb von R&auml;umen genutzt werden kann. Minimalwert ist -6 (ergibt gleichen Wert wie Zivile D&auml;mmerung). Bei 0 fallen
+ 	   indoor- und realer D&aumlmmerungswert zusammen. Werte gr&oumlsser 0 ergeben fr&uumlhere Werte für den Abend bzw. sp&aumltere f&uumlr den Morgen.   
+     <br><br>
+   <b>Weather_Position</b>
+@@ -908,7 +908,7 @@ Example:
+     <br><br>
+ 
+     Ein Twilight-Device berechnet periodisch die D&auml;mmerungszeiten und -phasen w&auml;hrend des Tages.
+-    Es berechnet ein virtuelles "Licht"-Element das einen Indikator f&uuml;r die momentane Tageslichtmenge ist.
++    Es berechnet ein virtuelles "Licht"-Element, das ein Indikator f&uuml;r die momentane Tageslichtmenge ist.
+     Neben der Position auf der Erde wird es vom sog. "indoor horizon" (Beispielsweise hohe Geb&auml;de oder Berge)
+     und dem Wetter beeinflusst. Schlechtes Wetter f&uuml;hrt zu einer Reduzierung des Tageslichts f&uuml;r den ganzen Tag.
+     Das berechnete Licht liegt zwischen 0 und 6 wobei die Werte folgendes bedeuten:<br><br>
+@@ -919,17 +919,17 @@ Example:
+ 	<code>2 - Nautische D&auml;mmerung, die Sonne ist zw. -6 and -12 Grad hinter dem Horizont</code><br>
+ 	<code>3 - Zivile/B&uuml;rgerliche D&auml;mmerung, die Sonne ist zw. 0 and -6 hinter dem Horizont</code><br>
+ 	<code>4 - "indoor twilight", die Sonne ist zwischen dem Wert indoor_horizon und 0 Grad hinter dem Horizont (wird nicht verwendet wenn indoor_horizon=0)</code><br>
+-	<code>5 - Wetterbedingte D&auml;mmerung, die Sonne ist zwischen indoor_horizon und einem virtuellen Wetter-Horizonz (der Wetter-Horizont ist Wetterabh&auml;ngig (optional)</code><br>
++	<code>5 - Wetterbedingte D&auml;mmerung, die Sonne ist zwischen indoor_horizon und einem virtuellen Wetter-Horizont (der Wetter-Horizont ist Wetterabh&auml;ngig (optional)</code><br>
+ 	<code>6 - Maximales Tageslicht</code><br>
+ 	<br>
+- <b>Azimut, Elevation, Twilight (Seitenwinkel, Höhenwinkel, D&auml;mmerung)</b>
++ <b>Azimuth, Elevation, Twilight (Seitenwinkel, Höhenwinkel, D&auml;mmerung)</b>
+  <br>
+    Das Modul berechnet zus&auml;tzlich Azimuth und Elevation der Sonne. Diese Werte k&ouml;nnen zur Rolladensteuerung verwendet werden.<br><br>
+    
+-Das Reading <b>Twilight</b> wird als neuer "(twi)light" Wert hinzugef&uuml;gt. Er wird aus der Elevation der Sonne mit folgender Formel abgeleitet: (Elevation+12)/18 * 100). Das erlaubt eine detailliertere Kontrolle der Lampen w&auml;hrend Sonnenauf - und untergang. Dieser Wert ist zwischen 0% und 100% wenn die Elevation zwischen -12&deg; und 6&deg;
++Das Reading <b>Twilight</b> wird als neuer "(twi)light" Wert hinzugef&uuml;gt. Er wird aus der Elevation der Sonne mit folgender Formel abgeleitet: (Elevation+12)/18 * 100). Das erlaubt eine detailliertere Kontrolle der Lampen w&auml;hrend Sonnenauf - und untergang. Dieser Wert ist zwischen 0% und 100% wenn die Elevation zwischen -12&deg; und 6&deg; ist.
+ 
+    <br><br>
+-Wissenswert dazu ist, dass die Sonne, abh&auml;gnig vom Breitengrad, bestimmte Elevationen nicht erreicht. Im Juni und Juli liegt die Sonne in Mitteleuropa nie unter -18&deg;. In n&ouml;rdlicheren Gebieten (Norwegen, ...) kommt die Sonne beispielsweise nicht &uuml;ber 0&deg.
++Wissenswert dazu ist, dass die Sonne, abh&auml;ngig vom Breitengrad, bestimmte Elevationen nicht erreicht. Im Juni und Juli liegt die Sonne in Mitteleuropa nie unter -18&deg;. In n&ouml;rdlicheren Gebieten (Norwegen, ...) kommt die Sonne beispielsweise nicht &uuml;ber 0&deg.
+    <br><br>
+    All diese Aspekte m&uuml;ssen ber&uuml;cksichtigt werden bei Schaltungen die auf Twilight basieren.
+  	<br><br>
