@@ -1,0 +1,384 @@
+diff --git a/fhem/FHEM/95_Babble.pm b/fhem/FHEM/95_Babble.pm
+index 877c0b84c..a48666917 100644
+--- a/fhem/FHEM/95_Babble.pm
++++ b/fhem/FHEM/95_Babble.pm
+@@ -2100,151 +2100,237 @@ sub Babble_Html($)
+ =item summary for speech control of FHEM devices 
+ =begin html
+ 
+-   <a name="Babble"></a>
+-        <h3>Babble</h3>
+-        <ul>
+-        <p> FHEM module for speech control of FHEM devices</p>
+-         <a name="babbleusage"></a>
+-        <h4>Usage</h4>
+-        See <a href="http://www.fhemwiki.de/wiki/Modul_babble">German Wiki page</a>
+-        <a name="babbledefine"></a>
+-        <br/>
+-        <h4>Define</h4>
+-        <p>
+-            <code>define &lt;name&gt; babble</code>
+-            <br />Defines the Babble device. </p>
+-        <a name="babbleset"></a>
+-        Notes: <ul>
++<a name="Babble"></a>
++<h3>Babble</h3>
++<blockquote>
++    <p> FHEM module for speech control of FHEM devices</p>
++    <a name="babbleusage"></a>
++    <h4>Usage</h4>
++    See <a href="http://www.fhemwiki.de/wiki/Modul_babble">German Wiki page</a>
++    <a name="babbledefine"></a>
++    <br/>
++    <h4>Define</h4>
++    <p>
++        <code>define &lt;name&gt; babble</code>
++        <br/>Defines the Babble device. </p>
++    <a name="babbleset"></a>
++    Notes:
++    <ul>
+         <li>This module uses the global attribute <code>language</code> to determine its output data<br/>
+-         (default: EN=english). For German output set <code>attr global language DE</code>.</li>
+-         <li>This module needs the JSON package.</li>
+-         <li>Only when the chatbot functionality of RiveScript is required, the RiveScript module must be installed as well, see https://github.com/aichaos/rivescript-perl</li>
+-         </ul>
+-         <h4>Usage</h4>
+-          To use this module, call the Perl function <code>Babble_DoIt("&lt;name&gt;","&lt;sentence&gt;"[,&lt;parm0&gt;,&lt;parm1&gt;,...])</code>. 
+-          &lt;name&gt; is the name of the Babble device,  &lt;parm0&gt; &lt;parm1&gt; are arbitrary parameters. 
+-          
+-          The module will analyze the sentence passed an isolate a device to be addressed, a place identifier, 
+-          a verb, a target and its value from the sentence passed.
+-          
+-          If a proper command has been stored with device, place, verb and target, it will be subject to substitutions and then will be executed. 
+-          In these substitutions, a string $VALUE will be replaced by the value for the target reading, a string $DEV will be replaced by the device name identified by Babble, 
+-          and strings $PARM[0|1|2...] will be replaced by the 
+-          corresponding parameters passed to the function <code>Babble_DoIt</code>   
+-          <ul>
+-          <li>If no stored command ist found, the sentence is passed to the local RiveScript interpreter if present</li>
+-          <li>To have a FHEM register itself as a Babble Device, it must get an attribute value <code>babbleDevice=&lt;name&gt;</code>. The <i>name</i> parameter must either be 
+-          unique to the Babble system, or it muts be of the form <code>&lt;name&gt;_&lt;digits&gt;</code></li>
+-          <li>Devices on remote FHEM installations are defined in the <code>babbleDevices</code> attribute, see below</li>
+-          </ul>
+-        <h4>Set</h4>
+-        <ul>
+-            <li><a name="babble_lock">
+-                    <code>set &lt;name&gt; locked</code><br />
+-                    <code>set &lt;name&gt; unlocked</code>
+-                </a>
+-                <br />sets the lockstate of the babble module to <i>locked</i> (i.e., babble setups
+-                may not be changed) resp. <i>unlocked</i> (i.e., babble setups may be changed>)</li>
+-            <li><a name="babble_save">
+-                    <code>set &lt;name&gt; save|restore</code>
+-              </a>
+-                <br />Manually save/restore the babble to/from the external file babbleFILE (save done automatically at each state modification, restore at FHEM start)</li>
+-            <li><a name="babble_rivereload">
+-                    <code>set &lt;name&gt; rivereload</code>
+-                </a>
+-                <br />Reload data for RiveScript Interpreter</li>
+-            <li><a name="babble_test">
+-                    <code>set &lt;name&gt; test</code>
+-                </a>
+-                <br />Run a few test cases for normalization</li>
+-        </ul>
+-        </ul>
+-        <a name="babbleget"></a>
+-        <h4>Get</h4>
+-        <ul>
+-            <li><a name="babble_version"></a>
+-                <code>get &lt;name&gt; version</code>
+-                <br />Display the version of the module</li>
+-             <li><a name="babble_tokens"></a>
+-                <code>get &lt;name&gt; tokens</code>
+-                <br />Obtain fresh csrfToken from remote FHEM installations (needed after restart of remote FHEM)</li>
+-        </ul>
+-        <a name="babbleattr"></a>
+-        <h4>Attributes</h4>
++            (default: EN=english). For German output set <code>attr global language DE</code>.
++        </li>
++        <li>This module needs the JSON package.</li>
++        <li>Only when the chatbot functionality of RiveScript is required, the RiveScript module must be installed as
++            well, see https://github.com/aichaos/rivescript-perl
++        </li>
++    </ul>
++    <h4>Usage</h4>
++    To use this module, call the Perl function <code>Babble_DoIt("&lt;name&gt;","&lt;sentence&gt;"[,&lt;parm0&gt;,&lt;parm1&gt;,...])</code>.
++    &lt;name&gt; is the name of the Babble device, &lt;parm0&gt; &lt;parm1&gt; are arbitrary parameters.
++
++    The module will analyze the sentence passed an isolate a device to be addressed, a place identifier,
++    a verb, a target and its value from the sentence passed.
++
++    If a proper command has been stored with device, place, verb and target, it will be subject to substitutions and
++    then will be executed.
++    In these substitutions, a string $VALUE will be replaced by the value for the target reading, a string $DEV will be
++    replaced by the device name identified by Babble,
++    and strings $PARM[0|1|2...] will be replaced by the
++    corresponding parameters passed to the function <code>Babble_DoIt</code>
++    <ul>
++        <li>If no stored command ist found, the sentence is passed to the local RiveScript interpreter if present</li>
++        <li>To have a FHEM register itself as a Babble Device, it must get an attribute value <code>babbleDevice=&lt;name&gt;</code>.
++            The <i>name</i> parameter must either be
++            unique to the Babble system, or it muts be of the form <code>&lt;name&gt;_&lt;digits&gt;</code></li>
++        <li>Devices on remote FHEM installations are defined in the <code>babbleDevices</code> attribute, see below</li>
++    </ul>
++    <h4>Set</h4>
++    <ul>
++        <li><a name="babble_lock">
++            <code>set &lt;name&gt; locked</code><br/>
++            <code>set &lt;name&gt; unlocked</code>
++        </a>
++            <br/>sets the lockstate of the babble module to <i>locked</i> (i.e., babble setups
++            may not be changed) resp. <i>unlocked</i> (i.e., babble setups may be changed>)
++        </li>
++        <li><a name="babble_save">
++            <code>set &lt;name&gt; save|restore</code>
++        </a>
++            <br/>Manually save/restore the babble to/from the external file babbleFILE (save done automatically at each
++            state modification, restore at FHEM start)
++        </li>
++        <li><a name="babble_rivereload">
++            <code>set &lt;name&gt; rivereload</code>
++        </a>
++            <br/>Reload data for RiveScript Interpreter
++        </li>
++        <li><a name="babble_test">
++            <code>set &lt;name&gt; test</code>
++        </a>
++            <br/>Run a few test cases for normalization
++        </li>
++    </ul>
++</blockquote>
++<a name="babbleget"></a>
++<h4>Get</h4>
++<ul>
++    <li><a name="babble_version"></a>
++        <code>get &lt;name&gt; version</code>
++        <br/>Display the version of the module
++    </li>
++    <li><a name="babble_tokens"></a>
++        <code>get &lt;name&gt; tokens</code>
++        <br/>Obtain fresh csrfToken from remote FHEM installations (needed after restart of remote FHEM)
++    </li>
++</ul>
++<a name="babbleattr"></a>
++<h4>Attributes</h4>
++<ul>
++    <li><a name="babbleDevices"><code>attr &lt;name&gt; babbleDevices [&lt;babble devname&gt;:&lt;FHEM devname&gt;:1|2|3]* </code></a>
++        <br/>space separated list of <i>remote</i> FHEM devices, each as a group separated by ':' consisting of
+         <ul>
+-            <li><a name="babbleDevices"><code>attr &lt;name&gt; babbleDevices [&lt;babble devname&gt;:&lt;FHEM devname&gt;:1|2|3]* </code></a>
+-                <br />space separated list of <i>remote</i> FHEM devices, each as a group separated by ':' consisting of
+-                <ul><li>a Babble device name</li>
+-                <li>a FHEM Device name</li>
+-                <li>an integer 1..3, indication which of the <i>remoteFHEM</i> functions to be called</li>
+-                </ul>
+-                The Babble device name may contain a <b>*</b>-character. If this is the case, it will be considered a regular expression, with the star replaced by <b>(.*)</b>. 
+-                When using Babble with a natural language sentence whose device part matches this regular expression, the character group addressed by the star sequence is placed in the variable 
+-                <code>$STAR</code>, and used to replace this value in the command sequence.
+-                </li>
+-            <li><a name="helpFunc"><code>attr &lt;name&gt; helpFunc &lt;function name&rt;</code></a>
+-                <br/>name of a help function which is used in case no command is found for a certain device. When this function is called, the strings $DEV, $HELP, $PARM[0|1|2...]
+-                will be replaced by the devicename identified by Babble, the help text for this device and parameters passed to the Babble_DoIt function</li>
+-            <li><a name="testParm"><code>attr &lt;name&gt; testParm(0|1|2|3) &lt;string&rt;</code></a>
+-                <br/>if a command is not really excuted, but only tested, the values of these attributes will be used to substitute the strings $PARM[0|1|2...]
+-                in the tested command</li>  
+-            <li><a name="dnuFile"><code>attr &lt;name&gt; dnuFile &lt;filename&rt;</code></a>
+-                <br/>if this filename is given, every sentence that could not be analyzed is stored in this file</li>       
+-            <li><a name="confirmFunc"><code>attr &lt;name&gt; confirmFunc &lt;function name&rt;</code></a>
+-                <br/>name of a confirmation function which is used in case a command is exceuted. When this function is called, the strings $DEV, $HELP, $PARM[0|1|2...]
+-                will be replaced by the devicename identified by Babble, the help text for this device and parameters passed to the Babble_DoIt function</li>     
+-            <li><a name="noChatBot"><code>attr &lt;name&gt; noChatBot 0|1</code></a>
+-                <br/>if this attribute is set to 1, a local RiveScript interpreter will be ignored even though it is present in the system</li>
+-            <li><a name="remoteFHEM"><code>attr &lt;name&gt; remoteFHEM(0|1|2|3) [&lt;user&gt;:&lt;password&gt;@]&lt;IP address:port&rt;</code></a>
+-                <br/>IP address and port for a remote FHEM installation</li>
+-            <li><a name="remoteFunc"><code>attr &lt;name&gt; remoteFunc(0|1|2|3) &lt;function name&rt;</code></a>
+-                <br/>name of a Perl function that is called for addressing a certain remote FHEM device</li>
+-            <li><a name="remoteToken"><code>attr &lt;name&gt; remoteToken(0|1|2|3) &lt;csrfToken&rt;</code></a>
+-                <br/>csrfToken for addressing a certain remote FHEM device</li>
+-            <li><a name="babbleIds"><code>attr &lt;name&gt; babbleIds <id_1> <id_2> ...</code></a>
+-                <br />space separated list of identities by which babble may be addressed</li>
+-            <li><a name="babblePreSubs"><code>attr &lt;name&gt; babbleSubs <regexp1>:<replacement1>,<regexp2>:<replacement2>, ...</code></a>
+-                <br/>space separated list of regular expressions and their replacements - this will be used on the initial sentence submitted to Babble 
+-                (Note: a space in the regexp must be replaced by \s). </li>
+-            <li><a name="babblePlaces"><code>attr &lt;name&gt; babblePlaces <place_1> <place_2> ...</code></a>
+-                <br />space separated list of special places to be identified in speech</li>
+-            <li><a name="babbleNotPlaces"><code>attr &lt;name&gt; babbleNoPlaces <place_1> <place_2> ...</code></a>
+-                <br />space separated list of rooms (in the local FHEM device) that should <i>not</i> appear in the list of place</li>
+-            <li><a name="babbleStatus"><code>attr &lt;name&gt; babbleStatus <status_1> <status_2> ...</code></a>
+-                <br />space separated list of status identifiers to be identified in speech. Example: <code>Status Value Weather Time</code></li>        
+-            <li><a name="babblePrepos"><code>attr &lt;name&gt; babblePrepos <prepo_1> <prepo_2> ...</code></a>
+-                <br />space separated list of prepositions to be identified in speech. Example: <code>by in at on</code></li>
+-            <li><a name="babbleTimes"><code>attr &lt;name&gt; babbleTimes <time_1> <time_2> ...</code></a>
+-                <br />space separated list of temporal adverbs. Example: <code>today tomorrow</code></li>      
+-            <li><a name="babbleQuests"><code>attr &lt;name&gt; babbleQuests <pron_1> <pron_2> ...</code></a>
+-                <br />space separated list of questioning adverbs. Example: <code>how when where</code></li>  
+-            <li><a name="babbleArticles"><code>attr &lt;name&gt; babbleArticles <art_1> <art_2> ...</code></a>
+-                <br />space separated list of articles to be identified in speech. Example: <code>the</code></li>
+-            <li><a name="babbleVerbs"><code>attr &lt;name&gt; babbleVerbs <form1a>,<form1b>...:<infinitive1> <form2a>,<form2b>...:<infinitive2></code></a>
+-                <br />space separated list of verb groups to be identified in speech. Each group consists of comma separated verb forms (conjugations as well as variations), 
+-                followed by a ':' and then the infinitive form of the verb. Example: <code>speak,speaks,say,says:speaking</code></li>
+-            <li><a name="babbleWrites"><code>attr &lt;name&gt; babbleWrites <write_1> <write_2> ...</code></a>
+-                <br />space separated list of write verbs to be identified in speech. Example: <code>send add remove</code></li>
+-            <li><a name="babbleVerbParts"><code>attr &lt;name&gt; babbleVerbParts <vp_1> <vp_2> ...</code></a>
+-                <br />space separated list of verb parts to be identified in speech. Example: <code>un re</code></li>
+-            <li><a name="babble_linkname"><code>attr &lt;name&gt; linkname
+-                    &lt;string&gt;</code></a>
+-                <br />Name for babble web link, default:
+-                babbles</li>
+-            <li><a name="babble_hiddenroom"><code>attr &lt;name&gt; hiddenroom
+-                    &lt;string&gt;</code></a>
+-                <br />Room name for hidden babble room (containing only the Babble device), default:
+-                babbleRoom</li>
+-            <li><a name="babble_publicroom"><code>attr &lt;name&gt; publicroom
+-                    &lt;string&gt;</code></a>
+-                <br />Room name for public babble room (containing sensor/actor devices), default:
+-                babble</li>
+-            <li><a name="babble_lockstate"><code>attr &lt;name&gt; lockstate
+-                    locked|unlocked</code></a>
+-                <br /><i>locked</i> means that babble setups may not be changed, <i>unlocked</i>
+-                means that babble setups may be changed></li>
+-        </ul>
++            <li>a Babble device name</li>
++            <li>a FHEM Device name</li>
++            <li>an integer 1..3, indication which of the <i>remoteFHEM</i> functions to be called</li>
+         </ul>
++        The Babble device name may contain a <b>*</b>-character. If this is the case, it will be considered a regular
++        expression, with the star replaced by <b>(.*)</b>.
++        When using Babble with a natural language sentence whose device part matches this regular expression, the
++        character group addressed by the star sequence is placed in the variable
++        <code>$STAR</code>, and used to replace this value in the command sequence.
++    </li>
++    <li><a name="helpFunc"><code>attr &lt;name&gt; helpFunc &lt;function name></code></a>
++        <br/>name of a help function which is used in case no command is found for a certain device. When this function
++        is called, the strings $DEV, $HELP, $PARM[0|1|2...]
++        will be replaced by the devicename identified by Babble, the help text for this device and parameters passed to
++        the Babble_DoIt function
++    </li>
++    <li><a name="testParm"><code>attr &lt;name&gt; testParm(0|1|2|3) &lt;string></code></a>
++        <br/>if a command is not really excuted, but only tested, the values of these attributes will be used to
++        substitute the strings $PARM[0|1|2...]
++        in the tested command
++    </li>
++    <li><a name="dnuFile"><code>attr &lt;name&gt; dnuFile &lt;filename></code></a>
++        <br/>if this filename is given, every sentence that could not be analyzed is stored in this file
++    </li>
++    <li><a name="confirmFunc"><code>attr &lt;name&gt; confirmFunc &lt;function name></code></a>
++        <br/>name of a confirmation function which is used in case a command is exceuted. When this function is called,
++        the strings $DEV, $HELP, $PARM[0|1|2...]
++        will be replaced by the devicename identified by Babble, the help text for this device and parameters passed to
++        the Babble_DoIt function
++    </li>
++    <li><a name="noChatBot"><code>attr &lt;name&gt; noChatBot 0|1</code></a>
++        <br/>if this attribute is set to 1, a local RiveScript interpreter will be ignored even though it is present in
++        the system
++    </li>
++    <li><a name="remoteFHEM"><code>attr &lt;name&gt; remoteFHEM(0|1|2|3) [&lt;user&gt;:&lt;password&gt;@]&lt;IP
++        address:port></code></a>
++        <br/>IP address and port for a remote FHEM installation
++    </li>
++    <li><a name="remoteFunc"><code>attr &lt;name&gt; remoteFunc(0|1|2|3) &lt;function name></code></a>
++        <br/>name of a Perl function that is called for addressing a certain remote FHEM device
++    </li>
++    <li><a name="remoteToken"><code>attr &lt;name&gt; remoteToken(0|1|2|3) &lt;csrfToken></code></a>
++        <br/>csrfToken for addressing a certain remote FHEM device
++    </li>
++    <li><a name="babbleIds"><code>attr &lt;name&gt; babbleIds
++        &lt;id_1>
++            &lt;id_2> ...
++    </code></a>
++        <br/>space separated list of identities by which babble may be addressed
++    </li>
++    <li><a name="babblePreSubs"><code>attr &lt;name&gt; babbleSubs
++        &lt;regexp1>:
++            &lt;replacement1>,
++                &lt;regexp2>:
++                    &lt;replacement2>, ...
++    </code></a>
++        <br/>space separated list of regular expressions and their replacements - this will be used on the initial
++        sentence submitted to Babble
++        (Note: a space in the regexp must be replaced by \s).
++    </li>
++    <li><a name="babblePlaces"><code>attr &lt;name&gt; babblePlaces
++        &lt;place_1>
++            &lt;place_2> ...
++    </code></a>
++        <br/>space separated list of special places to be identified in speech
++    </li>
++    <li><a name="babbleNotPlaces"><code>attr &lt;name&gt; babbleNoPlaces
++        &lt;place_1>
++            &lt;place_2> ...
++    </code></a>
++        <br/>space separated list of rooms (in the local FHEM device) that should <i>not</i> appear in the list of place
++    </li>
++    <li><a name="babbleStatus"><code>attr &lt;name&gt; babbleStatus
++        &lt;status_1>
++            &lt;status_2> ...
++    </code></a>
++        <br/>space separated list of status identifiers to be identified in speech. Example: <code>Status Value Weather
++            Time</code></li>
++    <li><a name="babblePrepos"><code>attr &lt;name&gt; babblePrepos
++        &lt;prepo_1>
++            &lt;prepo_2> ...
++    </code></a>
++        <br/>space separated list of prepositions to be identified in speech. Example: <code>by in at on</code></li>
++    <li><a name="babbleTimes"><code>attr &lt;name&gt; babbleTimes
++        &lt;time_1>
++            &lt;time_2> ...
++    </code></a>
++        <br/>space separated list of temporal adverbs. Example: <code>today tomorrow</code></li>
++    <li><a name="babbleQuests"><code>attr &lt;name&gt; babbleQuests
++        &lt;pron_1>
++            &lt;pron_2> ...
++    </code></a>
++        <br/>space separated list of questioning adverbs. Example: <code>how when where</code></li>
++    <li><a name="babbleArticles"><code>attr &lt;name&gt; babbleArticles
++        &lt;art_1>
++            &lt;art_2> ...
++    </code></a>
++        <br/>space separated list of articles to be identified in speech. Example: <code>the</code></li>
++    <li><a name="babbleVerbs"><code>attr &lt;name&gt; babbleVerbs
++        &lt;form1a>,
++            &lt;form1b>...:
++                &lt;infinitive1>
++                    &lt;form2a>,
++                        &lt;form2b>...:
++                            &lt;infinitive2>
++    </code></a>
++        <br/>space separated list of verb groups to be identified in speech. Each group consists of comma separated verb
++        forms (conjugations as well as variations),
++        followed by a ':' and then the infinitive form of the verb. Example: <code>speak,speaks,say,says:speaking</code>
++    </li>
++    <li><a name="babbleWrites"><code>attr &lt;name&gt; babbleWrites
++        &lt;write_1>
++            &lt;write_2> ...
++    </code></a>
++        <br/>space separated list of write verbs to be identified in speech. Example: <code>send add remove</code></li>
++    <li><a name="babbleVerbParts"><code>attr &lt;name&gt; babbleVerbParts
++        &lt;vp_1>
++            &lt;vp_2> ...
++    </code></a>
++        <br/>space separated list of verb parts to be identified in speech. Example: <code>un re</code></li>
++    <li><a name="babble_linkname"><code>attr &lt;name&gt; linkname
++        &lt;string&gt;</code></a>
++        <br/>Name for babble web link, default:
++        babbles
++    </li>
++    <li><a name="babble_hiddenroom"><code>attr &lt;name&gt; hiddenroom
++        &lt;string&gt;</code></a>
++        <br/>Room name for hidden babble room (containing only the Babble device), default:
++        babbleRoom
++    </li>
++    <li><a name="babble_publicroom"><code>attr &lt;name&gt; publicroom
++        &lt;string&gt;</code></a>
++        <br/>Room name for public babble room (containing sensor/actor devices), default:
++        babble
++    </li>
++    <li><a name="babble_lockstate"><code>attr &lt;name&gt; lockstate
++        locked|unlocked</code></a>
++        <br/><i>locked</i> means that babble setups may not be changed, <i>unlocked</i>
++        means that babble setups may be changed>
++    </li>
++</ul>
++
+ =end html
+ =begin html_DE
+ 
