@@ -1,0 +1,477 @@
+diff --git a/fhem/FHEM/73_UpsPico.pm b/fhem/FHEM/73_UpsPico.pm
+index 947247c7e..eaf2a87c0 100644
+--- a/fhem/FHEM/73_UpsPico.pm
++++ b/fhem/FHEM/73_UpsPico.pm
+@@ -1294,178 +1294,298 @@ sub UpsPico_GetAllData($@)
+ 
+ <a name="UpsPico"></a>
+ <h3>UpsPico</h3>
+-<ul>
+-	<table>
+-		<tr>
+-			<td>
+-				Der UpsPIco ist eine unterbrechungsfreie Stroimversorgung f&uuml;r den Raspberry Pi von PiModules. Dieses Modul wurde f&uuml;r die Firmware ab Version 0x38 und h&ouml;her geschrieben und wurde nur auf dem "UPS PIco HV3.0A Stack Plus" getestet.<BR>
+-				Dieses Modul stellt alle internen Daten zur Verf&uuml;gung, welche in die UpsPIco Register geschrieben und &uuml;ber den I2C - Bus ausgelesen werden. Der set-Befehl ist dar&uuml;ber hinaus in der Lage die Werte der Register entsprechend Ihrer Spezifikation zu &auml;ndern.<BR>
+-				Detailierte Informationen zu den einzelnen Registern stehen in den Register Spezifikationen in der letzten ver&ouml;ffentlichten Anleitung. (Siehe unten)<BR>
+-				<BR>
+-				<u>Referenzen:</u><BR>
+-				<a href="http://www.pimodulescart.com/shop/item.aspx?itemid=29">UPS PIco HV3.0A Stack Plus</a><BR>
+-				<a href="http://www.forum.pimodules.com/viewforum.php?f=25">UPS PIco HV3.0A : Interne Register Spezification, Anleitung and Firmware Updates</a><BR>
+-				<BR>
+-			</td>
+-		</tr>
+-	</table>
+-	  
+-	<table>
+-	<tr><td><a name="UpsPicodefine"></a><b>Define</b></td></tr>
+-	</table>
+-
+-	<table><tr><td><ul><code>define &lt;name&gt; UpsPico &lt;IPv4-address&gt; &lt;Username&gt; &lt;Password&gt;</code></ul></td></tr></table>
+-
+-	<ul><ul>
+-		<table>
+-			<tr><td><code>&lt;name&gt;</code> : </td><td>Der Name des Device. Empfehlung: "myUpsPico".</td></tr>
+-			<tr><td><code>&lt;IPv4-address&gt;</code> : </td><td>Eine g&uuml;ltige IPv4 Adresse des Raspberry Pi mit UpsPIco. Gegebenenfalls muss der Router f&uuml;r die an den Raspberry Pi vergebene DHCP Adresse konsultiert werden.</td></tr>
+-			<tr><td><code>&lt;GatewayPassword&gt;</code> : </td><td>Der Username des entfernten Raspberry Pi.</td></tr>
+-			<tr><td><code>&lt;PrivatePassword&gt;</code> : </td><td>Das Passwort des entfernten Raspberry Pi.</td></tr>
+-		</table>
+-	</ul></ul>
+-
+-	<BR>
+-
+-	<table>
+-		<tr><td><a name="UpsPicoSet"></a><b>Set</b></td></tr>
+-		<tr><td>
+-			<ul>
+-					Diese Funktion ver&auml;ndert die Werte der register, welche als beschreibbar definiert sind.<BR>
+-					Sind die entsprechenden Register als kritisch (critical) spezifiziert (Ein falscher Wert k&ouml;nnte zur Besch&auml;digung des UpsPIco f&uuml;hren), muss das Atttribut "WriteCritical" vorher auf "1" gesetzt werden.
+-			</ul>
+-		</td></tr>
+-	</table>
+-
+-	<table><tr><td><ul><code>set &lt;name&gt; &lt;register&gt; &lt;value&gt;</code></ul></td></tr></table>
+-
+-	<ul><ul>
+-		<table>
+-			<tr><td><code>&lt;name&gt;</code>      : </td><td>Der name des definierten UpsPico Device<BR></td></tr>
+-			<tr><td><code>&lt;register&gt;</code>  : </td><td>Der name des Registers welches ver&auml;ndert werden soll. E.g.: "<code>/Status/key</code>"<BR></td></tr>
+-			<tr><td><code>&lt;value&gt;</code>     : </td><td>Ein g&uuml;ltiger Wert f&uuml;r das Register.<BR></td></tr>
+-		</table>
+-	</ul></ul>
+-
+-	<BR>
+-
+-	<table>
+-		<tr><td><a name="UpsPicoGet"></a><b>Get</b></td></tr>
+-		<tr><td>
+-			<ul>
+-					Die get Funktion liest einzelne Register aus und schreibt sie in das entsprechende Reading.<BR>
+-					Es wird nur der Wert, aber nicht die Einheit oder der g&uuml;ltige Wertebereich zur&uuml;ckgegeben.<BR>
+-			</ul>
+-		</td></tr>
+-	</table>
+-
+-	<table><tr><td><ul><code>get &lt;name&gt; &lt;register&gt;</code></ul></td></tr></table>
+-
+-	<ul><ul>
+-		<table>
+-			<tr><td><code>&lt;name&gt;</code> : </td><td>Der name des definierten UpsPico Device<BR></td></tr>
+-			<tr><td><code>&lt;register&gt;</code>  : </td><td>Der name des Registers welches ausgelesen werden soll. E.g.: "<code>/Status/key</code>"<BR></td></tr>
+-
+-				</td>
+-			</tr>
+-		</table>
+-	</ul></ul>
+-
+-	<BR>
+-
+-	<table>
+-		<tr><td><a name="UpsPicoAttr"></a><b>Attributes</b></td></tr>
+-		<tr><td>
+-			<ul>
+-				<BR>
+-				Die folgenden Attribute k&ouml;nnen neben den allgemeinen Attributen wie <a href="#room">room</a> vergeben werden.<BR>
+-			</ul>
+-		</td></tr>
+-	</table>
++<blockquote>
++    <table>
++        <tr>
++            <td>
++                Der UpsPIco ist eine unterbrechungsfreie Stromversorgung f&uuml;r den Raspberry Pi von PiModules.
++                Dieses Modul wurde f&uuml;r die Firmware ab Version 0x38 und h&ouml;her geschrieben und wurde nur auf
++                dem "UPS PIco HV3.0A Stack Plus" getestet.<BR>
++                Dieses Modul stellt alle internen Daten zur Verf&uuml;gung, welche in die UpsPIco Register geschrieben
++                und &uuml;ber den I2C - Bus ausgelesen werden. Der set-Befehl ist dar&uuml;ber hinaus in der Lage die
++                Werte der Register entsprechend Ihrer Spezifikation zu &auml;ndern.<BR>
++                Detailierte Informationen zu den einzelnen Registern stehen in den Register Spezifikationen in der
++                letzten ver&ouml;ffentlichten Anleitung. (Siehe unten)<BR>
++                <BR>
++                <u>Referenzen:</u><BR>
++                <a href="http://www.pimodulescart.com/shop/item.aspx?itemid=29">UPS PIco HV3.0A Stack Plus</a><BR>
++                <a href="http://www.forum.pimodules.com/viewforum.php?f=25">UPS PIco HV3.0A : Interne Register
++                    Spezifikation, Anleitung and Firmware Updates</a><BR>
++                <BR>
++            </td>
++        </tr>
++    </table>
++
++    <table>
++        <tr>
++            <td><a name="UpsPicodefine"></a><b>Define</b></td>
++        </tr>
++    </table>
++
++    <table>
++        <tr>
++            <td>
++                <blockquote><code>define &lt;name&gt; UpsPico &lt;IPv4-address&gt; &lt;Username&gt; &lt;Password&gt;</code></blockquote>
++            </td>
++        </tr>
++    </table>
++
++    <blockquote>
++        <blockquote>
++            <table>
++                <tr>
++                    <td><code>&lt;name&gt;</code> :</td>
++                    <td>Der Name des Device. Empfehlung: "myUpsPico".</td>
++                </tr>
++                <tr>
++                    <td><code>&lt;IPv4-address&gt;</code> :</td>
++                    <td>Eine g&uuml;ltige IPv4 Adresse des Raspberry Pi mit UpsPIco. Gegebenenfalls muss der Router f&uuml;r
++                        die an den Raspberry Pi vergebene DHCP Adresse konsultiert werden.
++                    </td>
++                </tr>
++                <tr>
++                    <td><code>&lt;GatewayPassword&gt;</code> :</td>
++                    <td>Der Username des entfernten Raspberry Pi.</td>
++                </tr>
++                <tr>
++                    <td><code>&lt;PrivatePassword&gt;</code> :</td>
++                    <td>Das Passwort des entfernten Raspberry Pi.</td>
++                </tr>
++            </table>
++        </blockquote>
++    </blockquote>
++
++    <BR>
++
++    <table>
++        <tr>
++            <td><a name="UpsPicoSet"></a><b>Set</b></td>
++        </tr>
++        <tr>
++            <td>
++                <blockquote>
++                    Diese Funktion ver&auml;ndert die Werte der Register, welche als beschreibbar definiert sind.<BR>
++                    Sind die entsprechenden Register als kritisch (critical) spezifiziert (Ein falscher Wert k&ouml;nnte
++                    zur Besch&auml;digung des UpsPIco f&uuml;hren), muss das Atttribut "WriteCritical" vorher auf "1"
++                    gesetzt werden.
++                </blockquote>
++            </td>
++        </tr>
++    </table>
++
++    <table>
++        <tr>
++            <td>
++                <blockquote><code>set &lt;name&gt; &lt;register&gt; &lt;value&gt;</code></blockquote>
++            </td>
++        </tr>
++    </table>
++
++    <blockquote>
++        <blockquote>
++            <table>
++                <tr>
++                    <td><code>&lt;name&gt;</code> :</td>
++                    <td>Der Name des definierten UpsPico Device<BR></td>
++                </tr>
++                <tr>
++                    <td><code>&lt;register&gt;</code> :</td>
++                    <td>Der Name des Registers welches ver&auml;ndert werden soll. E.g.: "<code>/Status/key</code>"<BR>
++                    </td>
++                </tr>
++                <tr>
++                    <td><code>&lt;value&gt;</code> :</td>
++                    <td>Ein g&uuml;ltiger Wert f&uuml;r das Register.<BR></td>
++                </tr>
++            </table>
++        </blockquote>
++    </blockquote>
++
++    <BR>
++
++    <table>
++        <tr>
++            <td><a name="UpsPicoGet"></a><b>Get</b></td>
++        </tr>
++        <tr>
++            <td>
++                <blockquote>
++                    Die get Funktion liest einzelne Register aus und schreibt sie in das entsprechende Reading.<BR>
++                    Es wird nur der Wert, aber nicht die Einheit oder der g&uuml;ltige Wertebereich
++                    zur&uuml;ckgegeben.<BR>
++                </blockquote>
++            </td>
++        </tr>
++    </table>
++
++    <table>
++        <tr>
++            <td>
++                <blockquote><code>get &lt;name&gt; &lt;register&gt;</code></blockquote>
++            </td>
++        </tr>
++    </table>
++
++    <blockquote>
++        <blockquote>
++            <table>
++                <tr>
++                    <td><code>&lt;name&gt;</code> :</td>
++                    <td>Der Name des definierten UpsPico Device<BR></td>
++                </tr>
++                <tr>
++                    <td><code>&lt;register&gt;</code> :</td>
++                    <td>Der Name des Registers welches ausgelesen werden soll. Zum Beispiel: "<code>/Status/key</code>"<BR></td>
++                </tr>
++            </table>
++        </blockquote>
++    </blockquote>
++
++    <BR>
++
++    <table>
++        <tr>
++            <td><a name="UpsPicoAttr"></a><b>Attributes</b></td>
++        </tr>
++        <tr>
++            <td>
++                <blockquote>
++                    <BR>
++                    Die folgenden Attribute k&ouml;nnen neben den allgemeinen Attributen wie <a href="#room">room</a>
++                    vergeben werden.<BR>
++                </blockquote>
++            </td>
++        </tr>
++    </table>
++
++    <table>
++        <tr>
++            <td>
++                <BR>
++            </td>
++            <td></td>
++        </tr>
++        <tr>
++            <td>
++                <blockquote>
++                    <code>PollingInterval</code>
++                </blockquote>
++            </td>
++            <td>
++                Abfrageinterval des UPS PIco. Der Wert muss >=20s sein um einen vollen Polling-Zyklus
++                zu erlauben.<BR>
++                Der Default-Wert ist 300 Sekunden.<BR>
++            </td>
++        </tr>
++        <tr>
++            <td>
++                <BR>
++            </td>
++            <td></td>
++        </tr>
++        <tr>
++            <td>
++                <blockquote>
++                    <code>WriteCritical</code>
++                </blockquote>
++            </td>
++            <td>
++                Verhindert versehentliche Besch&auml;digungen durch Beschreiben der kritischen Register mit falschen
++                Werten.<BR>
++
++                Musz f&uuml;r jeden einzelnen Schreibvorgang erneut gesetzt werden da dieser zur&uuml;ckgesetzt
++                wird..<BR>
++
++                Der Default-Wert ist 0 = Deaktiviert.<BR>
++            </td>
++        </tr>
++        <tr>
++            <td>
++                <BR>
++            </td>
++            <td></td>
++        </tr>
++        <tr>
++            <td>
++                <blockquote>
++                    <code>Port</code>
++                </blockquote>
++            </td>
++            <td>Port Nummer f&uuml;r den SSH Zugang am entfernten Raspberry Pi.<BR>
++                Der Default-Wert ist 22 = Standard SSH Port<BR>
++            </td>
++        </tr>
++        <tr>
++            <td>
++                <BR>
++            </td>
++            <td></td>
++        </tr>
++        <tr>
++            <td>
++                <blockquote>
++                    <code>CredentialsEncrypted</code>
++                </blockquote>
++            </td>
++            <td>
++                Definiert ob die Anmeldedaten in lesbarer Form (PlainText) oder als base64 verschl&uuml;sselt vorliegen.<BR>
++                Der Default-Wert ist 0 = Anmeldedaten liegen in PlainText vor.<BR>
++            </td>
++        </tr>
++        <tr>
++            <td>
++                <BR>
++            </td>
++            <td></td>
++        </tr>
++        <tr>
++            <td>
++                <blockquote>
++                    <code>DbLogExclude</code>
++                </blockquote>
++            </td>
++            <td>
++                Generelles Attribut um Readings von Loggen auszuschließen. Das Attribut wird automatisch auf
++                "/Status/pico_is_running" gesetzt welchen den kontinuierlichen Watchdog Z&auml;hler vom loggen ausnimmt.<BR>
++                Es ergibt keinen Sinn dieses Reading zu loggen.<BR>
++                Der Default-Wert f&uuml;r die Ausnahme vom loggen liegt auf dem Reading "/Status/pico_is_running" <BR>
++            </td>
++        </tr>
++        <tr>
++            <td>
++                <BR>
++            </td>
++            <td></td>
++        </tr>
++        <tr>
++            <td>
++                <blockquote>
++                    <code>event-on-change-reading</code>
++                </blockquote>
++            </td>
++            <td>Generelles Attribut um Events nur bei &auml;nderungen von Readings zu erzeugen. Das Attribut wird
++                automatisch auf ".*" gesetzt, was alle Readings nur bei &auml;nderungen loggt.<BR>
++                Der Default-Wert ist ".*" = Alle Readings.<BR>
++            </td>
++        </tr>
++        <tr>
++            <td>
++                <BR>
++            </td>
++            <td></td>
++        </tr>
++        <tr>
++            <td>
++                <blockquote>
++                    <code>room</code>
++                </blockquote>
++            </td>
++            <td>Generelles Attribut zum setzen des Raumes. Das Attribut wird automatisch auf "UpsPIco" gesetzt, damit
++                das device nicht im "Everything"-Raum verschwindet.<BR>
++                Der Default-Wert ist "UpsPIco".<BR>
++            </td>
++        </tr>
++    </table>
++</blockquote>
+ 
+-	<table>
+-		<td>
+-			<ul><ul>
+-					<tr>
+-						<td>
+-						<BR>
+-						<tr><td><ul><li><code>PollingInterval</code> : </li></td><td>Abrageinterval f&uuml;r den UPS PIco. Der Wert muss >=20s sein um einen vollen Polling Zyklus zu erlauben.<BR>
+-																					 Der Defaul Wert ist 300s.<BR>
+-						</ul></td></tr>
+-						</td>
+-					</tr>
+-			</ul></ul>
+-
+-			<ul><ul>
+-
+-					<tr>
+-						<td>
+-						<BR>
+-						<tr><td><ul><li><code>WriteCritical</code> : </li></td><td>Verhindert versehentliche Besch&auml;digungen durch Beschreiben der kritischen Register mit falschen Werten.<BR>
+-																				   Musz f&uuml;r jeden einzelnen Schreibvorgang erneut gesetzt werden da dieser zur&uuml;ckgesetzt wird..<BR>
+-																				   Der Default Wert ist 0 = Deaktiviert.<BR>
+-						</ul></td></tr>
+-						</td>
+-					</tr>
+-
+-			</ul></ul>
+-
+-			<ul><ul>
+-					<tr>
+-						<td>
+-						<BR>
+-						<tr><td><ul><li><code>Port</code> : </li></td><td>Port Nummer f&uuml;r den SSH Zugang am entfernten Raspberry Pi.<BR>
+-																		  Der Default Wert ist 22 = Standard SSH Port<BR>
+-					   </ul></td></tr>
+-						</td>
+-					</tr>
+-			</ul></ul>
+-
+-			<ul><ul>
+-					<tr>
+-						<td>
+-						<BR>
+-						<tr><td><ul><li><code>CredentialsEncrypted</code> : </li></td><td>Definiert ob die Anmeldedaten in lesbarer Form (PlainText) oder als base64 verschl&uuml;sselt vorliegen.<BR>
+-																						  Der Default Wert ist 0 = Anmeldedaten liegen in PlainText vor.<BR>
+-						</ul></td></tr>
+-						</td>
+-					</tr>
+-			</ul></ul>
+-
+-			<ul><ul>
+-					<tr>
+-						<td>
+-						<BR>
+-						<tr><td><ul><li><code>DbLogExclude</code> : </li></td><td>Generelles Attribut um Readings von Loggen auszuschließen. Das Attribut wird automatisch auf "/Status/pico_is_running" gesetzt welchen den kontinuierlichen Watchdog Z&auml;hler vom loggen ausnimmt.<BR>
+-																				  Es ergibt keinen Sinn dieses Reading zu loggen.<BR>
+-																				  Der Default Wert f&uuml;r die Ausnahme vom loggen liegt auf dem Reading "/Status/pico_is_running" <BR>
+-						</ul></td></tr>
+-						</td>
+-					</tr>
+-			</ul></ul>
+-
+-			<ul><ul>
+-					<tr>
+-						<td>
+-						<BR>
+-						<tr><td><ul><li><code>event-on-change-reading</code> : </li></td><td>Generelles Attribut um Events nur bei &auml;nderungen von Readings zu erzeugen. Das Attribut wird automatisch auf ".*" gesetzt, was alle Readings nur bei &auml;nderungen loggt.<BR>
+-																							 Der Default Wert ist ".*" = Alle Readings.<BR>
+-						</ul></td></tr>
+-						</td>
+-					</tr>
+-			</ul></ul>
+-
+-			<ul><ul>
+-					<tr>
+-						<td>
+-						<BR>
+-						<tr><td><ul><li><code>room</code> : </li></td><td>Generelles Attribut zum setzen des Raumes. Das Attribut wird automatisch auf "UpsPIco" gesetzt, damit das device nicht im "Everthing" Raum verschwindet.<BR>
+-																	  Der Default Wert ist "UpsPIco".<BR>
+-						</ul></td></tr>
+-						</td>
+-					</tr>
+-			</ul></ul>
+-		</td>
+-	</table>
+-</ul>
+ =end html_DE
+\ No newline at end of file
