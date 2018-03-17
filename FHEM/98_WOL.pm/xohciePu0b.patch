@@ -1,0 +1,20 @@
+diff --git a/fhem/FHEM/98_WOL.pm b/fhem/FHEM/98_WOL.pm
+index 4c34a7bd8..da52b83f3 100644
+--- a/fhem/FHEM/98_WOL.pm
++++ b/fhem/FHEM/98_WOL.pm
+@@ -364,7 +364,7 @@ sub WOL_Attr($$$) {
+ 
+ Defines a WOL device via its MAC and IP address.<br><br>
+ 
+-when sending the <b>on</b> command to a WOL device it wakes up the dependent device by sending a magic packet. When running in repeat mode the magic paket ist sent every n seconds to the device.
++when sending the <b>on</b> command to a WOL device it wakes up the dependent device by sending a magic packet. When running in repeat mode the magic packet is sent every <var>n</var> seconds to the device.
+ So, for example a Buffalo NAS can be kept awake.
+ <ul>
+   <a name="WOLdefine"></a>
+@@ -444,4 +444,4 @@ So, for example a Buffalo NAS can be kept awake.
+ </ul>
+ 
+ =end html
+-=cut
+\ No newline at end of file
++=cut
