@@ -12,7 +12,7 @@ cwd=$(pwd)
 trap "cd $cwd" INT TERM EXIT
 
 #   set to a more international environment
-LANG="C"
+export LANG="C"
 
 #   check if colours are supported
 #       tput colors returns the supported amount of colours by the current shell, i.e. 256 or 2
