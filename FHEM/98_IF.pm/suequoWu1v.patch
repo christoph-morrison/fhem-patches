@@ -1,0 +1,13 @@
+diff --git a/fhem/FHEM/98_IF.pm b/fhem/FHEM/98_IF.pm
+index c55522c40..8e186feed 100644
+--- a/fhem/FHEM/98_IF.pm
++++ b/fhem/FHEM/98_IF.pm
+@@ -480,7 +480,7 @@ CommandIF($$)
+   Es gibt inzwischen ein neueres <a href="http://fhem.de/commandref_DE.html#DOIF">DOIF</a>-Modul, welches auf der Syntax vom IF-Befehl aufbaut.
+   Es arbeitet im Gegensatz zu IF als Modul selbstständig ereignis- und zeitgesteuert ohne notify bzw. at. Damit lassen sich viele Problemlösungen eleganter, jeweils mit einem einzigen Modul, realisieren.<br>
+   <br>
+-  In der Bedingung des IF-Befehls wird die vollständige Syntax des Perl-if unterstützt. Stati und Readings von Devices werden in eckigen Klammern angegeben.<br>
++  In der Bedingung des IF-Befehls wird die vollständige Syntax des Perl-if unterstützt. Status und Readings von Devices werden in eckigen Klammern angegeben.<br>
+   <br>
+   <br>
+   <b>Beispiele:</b><br>
