@@ -1,0 +1,40 @@
+diff --git a/fhem/FHEM/98_IF.pm b/fhem/FHEM/98_IF.pm
+index c55522c40..d958a10ff 100644
+--- a/fhem/FHEM/98_IF.pm
++++ b/fhem/FHEM/98_IF.pm
+@@ -480,7 +480,7 @@ CommandIF($$)
+   Es gibt inzwischen ein neueres <a href="http://fhem.de/commandref_DE.html#DOIF">DOIF</a>-Modul, welches auf der Syntax vom IF-Befehl aufbaut.
+   Es arbeitet im Gegensatz zu IF als Modul selbstständig ereignis- und zeitgesteuert ohne notify bzw. at. Damit lassen sich viele Problemlösungen eleganter, jeweils mit einem einzigen Modul, realisieren.<br>
+   <br>
+-  In der Bedingung des IF-Befehls wird die vollständige Syntax des Perl-if unterstützt. Stati und Readings von Devices werden in eckigen Klammern angegeben.<br>
++  In der Bedingung des IF-Befehls wird die vollständige Syntax des Perl-if unterstützt. Status und Readings von Devices werden in eckigen Klammern angegeben.<br>
+   <br>
+   <br>
+   <b>Beispiele:</b><br>
+@@ -497,7 +497,7 @@ CommandIF($$)
+   <br>
+   <code>define check at +00:10 IF ([outdoor:&STATE] eq "open") (set switch1 on)<br></code>
+   <br>
+-  Wenn der Reading "state" abgefragt werden soll, dann wird der Readingname ohne & angegeben:<br>
++  Wenn das Reading "state" abgefragt werden soll, dann wird der Readingname ohne &amp; angegeben:<br>
+   <br>
+   <code>define check at +00:10 IF ([outdoor:state] eq "open") (set switch1 on)<br></code>
+   <br>
+@@ -558,7 +558,7 @@ CommandIF($$)
+   <br>
+   <code>define temp at 18:00 IF ([outdoor:temperature] > 10) (set thermostat desired-temp {([thermostat:desired-temp:d]+1)})<br></code>
+   <br>
+-  Mehrerer Befehle werden durch ein Komma statt durch ein Semikolon getrennt, dadurch entfällt das Doppeln, Vervierfachen usw. des Semikolons:<br>
++  Mehrere Befehle werden durch ein Komma anstelle eines Semikolons getrennt, dadurch entfällt das Doppeln, Vervierfachen usw. des Semikolons:<br>
+   <br>
+   <code>define check at +00:10 IF ([outdoor:humidity] > 10) (set switch1 off,set switch2 on) ELSE (set switch1 on,set switch2 off)<br></code>
+   <br>
+@@ -575,7 +575,7 @@ CommandIF($$)
+   <br>
+   <code>define check at *10:00 IF ([indoor] eq "on") (define a_test at +00:10 IF (1) (set lampe1 on,set lampe2 off,set temp desired 20))<br></code>
+   <br>
+-  Das Komma als Trennzeichen zwischen den FHEM-Befehlen lässt sich mit ;; kombinieren, z. B.:<br>
++  Das Komma als Trennzeichen zwischen den FHEM-Befehlen lässt sich mit ;; kombinieren, z.B.:<br>
+   <br>
+   <code>define check at *10:00 IF ([indoor] eq "on") (set lamp1 on,define a_test at +00:10 set lampe2 on;;set lampe3 off;;set temp desired 20)<br></code>
+   <br>
