@@ -1,0 +1,51 @@
+diff --git a/fhem/FHEM/95_Astro.pm b/fhem/FHEM/95_Astro.pm
+index bb9a7a6be..89370534e 100644
+--- a/fhem/FHEM/95_Astro.pm
++++ b/fhem/FHEM/95_Astro.pm
+@@ -1514,23 +1514,29 @@ sub Astro_Get($@) {
+         </ul>
+         <a name="Astroattr"></a>
+         <h4>Attributes</h4>
+-        <ul>
+-            <li><a name="astro_interval">
+-                <code>&lt;interval&gt;</code>
+-                <br />Update interval in seconds. The default is 3600 seconds, a value of 0 disables the automatic update. </li>
+-                  <li>Some definitions determining the observer position:<br/>
+-        <code>attr  &lt;name&gt;  longitude &lt;value&gt;</code><br/>
+-        <code>attr  &lt;name&gt;  latitude &lt;value&gt;</code><br/>
+-        <code>attr  &lt;name&gt;  altitude &lt;value&gt;</code> (in m above sea level)<br/>
+-        <code>attr  &lt;name&gt;  horizon &lt;value&gt;</code> custom horizon angle in degrees, default 0<br/>   
+-        These definitions take precedence over global attribute settings.
+-        </li>
+-            <li>Standard attributes <a href="#alias">alias</a>, <a href="#comment">comment</a>, <a
+-                    href="#event-on-update-reading">event-on-update-reading</a>, <a
+-                    href="#event-on-change-reading">event-on-change-reading</a>, <a href="#room"
+-                    >room</a>, <a href="#eventMap">eventMap</a>, <a href="#loglevel">loglevel</a>,
+-                    <a href="#webCmd">webCmd</a></li>
+-        </ul>
++            <ul>
++                <li>
++                    <a name="astro_interval"><code>&lt;interval&gt;</code></a><br>
++                    Update interval in seconds. The default is 3600 seconds, a value of 0 disables the automatic update.
++                </li>
++                <li>
++                    Some definitions determining the observer position:<br>
++                    <code>attr  &lt;name&gt;  longitude &lt;value&gt;</code><br>
++                    <code>attr  &lt;name&gt;  latitude &lt;value&gt;</code><br>
++                    <code>attr  &lt;name&gt;  altitude &lt;value&gt;</code> (in m above sea level)<br>
++                    <code>attr  &lt;name&gt;  horizon &lt;value&gt;</code> custom horizon angle in degrees, default 0<br>
++                    These definitions take precedence over <a href="#global">global</a> attribute settings.
++                </li>
++                <li>
++                    Standard attributes:<br>
++                    <a href="#alias">alias</a>, <a href="#comment">comment</a>,
++                    <a href="#event-on-update-reading">event-on-update-reading</a>,
++                    <a href="#event-on-change-reading">event-on-change-reading</a>,
++                    <a href="#room">room</a>,
++                    <a href="#eventMap">eventMap</a>, <a href="#loglevel">loglevel</a>,
++                    <a href="#webCmd">webCmd</a>
++                </li>
++            </ul>
+         </ul>
+ =end html
+ =begin html_DE
