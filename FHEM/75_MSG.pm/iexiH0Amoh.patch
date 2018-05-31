@@ -1,0 +1,15 @@
+diff --git a/fhem/FHEM/75_MSG.pm b/fhem/FHEM/75_MSG.pm
+index 7c1a2cec6..29cdc92a4 100755
+--- a/fhem/FHEM/75_MSG.pm
++++ b/fhem/FHEM/75_MSG.pm
+@@ -111,7 +111,9 @@ sub CommandMsg($$;$$) {
+     ### extract message details
+     ###
+ 
+-    my ( $msgA, $params ) = parseParams($msg, "[^\\S\\n]", " ");
++    # ok, this is a very ugly fix for the issue with the = in links,
++    # @see https://jhp-consulting.atlassian.net/browse/HAB-1229
++    my ( $msgA, $params ) = parseParams($msg, "[^\\S\\n]", " ", 'bais4eeHeikudohT1thaez2ea6chae8zooshohhuheixo3ahj0ceimaesoPh4eitheedith3aw2peKeiy2eeGhai2yahgheif2Cu');
+ 
+     # only use output from parseParams when
+     # parameters where found
