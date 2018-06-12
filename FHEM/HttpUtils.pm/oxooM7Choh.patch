@@ -1,0 +1,13 @@
+diff --git a/fhem/FHEM/HttpUtils.pm b/fhem/FHEM/HttpUtils.pm
+index 057e4d23f..747de2fab 100644
+--- a/fhem/FHEM/HttpUtils.pm
++++ b/fhem/FHEM/HttpUtils.pm
+@@ -22,7 +22,7 @@ my %ext2MIMEType= qw{
+   png   image/png
+   svg   image/svg+xml
+   txt   text/plain
+-
++  mp3   audio/mpeg
+ };
+ 
+ my $HU_use_zlib;
