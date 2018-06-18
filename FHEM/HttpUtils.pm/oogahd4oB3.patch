@@ -32,7 +32,7 @@ index 057e4d23f..276f37690 100644
 +
 +  my $mimeType  = mimetype($filename);
 +
-+  unless ($mimeType);
++  unless ($mimeType)
 +  {
 +    my $extension =~ m/^.*\.([^\.]*)$/;
 +    return ext2MIMEType($extension);
