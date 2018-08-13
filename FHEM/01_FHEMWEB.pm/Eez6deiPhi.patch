@@ -1,0 +1,21 @@
+diff --git a/fhem/FHEM/01_FHEMWEB.pm b/fhem/FHEM/01_FHEMWEB.pm
+index 2f38d03d6..c3356ebc0 100644
+--- a/fhem/FHEM/01_FHEMWEB.pm
++++ b/fhem/FHEM/01_FHEMWEB.pm
+@@ -8,6 +8,7 @@ use TcpServerUtils;
+ use HttpUtils;
+ use Blocking;
+ use Time::HiRes qw(gettimeofday);
++use Sort::Key::Natural qw(natsort);
+ 
+ #########################
+ # Forward declaration
+@@ -1249,7 +1250,7 @@ FW_makeTable($$$@)
+ 
+   my $row = 1;
+   my $prefix = ($title eq "Attributes" ? "a-" : "");
+-  foreach my $n (sort keys %{$hash}) {
++  foreach my $n (natsort keys %{$hash}) {
+     next if(!$si && $n =~ m/^\./);      # Skip "hidden" Values
+     my $val = $hash->{$n};
+     $val = "" if(!defined($val));
