@@ -1,0 +1,35 @@
+diff --git a/fhem/FHEM/73_ElectricityCalculator.pm b/fhem/FHEM/73_ElectricityCalculator.pm
+index f17e06c57..6950b2920 100644
+--- a/fhem/FHEM/73_ElectricityCalculator.pm
++++ b/fhem/FHEM/73_ElectricityCalculator.pm
+@@ -1499,8 +1499,8 @@ sub ElectricityCalculator_Notify($$)
+ 	<tr><td>
+ 		<ul>
+ 				Die set - Funktion erlaubt individuelle Readings zu ver&auml;ndern um beispielsweise nach einem Stromausfall Werte zu korrigieren.<BR>
+-				Die set - Funktion funktioniert nur f&uumlr Readings welche im CalculatorDevice gespeichert wurden.<BR>
+-				Die Readings welche im Counter - Device gespeichert wurden, m&uumlssen individuell mit <code>set</code> - Befehl gesetzt werden.<BR>
++				Die set - Funktion funktioniert nur f&uuml;r Readings welche im CalculatorDevice gespeichert wurden.<BR>
++				Die Readings welche im Counter - Device gespeichert wurden, m&uuml;ssen individuell mit <code>set</code> - Befehl gesetzt werden.<BR>
+ 		</ul>
+ 	</td></tr>
+ </table>
+@@ -1512,8 +1512,8 @@ sub ElectricityCalculator_Notify($$)
+ 	<tr><td>
+ 		<ul>
+ 				Die get - Funktion liefert nur den Wert des jeweiligen Readings zur&uuml;ck.<BR>
+-				Die get - Funktion funktioniert nur f&uumlr Readings welche im CalculatorDevice gespeichert wurden.<BR>
+-				Die Readings welche im Counter - Device gespeichert wurden, m&uumlssen individuell mit <code>get</code> - Befehl ausgelesen werden.<BR>
++				Die get - Funktion funktioniert nur f&uuml;r Readings welche im CalculatorDevice gespeichert wurden.<BR>
++				Die Readings welche im Counter - Device gespeichert wurden, m&uuml;ssen individuell mit <code>get</code> - Befehl ausgelesen werden.<BR>
+ 
+ 		</ul>
+ 	</td></tr>
+@@ -1525,7 +1525,7 @@ sub ElectricityCalculator_Notify($$)
+ 	<tr><td><a name="ElectricityCalculatorAttr"></a><b>Attributes</b></td></tr>
+ 	<tr><td>
+ 		<ul>
+-				Sollten die unten ausfeg&auuml;hrten Attribute bei der Definition eines entsprechenden Ger&auml;tes nicht gesetzt sein, so werden sie vom Modul mit Standard Werten automatisch gesetzt<BR>
++				Sollten die unten aufgef&uuml;hrten Attribute bei der Definition eines entsprechenden Ger&auml;tes nicht gesetzt worden sein, so werden sie vom Modul mit Standardwerten automatisch gesetzt.<BR>
+ 				Zus&auml;tzlich k&ouml;nnen die globalen Attribute wie <a href="#room">room</a> verwendet werden.<BR>
+ 		</ul>
+ 	</td></tr>
