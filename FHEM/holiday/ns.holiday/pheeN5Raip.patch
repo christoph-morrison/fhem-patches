@@ -1,0 +1,12 @@
+diff --git a/fhem/FHEM/holiday/ns.holiday b/fhem/FHEM/holiday/ns.holiday
+index 74760dc0f..e1080b2e9 100644
+--- a/fhem/FHEM/holiday/ns.holiday
++++ b/fhem/FHEM/holiday/ns.holiday
+@@ -4,6 +4,7 @@
+ 1 01-01 Neujahr
+ 1 05-01 Tag der Arbeit
+ 1 10-03 Tag der deutschen Einheit
++1 10-31 Reformationstag
+ 1 12-25 1. Weihnachtstag
+ 1 12-26 2. Weihnachtstag
+ 
