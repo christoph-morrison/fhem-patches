@@ -1,0 +1,65 @@
+diff --git a/fhem/FHEM/73_WaterCalculator.pm b/fhem/FHEM/73_WaterCalculator.pm
+index f028f6a4e..201315fd7 100644
+--- a/fhem/FHEM/73_WaterCalculator.pm
++++ b/fhem/FHEM/73_WaterCalculator.pm
+@@ -1401,15 +1401,15 @@ sub WaterCalculator_Notify($$)
+ <table>
+ 	<tr>
+ 		<td>
+-			Das WaterCalculator Modul berechnet den Verbrauch an Wasser und die verbundenen Kosten von einem oder mehreren Wasserz&auml;hlern.<BR>
++			WaterCalculator berechnet den Verbrauch an Wasser und die verbundenen Kosten von einem oder mehreren Wasserz&auml;hlern.<BR>
+ 			<BR>
+-			<FONT COLOR="#FF0000">Die Funktion des sogenannten Unterwasserz&auml;hlers ist noch nicht implementiert. Daher müssen bei den Wasserkosten die Abwasserkosten mit einbezogen werden.</FONT>
++			<FONT COLOR="#FF0000">Die Funktion des sogenannten Unterwasserz&auml;hlers ist noch nicht implementiert. Daher m&uuml;ssen bei den Wasserkosten die Abwasserkosten mit einbezogen werden.</FONT>
+ 			<BR>
+-			Es ist kein eigenes Z&auml;hlermodul sondern ben&ouml;tigt eine Regular Expression (regex or regexp) um das Reading mit den Z&auml;hlimpulse von einem oder mehreren Wasserz&auml;hlern zu finden.<BR>
++			Es ist kein eigenes Z&auml;hlermodul, sondern ben&ouml;tigt eine Regular Expression (regex or regexp) um das Reading mit den Z&auml;hlimpulse von einem oder mehreren Wasserz&auml;hlern zu finden.<BR>
+ 			<BR>
+-			Sobald das Modul in der fhem.cfg definiert wurde, reagiert das Modul auf jedes durch das regex definierte event wie beispielsweise ein myOWDEVICE:counter.* etc.<BR>
++			Sobald das Modul in der fhem.cfg definiert wurde, reagiert das Modul auf jedes durch die regex definierte Event wie beispielsweise ein myOWDEVICE:counter.* etc.<BR>
+ 			<BR>
+-			Das WaterCalculator Modul berechnet augenblickliche, historische statistische und vorhersehbare Werte von einem oder mehreren Wasserz&auml;hlern und erstellt die entsprechenden Readings.<BR>
++			WaterCalculator berechnet augenblickliche, historische, statistische und vorhersehbare Werte von einem oder mehreren Wasserz&auml;hlern und erstellt die entsprechenden Readings.<BR>
+ 			<BR>
+ 			Um zu verhindern, dass man bis zu 12 Monate warten muss, bis alle Werte der Realit&auml;t entsprechen, m&uuml;ssen die Readings<BR>
+ 			<code>&lt;DestinationDevice&gt;_&lt;SourceCounterReading&gt;_CounterDay1st</code>,<BR>
+@@ -1420,7 +1420,7 @@ sub WaterCalculator_Notify($$)
+ 			Diese Werte findet man unter Umst&auml;nden auf der letzten Abrechnung des Wasserversorgers. Andernfalls dauert es bis zu 24h f&uuml;r die t&auml;glichen, 30 Tage f&uuml;r die monatlichen und bis zu 12 Monate f&uuml;r die j&auml;hrlichen Werte bis diese der Realit&auml;t entsprechen.<BR>
+ 			<BR>
+ 			<BR>
+-			Intervalle kleienr als 10s werden ignoriert um Spitzen zu verhindern die von Blockaden des fhem Systems hervorgerufen werden (z.B. DbLog - reducelog).
++			Intervalle kleiner als 10s werden ignoriert um Spitzen zu verhindern, die von Blockaden des FHEM-Systems hervorgerufen werden (z.B. DbLog - reducelog).
+ 		</td>
+ 	</tr>
+ </table>
+@@ -1432,7 +1432,7 @@ sub WaterCalculator_Notify($$)
+ <ul><ul>
+ 	<table>
+ 		<tr><td><code>&lt;name&gt;</code> : </td><td>Der Name dieses Berechnungs-Device. Empfehlung: "myWaterCalculator".</td></tr>
+-		<tr><td><code>&lt;regex&gt;</code> : </td><td>Eine g&uuml;ltige Regular Expression (regex or regexp) von dem Event wo der Z&auml;hlerstand gefunden werden kann</td></tr>
++		<tr><td><code>&lt;regex&gt;</code> : </td><td>Eine g&uuml;ltige Regular Expression (regex or regexp) des Events, wo der Z&auml;hlerstand gefunden werden kann</td></tr>
+ 	</table>
+ </ul></ul>
+ <table><tr><td><ul>Beispiel: <code>define myWaterCalculator WaterCalculator myWaterCounter:countersA.*</code></ul></td></tr></table>
+@@ -1442,8 +1442,8 @@ sub WaterCalculator_Notify($$)
+ 	<tr><td>
+ 		<ul>
+ 				Die set - Funktion erlaubt individuelle Readings zu ver&auml;ndern um beispielsweise nach einem Stromausfall Werte zu korrigieren.<BR>
+-				Die set - Funktion funktioniert nur f&uumlr Readings welche im CalculatorDevice gespeichert wurden.<BR>
+-				Die Readings welche im Counter - Device gespeichert wurden, m&uumlssen individuell mit <code>set</code> - Befehl gesetzt werden.<BR>
++				Die set - Funktion funktioniert nur f&uumlr; Readings welche im CalculatorDevice gespeichert wurden.<BR>
++				Die Readings welche im Counter - Device gespeichert wurden, m&uuml;ssen individuell mit <code>set</code> gesetzt werden.<BR>
+ 		</ul>
+ 	</td></tr>
+ </table>
+@@ -1453,8 +1453,8 @@ sub WaterCalculator_Notify($$)
+ 	<tr><td>
+ 		<ul>
+ 				Die get - Funktion liefert nur den Wert des jeweiligen Readings zur&uuml;ck.<BR>
+-				Die get - Funktion funktioniert nur f&uumlr Readings welche im CalculatorDevice gespeichert wurden.<BR>
+-				Die Readings welche im Counter - Device gespeichert wurden, m&uumlssen individuell mit <code>get</code> - Befehl ausgelesen werden.<BR>
++				Die get - Funktion funktioniert nur f&uumlr; Readings, die im CalculatorDevice gespeichert wurden.<BR>
++				Die Readings, die im Counter - Device gespeichert wurden, m&uuml;ssen individuell mit <code>get</code> - Befehl ausgelesen werden.<BR>
+ 		</ul>
+ 	</td></tr>
+ </table>
