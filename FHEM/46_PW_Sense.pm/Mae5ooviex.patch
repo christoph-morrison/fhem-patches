@@ -1,0 +1,12 @@
+diff --git a/fhem/FHEM/46_PW_Sense.pm b/fhem/FHEM/46_PW_Sense.pm
+index c9f8f2233..417bcd220 100755
+--- a/fhem/FHEM/46_PW_Sense.pm
++++ b/fhem/FHEM/46_PW_Sense.pm
+@@ -199,6 +199,6 @@ See <a href="#PW_Sense">PW_Sense</a>.
+   </ul>
+ </ul>
+ 
+-=end html
++=end html_DE
+ =cut
+ 

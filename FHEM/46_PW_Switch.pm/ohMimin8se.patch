@@ -1,0 +1,12 @@
+diff --git a/fhem/FHEM/46_PW_Switch.pm b/fhem/FHEM/46_PW_Switch.pm
+index 9f9d8d2dd..c94f4d594 100755
+--- a/fhem/FHEM/46_PW_Switch.pm
++++ b/fhem/FHEM/46_PW_Switch.pm
+@@ -242,6 +242,6 @@ Siehe <a href="#PW_Switch">PW_Switch</a>.
+   <br>
+ </ul>
+ 
+-=end html
++=end html_DE
+ =cut
+ 

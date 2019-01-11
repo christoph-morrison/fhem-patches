@@ -1,0 +1,12 @@
+diff --git a/fhem/FHEM/46_PW_Circle.pm b/fhem/FHEM/46_PW_Circle.pm
+index 5d52eb379..15523d5e5 100755
+--- a/fhem/FHEM/46_PW_Circle.pm
++++ b/fhem/FHEM/46_PW_Circle.pm
+@@ -411,6 +411,6 @@ See <a href="#Plugwise">Plugwise</a>.
+   <br>
+ </ul>
+ 
+-=end html
++=end html_DE
+ =cut
+ 
