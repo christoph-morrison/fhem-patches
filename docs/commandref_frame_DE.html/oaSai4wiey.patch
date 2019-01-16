@@ -44,7 +44,7 @@ index 96e938af9..935074d87 100644
 +
 +      <a name="altitude"></a>
 +      <li>altitude<br>
-+          Höhe in Metern über dem Meeresspiegel (<abbr title="Normalhöhennull">NHN</abbr>).
++          H&ouml;he in Metern über dem Meeresspiegel (<abbr title="Normalh;ouml;hennull">NHN</abbr>).
 +          <span lang="en">Default</span>-Wert ist <var>0</var>.
 +      </li><br>
    </ul>
