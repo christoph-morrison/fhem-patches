@@ -1,0 +1,52 @@
+diff --git a/fhem/docs/commandref_frame_DE.html b/fhem/docs/commandref_frame_DE.html
+index 96e938af9..935074d87 100644
+--- a/fhem/docs/commandref_frame_DE.html
++++ b/fhem/docs/commandref_frame_DE.html
+@@ -1702,11 +1702,13 @@ Die folgenden lokalen Attribute werden von mehreren Ger&auml;ten verwendet:
+     <li>proxy<br>
+         IP:PORT des proxy Servers, wird von HttpUtils benutzt.
+     </li><br>
++
+     <a name="proxyAuth"></a>
+     <li>proxyAuth<br>
+         Base64 kodiertes Benutzername:Passwort
+     </li><br>
+-    <a name="proxyExclude"></a>
++
++      <a name="proxyExclude"></a>
+     <li>proxyExclude<br>
+         Regexp, um bestimmte Hosts nicht via proxy zu kontaktieren.
+     </li><br>
+@@ -1739,7 +1741,8 @@ Die folgenden lokalen Attribute werden von mehreren Ger&auml;ten verwendet:
+     werden keinerlei Informationen gesichert.
+     </li><br>
+ 
+-    <li><a href="#title">title</a><br>
++    <li><a href="#title">title</a>
++    <br>
+ 
+     <a name="useInet6"></a>
+     <li>useInet6<br>
+@@ -1800,6 +1803,22 @@ Die folgenden lokalen Attribute werden von mehreren Ger&auml;ten verwendet:
+         wurde. Die Voreinstellung ist 1 (wahr), man kann es ausschalten, indem
+         man den Wert auf 0 setzt.
+     </li>
++
++      <a name="latitude"></a>
++      <li>latitude<br>
++          Geographische Breite in Dezimalgrad in Form eines <code>float</code>, <abbr>z.B</abbr> <code><var>49.872471</var></code>. <span lang="en">Default</span>-Wert ist <code><var>50.112</var></code>.
++      </li>
++
++      <a name="longitude"></a>
++      <li>longitude<br>
++          Geographische L&auml;nge in Dezimalgrad in Form eines <code>float</code>, <abbr>z.B</abbr> <code><var>8.650991</var></code>. <span lang="en">Default</span>-Wert ist <code><var>8.686</var></code>.
++      </li>
++
++      <a name="altitude"></a>
++      <li>altitude<br>
++          Höhe in Metern über dem Meeresspiegel (<abbr title="Normalhöhennull">NHN</abbr>).
++          <span lang="en">Default</span>-Wert ist <var>0</var>.
++      </li>
+   </ul>
+ 
+   <br><br>
