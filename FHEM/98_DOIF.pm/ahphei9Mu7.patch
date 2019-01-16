@@ -1,0 +1,86 @@
+diff --git a/fhem/FHEM/98_DOIF.pm b/fhem/FHEM/98_DOIF.pm
+index 381b0d412..53f7e6da1 100644
+--- a/fhem/FHEM/98_DOIF.pm
++++ b/fhem/FHEM/98_DOIF.pm
+@@ -736,6 +736,7 @@ sub AggrIntDoIf
+   my $name;
+   my $devname;
+   my $err;
++  my ($median, @median_values);
+   my $ret;
+   my $result;
+   my @devices;
+@@ -750,8 +751,8 @@ sub AggrIntDoIf
+   my $place;
+   my $number;
+   my $readingRegex;
+-  
+-  if ($modeType =~ /.(sum|average|max|min)?[:]?(?:(a|d)?(\d)?)?/) {
++
++  if ($modeType =~ /.(sum|average|max|min|median)?[:]?(?:(a|d)?(\d)?)?/) {
+     $type = (defined $1)? $1 : "";
+     $format= (defined $2)? $2 : "";
+     $place= $3;
+@@ -839,6 +840,10 @@ sub AggrIntDoIf
+                 $extrem=$number;
+                 @devices=($devname);
+               }
++          } elsif ($type eq "median") {
++            $num++;
++            push @median_values, $number;
++            push (@devices,$devname);
+           }
+         }
+       }
+@@ -856,6 +861,21 @@ sub AggrIntDoIf
+     if ($num>0) {
+       $result=($sum/$num)
+     }
++  } elsif ($type eq "median"){
++
++      $result = &{ sub {
++            return 0 if $num == 0;
++
++            my @vals = sort{  $a <=> $b } @median_values;
++
++            # odd amount of values, return the middle one
++            return $vals[int($num / 2)] if ( $num % 2);
++
++            # even amount of values, return the median
++             return  ( $vals[int($num / 2) - 1] + $vals[int($num / 2)] ) / 2;
++        }
++      };
++
+   } else {
+     $result=$num;
+   }
+@@ -890,7 +910,7 @@ sub AggregateDoIf
+   my $mode=substr($modeType,0,1);
+   my $type=substr($modeType,1);
+   my $splittoken=",";
+-  if ($modeType =~ /.(?:sum|average|max|min)?[:]?[^s]*(?:s\((.*)\))?/) {
++  if ($modeType =~ /.(?:sum|average|max|min|median)?[:]?[^s]*(?:s\((.*)\))?/) {
+     $splittoken=$1 if (defined $1);
+   } 
+   if ($mode eq "#") {
+@@ -3981,6 +4001,7 @@ Syntax:<br>
+ <b>#max</b>  höchster Wert<br>
+ <b>#min</b>  niedrigster Wert<br>
+ <b>#average</b>  Durchschnitt<br>
++<b>#median</b> Medianwert<br>
+ <b>@max</b>  Device des höchsten Wertes<br>
+ <b>@min</b>  Device de niedrigsten Wertes<br>
+ <br>
+@@ -4027,7 +4048,11 @@ Kleinster Wert der Readings des Devices "abfall", in deren Namen "Gruenschnitt"
+ <br>
+ Durchschnitt von Readings aller Devices, die mit "T_" beginnen, in deren Reading-Namen "temp" vorkommt:<br>
+ <br>
+-<code>[#average:"^T_":"temp"]</code><br>
++<code>[#average:"^T_":"temp"]</code>
++<br>
++Medianwert (gewichtetes Mittel) von Readings aller Devices, die mit "T_" beginnen, in deren Reading-Namen "temp" vorkommt:<br>
++<br>
++<code>[#median:"^T_":"temp"]</code><br>
+ <br>
+ In der Aggregationsbedingung <condition> können alle in FHEM definierten Perlfunktionen genutzt werden. Folgende Variablen sind vorbelegt und können ebenfalls benutzt werden:<br>
+ <br>
