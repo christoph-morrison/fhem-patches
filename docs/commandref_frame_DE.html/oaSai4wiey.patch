@@ -35,18 +35,18 @@ index 96e938af9..935074d87 100644
 +      <a name="latitude"></a>
 +      <li>latitude<br>
 +          Geographische Breite in Dezimalgrad in Form eines <code>float</code>, <abbr>z.B</abbr> <code><var>49.872471</var></code>. <span lang="en">Default</span>-Wert ist <code><var>50.112</var></code>.
-+      </li>
++      </li><br>
 +
 +      <a name="longitude"></a>
 +      <li>longitude<br>
 +          Geographische L&auml;nge in Dezimalgrad in Form eines <code>float</code>, <abbr>z.B</abbr> <code><var>8.650991</var></code>. <span lang="en">Default</span>-Wert ist <code><var>8.686</var></code>.
-+      </li>
++      </li><br>
 +
 +      <a name="altitude"></a>
 +      <li>altitude<br>
 +          Höhe in Metern über dem Meeresspiegel (<abbr title="Normalhöhennull">NHN</abbr>).
 +          <span lang="en">Default</span>-Wert ist <var>0</var>.
-+      </li>
++      </li><br>
    </ul>
  
    <br><br>

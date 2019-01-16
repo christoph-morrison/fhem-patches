@@ -10,7 +10,7 @@ index 50f9cffba..12c51df13 100644
 +      <li>
 +          altitude<br>
 +          Specifies the metres above mean sea level (<abbr>MAMSL</abbr>). Default is <var>0</var>.
-+      </li>
++      </li><br>
 +
      <a name="backupcmd"></a>
      <li>backupcmd<br>
@@ -22,12 +22,12 @@ index 50f9cffba..12c51df13 100644
 +    <a name="latitude"></a>
 +      <li>latitude<br>
 +        Specify the geographical latitude. Default value is <var>50.112</var>.
-+      </li>
++      </li><br>
 +
 +    <a name="longitude"></a>
 +      <li>latitude<br>
 +          Specify the geographical longitude. Default value is <var>>8.686</var>.
-+      </li>
++      </li><br>
 +
      <a name="maxShutdownDelay"></a>
      <li>maxShutdownDelay<br>
