@@ -1,0 +1,13 @@
+diff --git a/fhem/FHEM/99_SUNRISE_EL.pm b/fhem/FHEM/99_SUNRISE_EL.pm
+index 9813adbfc..c6e48da22 100644
+--- a/fhem/FHEM/99_SUNRISE_EL.pm
++++ b/fhem/FHEM/99_SUNRISE_EL.pm
+@@ -549,7 +549,7 @@ isday</pre>
+         deines Standorts setzen.
+     
+     <div>
+-        Die Voreinstellung ist 50.112, 8.686, Frankfurt am Main).
++        Die Voreinstellung ist 50.112, 8.686 (Frankfurt am Main).
+     </div>
+     
+     SUNRISE_EL geht von einem H&ouml;henwinkel der Sonne bezogen zum Horizont,
