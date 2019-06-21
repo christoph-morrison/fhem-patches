@@ -2,7 +2,7 @@
 
 ## Purpose of this project
 
-From time to time, I skimm through the [FHEM documentation](https://fhem.de/commandref_DE.html) and encounter typos, misspellings, misformats etc. pp. and have the urge to fix them. This is the place where I gather my patches.
+From time to time, I skim through the [FHEM documentation](https://fhem.de/commandref_DE.html) and encounter typos, misspellings, misformats etc. pp. and have the urge to fix them. This is the place where I gather my patches.
 
 ## Usage 
 
