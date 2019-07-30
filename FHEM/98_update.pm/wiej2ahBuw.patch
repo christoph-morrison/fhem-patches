@@ -1,7 +1,40 @@
 diff --git a/fhem/FHEM/98_update.pm b/fhem/FHEM/98_update.pm
-index ebb8584e5..03f5a5a2d 100644
+index ebb8584e5..6ae85994f 100644
 --- a/fhem/FHEM/98_update.pm
 +++ b/fhem/FHEM/98_update.pm
+@@ -682,10 +682,10 @@ upd_writeFile($$$$)
+   <br>
+   <br>
+   Erneuert die FHEM Installation. D.h. es wird (werden) zuerst die
+-  Kontroll-Datei(en) heruntergeladen, und mit der lokalen Version dieser Datei
++  Kontroll-Datei(en) heruntergeladen und mit der lokalen Version dieser Datei
+   in moddir/FHEM verglichen. Danach werden alle in der  Kontroll-Datei
+   spezifizierten Dateien heruntergeladen, deren Gr&ouml;&szlig;e oder
+-  Zeitstempel sich unterscheidet. Wenn dieser Ablauf abgeschlossen ist, wird
++  Zeitstempel sich unterscheiden. Wenn dieser Ablauf abgeschlossen ist, wird
+   das globale UPDATE Ereignis ausgel&ouml;st.
+   <br>
+   Mit den Befehlen add/delete/list/reset kann man die Liste der Kontrolldateien 
+@@ -696,16 +696,16 @@ upd_writeFile($$$$)
+   <ul>
+     <li>Das contrib Verzeichnis wird nicht heruntergeladen.</li>
+     <li>Die Dateien werden auf der Webseite einmal am Tag um 07:45 MET/MEST aus
+-        der Quell-Verwaltungssystem (SVN) bereitgestellt.</li>
++        dem Quell-Verwaltungssystem (SVN) bereitgestellt.</li>
+     <li>Das all Argument ist die Voreinstellung.</li>
+     <li>Das force Argument beachtet die lokale controls_fhem.txt Datei
+         nicht.</li>
+-    <li>Das check Argument zeigt die neueren Dateien an, und den letzten
++    <li>Das check Argument zeigt die neueren Dateien und den letzten
+         Abschnitt aus der CHANGED Datei</li>
+     <li>checktime zeigt zus&auml;tzlich zu check den update-Zeitstempel der
+         neuen Datei, &uuml;blicherweise version Zeitstempel +1 Tag.
+         </li>
+-    <li>Falls man &lt;fileName&gt; spezifiziert, dann werden nur die Dateien
++    <li>Falls man &lt;fileName&gt; spezifiziert werden nur die Dateien
+         heruntergeladen, die diesem Regexp entsprechen.</li>
+   </ul>
+   Siehe Befehl restore.<br>
 @@ -724,10 +724,10 @@ upd_writeFile($$$$)
    <ul>
      <a name="updateInBackground"></a>
