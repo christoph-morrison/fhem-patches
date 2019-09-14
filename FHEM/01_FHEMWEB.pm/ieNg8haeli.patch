@@ -1,0 +1,1518 @@
+diff --git a/fhem/FHEM/01_FHEMWEB.pm b/fhem/FHEM/01_FHEMWEB.pm
+index 661569b6a..fe2406024 100644
+--- a/fhem/FHEM/01_FHEMWEB.pm
++++ b/fhem/FHEM/01_FHEMWEB.pm
+@@ -1,5 +1,5 @@
+ ##############################################
+-# $Id$
++# $Id: 01_FHEMWEB.pm 19904 2019-07-28 08:53:49Z rudolfkoenig $
+ package main;
+ 
+ use strict;
+@@ -59,7 +59,7 @@ use vars qw($FW_cssdir);  # css directory
+ use vars qw($FW_gplotdir);# gplot directory
+ use vars qw($FW_confdir); # conf dir
+ use vars qw($MW_dir);     # moddir (./FHEM), needed by edit Files in new
+-                          # structure
++# structure
+ 
+ use vars qw($FW_ME);      # webname (default is fhem), used by 97_GROUP/weblink
+ use vars qw($FW_CSRF);    # CSRF Token or empty
+@@ -142,69 +142,69 @@ FHEMWEB_Initialize($)
+   $hash->{CanAuthenticate} = 1;
+   no warnings 'qw';
+   my @attrList = qw(
+-    CORS:0,1
+-    HTTPS:1,0
+-    CssFiles
+-    Css:textField-long
+-    JavaScripts
+-    SVGcache:1,0
+-    addHtmlTitle:1,0
+-    addStateEvent
+-    csrfToken
+-    csrfTokenHTTPHeader:0,1
+-    alarmTimeout
+-    allowedHttpMethods
+-    allowedCommands
+-    allowfrom
+-    basicAuth
+-    basicAuthMsg
+-    closeConn:1,0
+-    column
+-    confirmDelete:0,1
+-    confirmJSError:0,1
+-    defaultRoom
+-    deviceOverview:always,iconOnly,onClick,never
+-    editConfig:1,0
+-    editFileList:textField-long
+-    endPlotNow:1,0
+-    endPlotToday:1,0
+-    extraRooms:textField-long
+-    forbiddenroom
+-    fwcompress:0,1
+-    hiddengroup
+-    hiddengroupRegexp
+-    hiddenroom
+-    hiddenroomRegexp
+-    httpHeader
+-    iconPath
+-    longpoll:0,1,websocket
+-    longpollSVG:1,0
+-    menuEntries
+-    mainInputLength
+-    nameDisplay
+-    ploteditor:always,onClick,never
+-    plotfork:1,0
+-    plotmode:gnuplot-scroll,gnuplot-scroll-svg,SVG
+-    plotEmbed:0,1
+-    plotsize
+-    plotWeekStartDay:0,1,2,3,4,5,6
+-    nrAxis
+-    redirectCmds:0,1
+-    refresh
+-    reverseLogs:0,1
+-    roomIcons
+-    showUsedFiles:0,1
+-    sortRooms
+-    sslVersion
+-    sslCertPrefix
+-    smallscreen:unused
+-    smallscreenCommands:0,1
+-    stylesheetPrefix
+-    styleData:textField-long
+-    title
+-    touchpad:unused
+-    viewport
+-    webname
++      CORS:0,1
++      HTTPS:1,0
++      CssFiles
++      Css:textField-long
++      JavaScripts
++      SVGcache:1,0
++      addHtmlTitle:1,0
++      addStateEvent
++      csrfToken
++      csrfTokenHTTPHeader:0,1
++      alarmTimeout
++      allowedHttpMethods
++      allowedCommands
++      allowfrom
++      basicAuth
++      basicAuthMsg
++      closeConn:1,0
++      column
++      confirmDelete:0,1
++      confirmJSError:0,1
++      defaultRoom
++      deviceOverview:always,iconOnly,onClick,never
++      editConfig:1,0
++      editFileList:textField-long
++      endPlotNow:1,0
++      endPlotToday:1,0
++      extraRooms:textField-long
++      forbiddenroom
++      fwcompress:0,1
++      hiddengroup
++      hiddengroupRegexp
++      hiddenroom
++      hiddenroomRegexp
++      httpHeader
++      iconPath
++      longpoll:0,1,websocket
++      longpollSVG:1,0
++      menuEntries
++      mainInputLength
++      nameDisplay
++      ploteditor:always,onClick,never
++      plotfork:1,0
++      plotmode:gnuplot-scroll,gnuplot-scroll-svg,SVG
++      plotEmbed:0,1
++      plotsize
++      plotWeekStartDay:0,1,2,3,4,5,6
++      nrAxis
++      redirectCmds:0,1
++      refresh
++      reverseLogs:0,1
++      roomIcons
++      showUsedFiles:0,1
++      sortRooms
++      sslVersion
++      sslCertPrefix
++      smallscreen:unused
++      smallscreenCommands:0,1
++      stylesheetPrefix
++      styleData:textField-long
++      title
++      touchpad:unused
++      viewport
++      webname
+   );
+   use warnings 'qw';
+   $hash->{AttrList} = join(" ", @attrList);
+@@ -213,14 +213,14 @@ FHEMWEB_Initialize($)
+   ###############
+   # Initialize internal structures
+   map { addToAttrList($_) } (
+-    "cmdIcon",
+-    "devStateIcon:textField-long",
+-    "devStateStyle",
+-    "icon",
+-    "sortby",
+-    "webCmd",
+-    "webCmdLabel:textField-long",
+-    "widgetOverride"
++      "cmdIcon",
++      "devStateIcon:textField-long",
++      "devStateStyle",
++      "icon",
++      "sortby",
++      "webCmd",
++      "webCmdLabel:textField-long",
++      "widgetOverride"
+   );
+ 
+   $FW_confdir  = "$attr{global}{modpath}/conf";
+@@ -231,8 +231,8 @@ FHEMWEB_Initialize($)
+ 
+   if(opendir(DH, "$FW_dir/pgm2")) {
+     $FW_fhemwebjs = join(",", map { $_ = ~m/^fhemweb_(.*).js$/; $1 }
+-                              grep { /fhemweb_(.*).js$/ }
+-                              readdir(DH));
++        grep { /fhemweb_(.*).js$/ }
++            readdir(DH));
+     closedir(DH);
+   }
+ 
+@@ -245,24 +245,24 @@ FHEMWEB_Initialize($)
+   }
+ 
+   my %optMod = (
+-    zlib   => { mod=>"Compress::Zlib", txt=>"compressed HTTP transfer" },
+-    sha    => { mod=>"Digest::SHA",    txt=>"longpoll via websocket" },
+-    base64 => { mod=>"MIME::Base64",   txt=>"parallel SVG computing" }
++      zlib   => { mod=>"Compress::Zlib", txt=>"compressed HTTP transfer" },
++      sha    => { mod=>"Digest::SHA",    txt=>"longpoll via websocket" },
++      base64 => { mod=>"MIME::Base64",   txt=>"parallel SVG computing" }
+   );
+   foreach my $mod (keys %optMod) {
+     eval "require $optMod{$mod}{mod}";
+     if($@) {
+       Log 4, $@;
+       Log 3, "FHEMWEB: Can't load $optMod{$mod}{mod}, ".
+-             "$optMod{$mod}{txt} is not available";
++          "$optMod{$mod}{txt} is not available";
+     } else {
+       $FW_use{$mod} = 1;
+     }
+   }
+ 
+-  $cmds{show} = { 
+-    Fn=>"FW_show", ClientFilter=>"FHEMWEB",
+-    Hlp=>"<devspec>, show temporary room with devices from <devspec>"
++  $cmds{show} = {
++      Fn=>"FW_show", ClientFilter=>"FHEMWEB",
++      Hlp=>"<devspec>, show temporary room with devices from <devspec>"
+   };
+ 
+ }
+@@ -274,7 +274,7 @@ FW_Define($$)
+   my ($hash, $def) = @_;
+   my ($name, $type, $port, $global) = split("[ \t]+", $def);
+   return "Usage: define <name> FHEMWEB [IPV6:]<tcp-portnr> [global]"
+-        if($port !~ m/^(IPV6:)?\d+$/);
++      if($port !~ m/^(IPV6:)?\d+$/);
+ 
+   FW_Undef($hash, undef) if($hash->{OLDDEF}); # modify
+ 
+@@ -352,12 +352,12 @@ FW_Read($$)
+ 
+     if(!defined($ret) && $! == EWOULDBLOCK ){
+       $hash->{wantWrite} = 1
+-        if(TcpServer_WantWrite($hash));
++          if(TcpServer_WantWrite($hash));
+       return;
+     } elsif(!$ret) { # 0==EOF, undef=error
+       CommandDelete(undef, $name);
+       Log3 $FW_wname, 4, "Connection closed for $name: ".
+-                  (defined($ret) ? 'EOF' : $!);
++          (defined($ret) ? 'EOF' : $!);
+       return;
+     }
+     $hash->{BUF} .= $buf;
+@@ -410,7 +410,7 @@ FW_Read($$)
+     $hash->{BUF} = "";
+     my $ret = FW_fC($data);
+     FW_addToWritebuffer($hash,
+-                       FW_longpollInfo("JSON", defined($ret) ? $ret : "")."\n");
++        FW_longpollInfo("JSON", defined($ret) ? $ret : "")."\n");
+     return;
+   }
+ 
+@@ -434,39 +434,39 @@ FW_Read($$)
+ 
+   @FW_httpheader = split(/[\r\n]+/, $hash->{HDR});
+   %FW_httpheader = map {
+-                         my ($k,$v) = split(/: */, $_, 2);
+-                         $k =~ s/(\w+)/\u$1/g; # Forum #39203
+-                         $k=>(defined($v) ? $v : 1);
+-                       } @FW_httpheader;
++    my ($k,$v) = split(/: */, $_, 2);
++    $k =~ s/(\w+)/\u$1/g; # Forum #39203
++    $k=>(defined($v) ? $v : 1);
++  } @FW_httpheader;
+   delete($hash->{HDR});
+ 
+   my @origin = grep /Origin/i, @FW_httpheader;
+   $FW_headerlines = (AttrVal($FW_wname, "CORS", 0) ?
+-              (($#origin<0) ? "": "Access-Control-Allow-".$origin[0]."\r\n").
+-              "Access-Control-Allow-Methods: GET, POST, OPTIONS\r\n".
+-              "Access-Control-Allow-Headers: Origin, Authorization, Accept\r\n".
+-              "Access-Control-Allow-Credentials: true\r\n".
+-              "Access-Control-Max-Age:86400\r\n".
+-              "Access-Control-Expose-Headers: X-FHEM-csrfToken\r\n": "");
+-   $FW_headerlines .= "X-FHEM-csrfToken: $defs{$FW_wname}{CSRFTOKEN}\r\n"
+-        if(defined($defs{$FW_wname}{CSRFTOKEN}) &&
+-           AttrVal($FW_wname, "csrfTokenHTTPHeader", 1));
+-
+-   my $hh = AttrVal($FW_wname, "httpHeader", undef);
+-   $FW_headerlines .= "$hh\r\n" if($hh);
++      (($#origin<0) ? "": "Access-Control-Allow-".$origin[0]."\r\n").
++          "Access-Control-Allow-Methods: GET, POST, OPTIONS\r\n".
++          "Access-Control-Allow-Headers: Origin, Authorization, Accept\r\n".
++          "Access-Control-Allow-Credentials: true\r\n".
++          "Access-Control-Max-Age:86400\r\n".
++          "Access-Control-Expose-Headers: X-FHEM-csrfToken\r\n": "");
++  $FW_headerlines .= "X-FHEM-csrfToken: $defs{$FW_wname}{CSRFTOKEN}\r\n"
++      if(defined($defs{$FW_wname}{CSRFTOKEN}) &&
++          AttrVal($FW_wname, "csrfTokenHTTPHeader", 1));
++
++  my $hh = AttrVal($FW_wname, "httpHeader", undef);
++  $FW_headerlines .= "$hh\r\n" if($hh);
+ 
+   #########################
+   # Return 200 for OPTIONS or 405 for unsupported method
+   my ($method, $arg, $httpvers) = split(" ", $FW_httpheader[0], 3)
+-        if($FW_httpheader[0]);
++      if($FW_httpheader[0]);
+   $method = "" if(!$method);
+   my $ahm = AttrVal($FW_wname, "allowedHttpMethods", "GET|POST");
+   if($method !~ m/^($ahm)$/i){
+     my $retCode = ($method eq "OPTIONS") ? "200 OK" : "405 Method Not Allowed";
+     TcpServer_WriteBlocking($FW_chash,
+-      "HTTP/1.1 $retCode\r\n" .
+-      $FW_headerlines.
+-      "Content-Length: 0\r\n\r\n");
++        "HTTP/1.1 $retCode\r\n" .
++            $FW_headerlines.
++            "Content-Length: 0\r\n\r\n");
+     delete $hash->{CONTENT_LENGTH};
+     FW_Read($hash, 1) if($hash->{BUF});
+     Log 3, "$FW_cname: unsupported HTTP method $method, rejecting it."
+@@ -487,14 +487,14 @@ FW_Read($$)
+       # Need to send set-cookie (if set) after succesful authentication
+       my $ah = $FW_chash->{".httpAuthHeader"};
+       $FW_headerlines .= $ah if($ah);
+-      delete $FW_chash->{".httpAuthHeader"}; 
+-      
++      delete $FW_chash->{".httpAuthHeader"};
++
+     } else {
+       my $ah = $FW_chash->{".httpAuthHeader"};
+       TcpServer_WriteBlocking($hash,
+-             ($ah ? $ah : "").
+-             $FW_headerlines.
+-             "Content-Length: 0\r\n\r\n");
++          ($ah ? $ah : "").
++              $FW_headerlines.
++              "Content-Length: 0\r\n\r\n");
+       delete $hash->{CONTENT_LENGTH};
+       FW_Read($hash, 1) if($hash->{BUF});
+       return;
+@@ -515,21 +515,21 @@ FW_Read($$)
+ 
+   $FW_ME = "/" . AttrVal($FW_wname, "webname", "fhem");
+   $FW_CSRF = (defined($defs{$FW_wname}{CSRFTOKEN}) ?
+-                "&fwcsrf=".$defs{$FW_wname}{CSRFTOKEN} : "");
+-     
++      "&fwcsrf=".$defs{$FW_wname}{CSRFTOKEN} : "");
++
+   if($FW_use{sha} && $method eq 'GET' &&
+-     $FW_httpheader{Connection} && $FW_httpheader{Connection} =~ /Upgrade/i) {
++      $FW_httpheader{Connection} && $FW_httpheader{Connection} =~ /Upgrade/i) {
+ 
+     my $shastr = Digest::SHA::sha1_base64($FW_httpheader{'Sec-WebSocket-Key'}.
+-                                "258EAFA5-E914-47DA-95CA-C5AB0DC85B11");
++        "258EAFA5-E914-47DA-95CA-C5AB0DC85B11");
+ 
+     TcpServer_WriteBlocking($FW_chash,
+-       "HTTP/1.1 101 Switching Protocols\r\n" .
+-       "Upgrade: websocket\r\n" .
+-       "Connection: Upgrade\r\n" .
+-       "Sec-WebSocket-Accept:$shastr=\r\n".
+-      $FW_headerlines.
+-       "\r\n" );
++        "HTTP/1.1 101 Switching Protocols\r\n" .
++            "Upgrade: websocket\r\n" .
++            "Connection: Upgrade\r\n" .
++            "Sec-WebSocket-Accept:$shastr=\r\n".
++            $FW_headerlines.
++            "\r\n" );
+     $FW_chash->{websocket} = 1;
+ 
+     my $me = $FW_chash;
+@@ -553,7 +553,7 @@ FW_Read($$)
+       if($pid) { # success, parent
+         use constant PRIO_PROCESS => 0;
+         setpriority(PRIO_PROCESS, $pid, getpriority(PRIO_PROCESS,$pid) + $pf)
+-          if($^O !~ m/Win/);
++            if($^O !~ m/Win/);
+         # a) while child writes a new request might arrive if client uses
+         # pipelining or
+         # b) parent doesn't know about ssl-session changes due to child writing
+@@ -593,9 +593,9 @@ FW_finishRead($$$)
+ 
+   my $compressed = "";
+   if($FW_RETTYPE =~ m/(text|xml|json|svg|script)/i &&
+-     ($FW_httpheader{"Accept-Encoding"} &&
+-      $FW_httpheader{"Accept-Encoding"} =~ m/gzip/) &&
+-     $FW_use{zlib}) {
++      ($FW_httpheader{"Accept-Encoding"} &&
++          $FW_httpheader{"Accept-Encoding"} =~ m/gzip/) &&
++      $FW_use{zlib}) {
+     utf8::encode($FW_RET)
+         if(utf8::is_utf8($FW_RET) && $FW_RET =~ m/[^\x00-\xFF]/ );
+     eval { $FW_RET = Compress::Zlib::memGzip($FW_RET); };
+@@ -608,21 +608,21 @@ FW_finishRead($$$)
+ 
+   my $length = length($FW_RET);
+   my $expires = ($cacheable ?
+-         "Expires: ".FmtDateTimeRFC1123($hash->{LASTACCESS}+900)."\r\n" : 
+-         "Cache-Control: no-cache, no-store, must-revalidate\r\n");
++      "Expires: ".FmtDateTimeRFC1123($hash->{LASTACCESS}+900)."\r\n" :
++      "Cache-Control: no-cache, no-store, must-revalidate\r\n");
+   Log3 $FW_wname, 4,
+-        "$FW_wname: $arg / RL:$length / $FW_RETTYPE / $compressed / $expires";
++      "$FW_wname: $arg / RL:$length / $FW_RETTYPE / $compressed / $expires";
+   if( ! FW_addToWritebuffer($hash,
+-           "HTTP/1.1 $FW_httpRetCode\r\n" .
+-           "Content-Length: $length\r\n" .
+-           $expires . $compressed . $FW_headerlines .
+-           "Content-Type: $FW_RETTYPE\r\n\r\n" .
+-           $FW_RET, "FW_closeConn", 1) ){
++      "HTTP/1.1 $FW_httpRetCode\r\n" .
++          "Content-Length: $length\r\n" .
++          $expires . $compressed . $FW_headerlines .
++          "Content-Type: $FW_RETTYPE\r\n\r\n" .
++          $FW_RET, "FW_closeConn", 1) ){
+     Log3 $name, 4, "Closing connection $name due to full buffer in FW_Read"
+-      if(!$hash->{isChild});
++        if(!$hash->{isChild});
+     FW_closeConn($hash);
+     TcpServer_Close($hash, 1);
+-  } 
++  }
+ }
+ 
+ sub
+@@ -662,13 +662,13 @@ FW_initInform($$)
+   my $sinceTimestamp = FmtDateTime($me->{inform}{since});
+   if($longpoll) {
+     TcpServer_WriteBlocking($me,
+-       "HTTP/1.1 200 OK\r\n".
+-       $FW_headerlines.
+-       "Content-Type: application/octet-stream; charset=$FW_encoding\r\n\r\n".
+-       FW_roomStatesForInform($me, $sinceTimestamp));
++        "HTTP/1.1 200 OK\r\n".
++            $FW_headerlines.
++            "Content-Type: application/octet-stream; charset=$FW_encoding\r\n\r\n".
++            FW_roomStatesForInform($me, $sinceTimestamp));
+ 
+   } else { # websocket
+-     FW_addToWritebuffer($me,
++    FW_addToWritebuffer($me,
+         FW_roomStatesForInform($me, $sinceTimestamp));
+   }
+ 
+@@ -702,7 +702,7 @@ FW_addToWritebuffer($$@)
+         $txt = chr(0x81) . chr(0x7E) . pack('n', $len) . $txt;
+       } else {
+         $txt = chr(0x81) . chr(0x7F) . chr(0x00) . chr(0x00) .
+-               chr(0x00) . chr(0x00) . pack('N', $len) . $txt;
++            chr(0x00) . chr(0x00) . pack('N', $len) . $txt;
+       }
+     }
+   }
+@@ -725,7 +725,7 @@ FW_AsyncOutput($$)
+   }
+ 
+   my $data = FW_longpollInfo('JSON',
+-                             "#FHEMWEB:$FW_wname","FW_okDialog('$ret')","");
++      "#FHEMWEB:$FW_wname","FW_okDialog('$ret')","");
+ 
+   # find the longpoll connection with the same fw_id as the page that was the
+   # origin of the get command
+@@ -751,7 +751,7 @@ FW_closeConn($)
+   # Forum #41125, 88470
+   if(!$hash->{inform} && !$hash->{BUF} && !defined($hash->{".WRITEBUFFER"})) {
+     my $cc = AttrVal($hash->{SNAME}, "closeConn",
+-                     $FW_userAgent =~ m/(iPhone|iPad|iPod)/);
++        $FW_userAgent =~ m/(iPhone|iPad|iPod)/);
+     if(!$FW_httpheader{Connection} || $cc) {
+       TcpServer_Close($hash, 1);
+     }
+@@ -789,7 +789,7 @@ FW_answerCall($)
+   $FW_tp = ($FW_sp =~ m/smallscreen|touchpad/);
+   my $spDir = ($FW_sp eq "default" ? "" : "$FW_sp:");
+   @FW_iconDirs = grep { $_ } split(":", AttrVal($FW_wname, "iconPath",
+-                                "${spDir}fhemSVG:openautomation:default"));
++      "${spDir}fhemSVG:openautomation:default"));
+   @FW_fhemwebjs = ("fhemweb.js");
+   push(@FW_fhemwebjs, "$FW_sp.js") if(-r "$FW_dir/pgm2/$FW_sp.js");
+ 
+@@ -802,7 +802,7 @@ FW_answerCall($)
+   # also used for static images: unintended, but too late to change
+ 
+   my ($dir1, $dirN, $ofile) = ($1, $2, $3)
+-             if($arg =~ m,^$FW_ME/([^/]*)(.*/)([^/]*)$,);
++      if($arg =~ m,^$FW_ME/([^/]*)(.*/)([^/]*)$,);
+   if($arg =~ m,\brobots.txt$,) {
+     Log3 $FW_wname, 1, "NOTE: $FW_wname is probed by a search engine";
+     $FW_RETTYPE = "text/plain; charset=$FW_encoding";
+@@ -853,7 +853,7 @@ FW_answerCall($)
+     my $static = ($ext =~ m/(css|js|png|jpg)/i || $dir =~ m/^pgm2/);
+     my $fname = ($ext ? "$file.$ext" : $file);
+     return FW_serveSpecial($file, $ext, $ldir, ($arg =~ m/nocache/) ? 0 : 1)
+-      if(-r "$ldir/$fname" || $static); # no return for FLOORPLAN
++        if(-r "$ldir/$fname" || $static); # no return for FLOORPLAN
+     $arg = "/$dir/$ofile";
+ 
+   } elsif($arg =~ m/^$FW_ME(.*)/s) {
+@@ -862,10 +862,10 @@ FW_answerCall($)
+   } else {
+     Log3 $FW_wname, 4, "$FW_wname: redirecting $arg to $FW_ME";
+     TcpServer_WriteBlocking($me,
+-             "HTTP/1.1 302 Found\r\n".
+-             "Content-Length: 0\r\n".
+-             $FW_headerlines.
+-             "Location: $FW_ME\r\n\r\n");
++        "HTTP/1.1 302 Found\r\n".
++            "Content-Length: 0\r\n".
++            $FW_headerlines.
++            "Location: $FW_ME\r\n\r\n");
+     FW_closeConn($FW_chash);
+     return -1;
+   }
+@@ -873,15 +873,15 @@ FW_answerCall($)
+ 
+   $FW_plotmode = AttrVal($FW_wname, "plotmode", "SVG");
+   $FW_plotsize = AttrVal($FW_wname, "plotsize", $FW_ss ? "480,160" :
+-                                                $FW_tp ? "640,160" : "800,160");
++      $FW_tp ? "640,160" : "800,160");
+   my ($cmd, $cmddev) = FW_digestCgi($arg);
+   if($cmd && $FW_CSRF && $cmd !~ m/style (list|select|eventMonitor)/) {
+     my $supplied = defined($FW_webArgs{fwcsrf}) ? $FW_webArgs{fwcsrf} : "";
+     my $want = $defs{$FW_wname}{CSRFTOKEN};
+     if($supplied ne $want) {
+       Log3 $FW_wname, 3, "FHEMWEB $FW_wname CSRF error: $supplied ne $want ".
+-                         "for client $FW_chash->{NAME} / command $cmd. ".
+-                         "For details see the csrfToken FHEMWEB attribute.";
++          "for client $FW_chash->{NAME} / command $cmd. ".
++          "For details see the csrfToken FHEMWEB attribute.";
+       $FW_httpRetCode = "400 Bad Request";
+       return 0;
+     }
+@@ -899,9 +899,9 @@ FW_answerCall($)
+ 
+   my $docmd = 0;
+   $docmd = 1 if($cmd &&
+-                $cmd !~ /^showlog/ &&
+-                $cmd !~ /^style / &&
+-                $cmd !~ /^edit/);
++      $cmd !~ /^showlog/ &&
++      $cmd !~ /^style / &&
++      $cmd !~ /^edit/);
+ 
+   #If we are in XHR or json mode, execute the command directly
+   if($FW_XHR || $FW_jsonp) {
+@@ -960,14 +960,14 @@ FW_answerCall($)
+   # Redirect after a command, to clean the browser URL window
+   if($docmd && !defined($FW_cmdret) && AttrVal($FW_wname, "redirectCmds", 1)) {
+     my $tgt = $FW_ME;
+-       if($FW_detail) { $tgt .= "?detail=$FW_detail&fw_id=$FW_id" }
++    if($FW_detail) { $tgt .= "?detail=$FW_detail&fw_id=$FW_id" }
+     elsif($FW_room)   { $tgt .= "?room=".urlEncode($FW_room)."&fw_id=$FW_id" }
+     else              { $tgt .= "?fw_id=$FW_id" }
+     TcpServer_WriteBlocking($me,
+-             "HTTP/1.1 302 Found\r\n".
+-             "Content-Length: 0\r\n". $FW_headerlines.
+-             "Location: $tgt\r\n".
+-             "\r\n");
++        "HTTP/1.1 302 Found\r\n".
++            "Content-Length: 0\r\n". $FW_headerlines.
++            "Location: $tgt\r\n".
++            "\r\n");
+     return -1;
+   }
+ 
+@@ -984,7 +984,7 @@ FW_answerCall($)
+ 
+ 
+   FW_pO '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" '.
+-                '"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">';
++      '"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">';
+   FW_pO '<html xmlns="http://www.w3.org/1999/xhtml">';
+   FW_pO "<head root=\"$FW_ME\">\n<title>$t</title>";
+   FW_pO '<link rel="shortcut icon" href="'.FW_IconURL("favicon").'" />';
+@@ -997,8 +997,8 @@ FW_answerCall($)
+     $icon = $FW_ME."/images/".($icon ? $icon : "default/fhemicon_ios.png");
+     my $viewport = '';
+     if($FW_ss) {
+-       my $stf = $FW_userAgent =~ m/iPad|iPhone|iPod/ ? ",shrink-to-fit=no" :"";
+-       $viewport = "initial-scale=1.0,user-scalable=1$stf";
++      my $stf = $FW_userAgent =~ m/iPad|iPhone|iPod/ ? ",shrink-to-fit=no" :"";
++      $viewport = "initial-scale=1.0,user-scalable=1$stf";
+     } elsif($FW_tp) {
+       $viewport = "width=768";
+     }
+@@ -1021,7 +1021,7 @@ FW_answerCall($)
+   FW_pO sprintf($cssTemplate, "pgm2/style.css?v=$FW_styleStamp");
+   FW_pO sprintf($cssTemplate, "pgm2/jquery-ui.min.css");
+   map { FW_pO sprintf($cssTemplate, $_); }
+-                        split(" ", AttrVal($FW_wname, "CssFiles", ""));
++      split(" ", AttrVal($FW_wname, "CssFiles", ""));
+ 
+   my $sd = AttrVal($FW_wname, "styleData", ""); # Avoid flicker in f18
+   if($sd && $sd =~ m/"$FW_sp":/s) {
+@@ -1046,7 +1046,7 @@ FW_answerCall($)
+   ########################
+   # JavaScripts
+   my $jsTemplate =
+-        '<script attr=\'%s\' type="text/javascript" src="%s"></script>';
++      '<script attr=\'%s\' type="text/javascript" src="%s"></script>';
+   FW_pO sprintf($jsTemplate, "", "$FW_ME/pgm2/jquery.min.js");
+   FW_pO sprintf($jsTemplate, "", "$FW_ME/pgm2/jquery-ui.min.js");
+ 
+@@ -1078,7 +1078,7 @@ FW_answerCall($)
+   my $csrf= ($FW_CSRF ? "fwcsrf='$defs{$FW_wname}{CSRFTOKEN}'" : "");
+   my $gen = 'generated="'.(time()-1).'"';
+   my $lp = 'longpoll="'.AttrVal($FW_wname,"longpoll",
+-                 $FW_use{sha} && $FW_userAgent=~m/Chrome/ ? "websocket": 1).'"';
++      $FW_use{sha} && $FW_userAgent=~m/Chrome/ ? "websocket": 1).'"';
+   $FW_id = $FW_chash->{NR} if( !$FW_id );
+ 
+   my $dataAttr = FW_dataAttr();
+@@ -1123,15 +1123,15 @@ FW_answerCall($)
+   }
+ 
+   my $srVal = 0;
+-     if($cmd =~ m/^style /)    { FW_style($cmd,undef);    }
++  if($cmd =~ m/^style /)    { FW_style($cmd,undef);    }
+   elsif($FW_detail)            { FW_doDetail($FW_detail); }
+   elsif($FW_room)              { $srVal = FW_showRoom();  }
+   elsif(!defined($FW_cmdret) &&
+-        !$FW_contentFunc) {
++      !$FW_contentFunc) {
+ 
+     $FW_room = AttrVal($FW_wname, "defaultRoom", '');
+     if($FW_room ne '') {
+-      $srVal = FW_showRoom(); 
++      $srVal = FW_showRoom();
+ 
+     } else {
+       my $motd = AttrVal("global","motd","none");
+@@ -1159,12 +1159,12 @@ FW_dataAttr()
+   }
+ 
+   return
+-    addParam("confirmDelete", 1).
+-    addParam("confirmJSError", 1).
+-    addParam("addHtmlTitle", 1).
+-    addParam("styleData", "").
+-    "data-availableJs='$FW_fhemwebjs' ".
+-    "data-webName='$FW_wname '";
++      addParam("confirmDelete", 1).
++          addParam("confirmJSError", 1).
++          addParam("addHtmlTitle", 1).
++          addParam("styleData", "").
++          "data-availableJs='$FW_fhemwebjs' ".
++          "data-webName='$FW_wname '";
+ }
+ 
+ sub
+@@ -1180,7 +1180,7 @@ FW_addLinks($)
+   my ($txt) = @_;
+   return undef if(!defined($txt));
+   $txt =~ s,\b([a-z0-9._]+)\b,
+-            $defs{$1} ? "<a href='$FW_ME$FW_subdir?detail=$1'>$1</a>" : $1,gei;
++    $defs{$1} ? "<a href='$FW_ME$FW_subdir?detail=$1'>$1</a>" : $1,gei;
+   return $txt;
+ }
+ 
+@@ -1284,7 +1284,7 @@ FW_updateHashes()
+ 
+   if(AttrVal($FW_wname, "sortRooms", "")) { # Slow!
+     my @sortBy = split( " ", AttrVal( $FW_wname, "sortRooms", "" ) );
+-    my %sHash;                                                       
++    my %sHash;
+     map { $sHash{$_} = FW_roomIdx(\@sortBy,$_) } keys %FW_rooms;
+     @FW_roomsArr = sort { $sHash{$a} cmp $sHash{$b} } keys %FW_rooms;
+ 
+@@ -1356,8 +1356,8 @@ FW_makeTable($$$@)
+         # if possible provide some links
+         if ($n eq "room"){
+           FW_pO "<td><div $tattr>".
+-                join(",", map { FW_pH("room=$_",$_,0,"",1,1) } split(",",$val)).
+-                "</div></td>";
++              join(",", map { FW_pH("room=$_",$_,0,"",1,1) } split(",",$val)).
++              "</div></td>";
+ 
+         } elsif ($n =~ m/^fp_(.*)/ && $defs{$1}){ #special for Floorplan
+           FW_pH "detail=$1", $val,1;
+@@ -1366,11 +1366,11 @@ FW_makeTable($$$@)
+           FW_pH "cmd=list%20TYPE=$val", $val,1;
+ 
+         } else {
+-           $val = "<pre>$val</pre>" if($val =~ m/\n/);
+-           FW_pO "<td><div $tattr>".
+-                   join(",", map { ($_ ne $name && $defs{$_}) ?
+-                     FW_pH( "detail=$_", $_ ,0,"",1,1) : $_ } split(",",$val)).
+-                 "</div></td>";
++          $val = "<pre>$val</pre>" if($val =~ m/\n/);
++          FW_pO "<td><div $tattr>".
++              join(",", map { ($_ ne $name && $defs{$_}) ?
++                  FW_pH( "detail=$_", $_ ,0,"",1,1) : $_ } split(",",$val)).
++              "</div></td>";
+         }
+       }
+ 
+@@ -1404,12 +1404,12 @@ FW_detailSelect(@)
+   my $psc = AttrVal("global", "perlSyntaxCheck", ($featurelevel>5.7) ? 1 : 0);
+   $ret .= "<div class='makeSelect' dev=\"$d\" cmd=\"$cmd\" list=\"$list\">";
+   $ret .= "<form method=\"$FW_formmethod\" ".
+-                  "action=\"$FW_ME$FW_subdir\" autocomplete=\"off\">";
++      "action=\"$FW_ME$FW_subdir\" autocomplete=\"off\">";
+   $ret .= FW_hidden("detail", $d);
+   $ret .= FW_hidden("dev.$cmd$d", $d.($param ? " $param":""));
+   $ret .= FW_submit("cmd.$cmd$d", $cmd, $cmd.($psc?" psc":""));
+   $ret .= "<div class=\"$cmd downText\">&nbsp;$d&nbsp;".
+-                ($param ? "&nbsp;$param":"")."</div>";
++      ($param ? "&nbsp;$param":"")."</div>";
+   $ret .= FW_select("sel_$cmd$d","arg.$cmd$d",\@al, $selEl, $cmd);
+   $ret .= FW_textfield("val.$cmd$d", 30, $cmd);
+   $ret .= "</form></div>";
+@@ -1452,7 +1452,7 @@ FW_doDetail($)
+       if( $show eq 'iconOnly' ) {
+         my ($allSets, $cmdlist, $txt) = FW_devState($d, $FW_room, \%extPage);
+         FW_pO "<div informId='$d'".
+-                ($FW_tp?"":" style='float:right'").">$txt</div>";
++            ($FW_tp?"":" style='float:right'").">$txt</div>";
+ 
+       } else {
+         my $nameDisplay = AttrVal($FW_wname,"nameDisplay",undef);
+@@ -1461,12 +1461,12 @@ FW_doDetail($)
+         my $style = "";
+         if( $show eq 'onClick' ) {
+           my $pgm = "Javascript:" .
+-                     "s=document.getElementById('ddtable').style;".
+-                     "s.display = s.display=='none' ? 'block' : 'none';".
+-                     "s=document.getElementById('ddisp').style;".
+-                     "s.display = s.display=='none' ? 'block' : 'none';";
++              "s=document.getElementById('ddtable').style;".
++              "s.display = s.display=='none' ? 'block' : 'none';".
++              "s=document.getElementById('ddisp').style;".
++              "s.display = s.display=='none' ? 'block' : 'none';";
+           FW_pO "<div id=\"ddisp\"><br><a style=\"cursor:pointer\" ".
+-                     "onClick=\"$pgm\">Show DeviceOverview</a><br><br></div>";
++              "onClick=\"$pgm\">Show DeviceOverview</a><br><br></div>";
+           $style = 'style="display:none"';
+         }
+ 
+@@ -1487,18 +1487,18 @@ FW_doDetail($)
+ 
+ 
+   FW_pO FW_detailSelect($d, "set",
+-                        FW_widgetOverride($d, getAllSets($d, $FW_chash)));
++      FW_widgetOverride($d, getAllSets($d, $FW_chash)));
+   FW_pO FW_detailSelect($d, "get",
+-                        FW_widgetOverride($d, getAllGets($d, $FW_chash)));
++      FW_widgetOverride($d, getAllGets($d, $FW_chash)));
+ 
+   FW_makeTable("Internals", $d, $h);
+   FW_makeTable("Readings", $d, $h->{READINGS});
+ 
+   my $attrList = getAllAttr($d);
+-  my $roomList = "multiple,".join(",", 
+-                sort map { $_ =~ s/ /#/g ;$_} keys %FW_rooms);
+-  my $groupList = "multiple,".join(",", 
+-                sort map { $_ =~ s/ /#/g ;$_} keys %FW_groups);				
++  my $roomList = "multiple,".join(",",
++      sort map { $_ =~ s/ /#/g ;$_} keys %FW_rooms);
++  my $groupList = "multiple,".join(",",
++      sort map { $_ =~ s/ /#/g ;$_} keys %FW_groups);
+   $attrList =~ s/room /room:$roomList /;
+   $attrList =~ s/group /group:$groupList /;
+   $attrList = FW_widgetOverride($d, $attrList);
+@@ -1513,15 +1513,16 @@ FW_doDetail($)
+ 
+   my ($link, $txt, $td, $class, $doRet,$nonl) = @_;
+ 
+-  FW_pH "cmd=style iconFor $d", "Select icon",         undef, "detLink iconFor";
+-  FW_pH "cmd=style showDSI $d", "Extend devStateIcon", undef, "detLink showDSI";
+-  FW_pH "cmd=rawDef $d", "Raw definition", undef, "detLink rawDef";
+-  FW_pH "cmd=delete $d", "Delete this device ($d)",    undef, "detLink delDev"
+-         if($d ne "global");
++  FW_pH "cmd=style iconFor $d", "Select icon",          undef, "detLink iconFor";
++  FW_pH "cmd=style showDSI $d", "Extend devStateIcon",  undef, "detLink showDSI";
++  FW_pH "cmd=rawDef $d", "Raw definition",              undef, "detLink rawDef";
++  FW_pH "cmd=list $d", "List for device",               undef, "detLink listDev";
++  FW_pH "cmd=delete $d", "Delete this device ($d)",     undef, "detLink delDev"
++      if($d ne "global");
+   my $sfx = AttrVal("global", "language", "EN");
+   $sfx = ($sfx eq "EN" ? "" : "_$sfx");
+-  FW_pH "$FW_ME/docs/commandref${sfx}.html#${t}", "Device specific help", 
+-         undef, "detLink devSpecHelp";
++  FW_pH "$FW_ME/docs/commandref${sfx}.html#${t}", "Device specific help",
++      undef, "detLink devSpecHelp";
+   FW_pO "<br><br>";
+   FW_pO "</div>";
+ 
+@@ -1553,15 +1554,15 @@ FW_makeTableFromArray($$@) {
+ sub
+ FW_roomIdx($$)
+ {
+-  my ($arr,$v) = @_; 
++  my ($arr,$v) = @_;
+   my ($index) = grep { $v =~ /^$arr->[$_]$/ } 0..$#$arr;
+- 
+-  if( !defined($index) ) { 
++
++  if( !defined($index) ) {
+     $index = 9999;
+   } else {
+     $index = sprintf( "%03i", $index );
+   }
+- 
++
+   return "$index-$v";
+ }
+ 
+@@ -1646,14 +1647,14 @@ FW_roomOverview($)
+   my $sfx = AttrVal("global", "language", "EN");
+   $sfx = ($sfx eq "EN" ? "" : "_$sfx");
+   my @list = (
+-     "Everything",    "$FW_ME?room=all",
+-     "",              "",
+-     "Commandref",    "$FW_ME/docs/commandref${sfx}.html",
+-     "Remote doc",    "http://fhem.de/fhem.html#Documentation",
+-     "Edit files",    "$FW_ME?cmd=style%20list",
+-     "Select style",  "$FW_ME?cmd=style%20select",
+-     "Event monitor", "$FW_ME?cmd=style%20eventMonitor",
+-     "",           "");
++      "Everything",    "$FW_ME?room=all",
++      "",              "",
++      "Commandref",    "$FW_ME/docs/commandref${sfx}.html",
++      "Remote doc",    "http://fhem.de/fhem.html#Documentation",
++      "Edit files",    "$FW_ME?cmd=style%20list",
++      "Select style",  "$FW_ME?cmd=style%20select",
++      "Event monitor", "$FW_ME?cmd=style%20eventMonitor",
++      "",           "");
+   my $lastname = ","; # Avoid double "".
+ 
+   my $lfn = "Logfile";
+@@ -1661,7 +1662,7 @@ FW_roomOverview($)
+     my @l = FW_fileList($defs{$lfn}{logfile},1);
+     my $fn = pop @l;
+     splice @list, 4,0, ("Logfile",
+-                      "$FW_ME/FileLog_logWrapper?dev=$lfn&type=text&file=$fn");
++        "$FW_ME/FileLog_logWrapper?dev=$lfn&type=text&file=$fn");
+   }
+ 
+   my @me = split(",", AttrVal($FW_wname, "menuEntries", ""));
+@@ -1678,7 +1679,7 @@ FW_roomOverview($)
+   FW_pO "<table>";
+   if($FW_ss) {  # Make a selection sensitive dropdown list
+     FW_pO "<tr><td><select OnChange=\"location.href=" .
+-                              "this.options[this.selectedIndex].value\">";
++        "this.options[this.selectedIndex].value\">";
+     foreach(my $idx = 0; $idx < @list1; $idx++) {
+       next if(!$list1[$idx]);
+       my $sel = ($list1[$idx] eq $FW_room ? " selected=\"selected\""  : "");
+@@ -1712,14 +1713,14 @@ FW_roomOverview($)
+         # image tag if we have an icon, else empty
+         my $icoName = "ico$l1";
+         map { my ($n,$v) = split(":",$_); $icoName=$v if($l1 =~ m/^$n$/); }
+-                        split(" ", AttrVal($FW_wname, "roomIcons", ""));
++            split(" ", AttrVal($FW_wname, "roomIcons", ""));
+         my $icon = FW_iconName($icoName) ?
+-                        FW_makeImage($icoName,$icoName,"icon")."&nbsp;" : "";
++            FW_makeImage($icoName,$icoName,"icon")."&nbsp;" : "";
+ 
+         if($l1 eq "Save config") {
+           $l1 .= '</span></a> '.
+-                  '<a id="saveCheck" class="changed" style="visibility:'.
+-                  (int(@structChangeHist) ? 'visible' : 'hidden').'"><span>?';
++              '<a id="saveCheck" class="changed" style="visibility:'.
++              (int(@structChangeHist) ? 'visible' : 'hidden').'"><span>?';
+         }
+ 
+         # Force external browser if FHEMWEB is installed as an offline app.
+@@ -1727,8 +1728,8 @@ FW_roomOverview($)
+         $target = 'target="_blank"' if($l2 =~ s/^$FW_ME\/\+/$FW_ME\//);
+         $target = 'target="_blank"' if($l2 =~ m/commandref|fhem.de.fhem.html/);
+         if($l2 =~ m/.html$/ || $l2 =~ m/^(http|javascript)/ || length($target)){
+-           FW_pO "<td><div><a href='$l2' $target>$icon<span>$l1</span></a>".
+-                 "</div></td>";
++          FW_pO "<td><div><a href='$l2' $target>$icon<span>$l1</span></a>".
++              "</div></td>";
+         } else {
+           FW_pH $l2, "$icon<span>$l1</span>", 1, $class;
+         }
+@@ -1750,8 +1751,8 @@ FW_roomOverview($)
+   FW_pO FW_hidden("fw_id", $FW_id) if($FW_id);
+   FW_pO FW_hidden("room", $FW_room) if($FW_room);
+   FW_pO FW_hidden("fwcsrf", $defs{$FW_wname}{CSRFTOKEN}) if($FW_CSRF);
+-  FW_pO FW_textfield("cmd", 
+-        AttrVal($FW_wname, "mainInputLength", $FW_ss ? 25 : 40), "maininput");
++  FW_pO FW_textfield("cmd",
++      AttrVal($FW_wname, "mainInputLength", $FW_ss ? 25 : 40), "maininput");
+   FW_pO "</form>";
+   FW_pO "</td></tr></table>";
+   FW_pO "</div>";
+@@ -1826,7 +1827,7 @@ FW_makeDeviceLine($$$$$)
+         foreach my $fn (sort keys %{$data{webCmdFn}}) {
+           no strict "refs";
+           $htmlTxt = &{$data{webCmdFn}{$fn}}($FW_wname,
+-                                             $d, $FW_room, $cmd, $values);
++              $d, $FW_room, $cmd, $values);
+           use strict "refs";
+           last if(defined($htmlTxt));
+         }
+@@ -1835,8 +1836,8 @@ FW_makeDeviceLine($$$$$)
+       if($htmlTxt) {
+         $htmlTxt =~ s,^<td[^>]*>(.*)</td>$,$1,;
+       } else {
+-        my $nCmd = $cmdIcon{$cmd} ? 
+-                      FW_makeImage($cmdIcon{$cmd},$cmd,"webCmd") : $cmd;
++        my $nCmd = $cmdIcon{$cmd} ?
++            FW_makeImage($cmdIcon{$cmd},$cmd,"webCmd") : $cmd;
+         $htmlTxt = FW_pH "cmd.$d=set $d $cmd$rf", $nCmd, 0, "", 1, 1;
+       }
+ 
+@@ -1891,8 +1892,8 @@ sub
+ FW_showRoom()
+ {
+   return 0 if(!$FW_room ||
+-              AttrVal($FW_wname,"forbiddenroom","") =~ m/\b$FW_room\b/);
+-  
++      AttrVal($FW_wname,"forbiddenroom","") =~ m/\b$FW_room\b/);
++
+   %FW_hiddengroup = ();
+   foreach my $r (split(",",AttrVal($FW_wname, "hiddengroup", ""))) {
+     $FW_hiddengroup{$r} = 1;
+@@ -1900,7 +1901,7 @@ FW_showRoom()
+   my $hge = AttrVal($FW_wname, "hiddengroupRegexp", undef);
+ 
+   FW_pO "<form method=\"$FW_formmethod\" ".  # Why do we need a form here?
+-                "action=\"$FW_ME\" autocomplete=\"off\">";
++      "action=\"$FW_ME\" autocomplete=\"off\">";
+   FW_addContent("room='$FW_room'");
+   FW_pO "<table class=\"roomoverview\">";  # Need for equal width of subtables
+ 
+@@ -1913,7 +1914,7 @@ FW_showRoom()
+ 
+   } else {
+     @devs= grep { (($FW_rooms{$FW_room} && $FW_rooms{$FW_room}{$_}) ||
+-                   $FW_room eq "all") && !IsIgnored($_) } keys %defs;
++        $FW_room eq "all") && !IsIgnored($_) } keys %defs;
+   }
+ 
+   my (%group, @atEnds, %usuallyAtEnd, %sortIndex);
+@@ -1929,7 +1930,7 @@ FW_showRoom()
+     }
+     next if(!$FW_types{$dev});   # FHEMWEB connection, missed due to caching
+     foreach my $grp (split(",", AttrVal($dev, "group", $FW_types{$dev}))) {
+-      next if($FW_hiddengroup{$grp}); 
++      next if($FW_hiddengroup{$grp});
+       next if($hge && $grp =~ m/$hge/);
+       $sortIndex{$dev} = FW_sortIndex($dev);
+       $group{$grp}{$dev} = 1;
+@@ -1949,9 +1950,9 @@ FW_showRoom()
+ 
+     # iterate over the distinct groups  
+     foreach my $g (sort { $maxc==-1 ?
+-                    $a cmp $b :
+-                    ($columns->{$a} ? $columns->{$a}->[0] : 99) <=>
+-                    ($columns->{$b} ? $columns->{$b}->[0] : 99) } keys %group) {
++        $a cmp $b :
++        ($columns->{$a} ? $columns->{$a}->[0] : 99) <=>
++            ($columns->{$b} ? $columns->{$b}->[0] : 99) } keys %group) {
+ 
+       next if($maxc != -1 && (!$columns->{$g} || $columns->{$g}->[1] != $col));
+ 
+@@ -1962,7 +1963,7 @@ FW_showRoom()
+       FW_pO "<table class=\"block wide\" id=\"TYPE_$g\">";
+ 
+       foreach my $d (sort { $sortIndex{$a} cmp $sortIndex{$b} }
+-                     keys %{$group{$g}}) {
++          keys %{$group{$g}}) {
+         my $type = $defs{$d}{TYPE};
+         $extPage{group} = $g;
+ 
+@@ -1991,7 +1992,7 @@ FW_showRoom()
+ 
+   # Now the "atEnds"
+   my $doBC = (AttrVal($FW_wname, "plotfork", 0) &&
+-              AttrVal($FW_wname, "plotEmbed", 0) == 0);
++      AttrVal($FW_wname, "plotEmbed", 0) == 0);
+   my %res;
+   my ($idx,$svgIdx) = (1,1);
+   @atEnds =  sort { $sortIndex{$a} cmp $sortIndex{$b} } @atEnds;
+@@ -2005,7 +2006,7 @@ FW_showRoom()
+       $extPage{svgIdx} = $svgIdx++;
+       BlockingCall(sub {
+         return "$FW_cname,$d,".
+-               encode_base64(&{$fn}($FW_wname,$d,$FW_room,\%extPage),'');
++            encode_base64(&{$fn}($FW_wname,$d,$FW_room,\%extPage),'');
+       }, undef, "FW_svgCollect");
+     } else {
+       $res{$d} = &{$fn}($FW_wname,$d,$FW_room,\%extPage);
+@@ -2091,7 +2092,7 @@ FW_fileList($;$)
+ {
+   my ($fname,$mtime) = @_;
+   $fname =~ s/%L/$attr{global}{logdir}/g #Forum #89744
+-        if($fname =~ m/%/ && $attr{global}{logdir});
++      if($fname =~ m/%/ && $attr{global}{logdir});
+   $fname =~ m,^(.*)/([^/]*)$,; # Split into dir and file
+   my ($dir,$re) = ($1, $2);
+   return $fname if(!$re);
+@@ -2104,7 +2105,7 @@ FW_fileList($;$)
+   }
+   closedir(DH);
+   return sort { (CORE::stat("$dir/$a"))[9] <=> (CORE::stat("$dir/$b"))[9] }
+-         @ret if($mtime);
++      @ret if($mtime);
+   @ret = cfgDB_FW_fileList($dir,$re,@ret) if (configDBUsed());
+   return sort @ret;
+ }
+@@ -2137,20 +2138,20 @@ FW_returnFileAsStream($$$$$)
+     if(defined($etag) && defined($if_none_match) && $etag eq $if_none_match) {
+       my $now = time();
+       my $rsp = "Date: ".FmtDateTimeRFC1123($now)."\r\n".
+-                "ETag: $etag\r\n".
+-                "Expires: ".FmtDateTimeRFC1123($now+900)."\r\n";
++          "ETag: $etag\r\n".
++          "Expires: ".FmtDateTimeRFC1123($now+900)."\r\n";
+       Log3 $FW_wname, 4, "$FW_chash->{NAME} => 304 Not Modified";
+       TcpServer_WriteBlocking($FW_chash,"HTTP/1.1 304 Not Modified\r\n".
+-                    $rsp . $FW_headerlines . "\r\n");
++          $rsp . $FW_headerlines . "\r\n");
+       return -1;
+     }
+   }
+ 
+   if(!open(FH, $path)) {
+     Log3 $FW_wname, 4, "FHEMWEB $FW_wname $path: $!";
+-    TcpServer_WriteBlocking($FW_chash, 
++    TcpServer_WriteBlocking($FW_chash,
+         "HTTP/1.1 404 Not Found\r\n".
+-        "Content-Length:0\r\n\r\n");
++            "Content-Length:0\r\n\r\n");
+     FW_closeConn($FW_chash);
+     return -1;
+   }
+@@ -2160,18 +2161,18 @@ FW_returnFileAsStream($$$$$)
+   $etag = defined($etag) ? "ETag: \"$etag\"\r\n" : "";
+   my $expires = $cacheable ? ("Expires: ".gmtime(time()+900)." GMT\r\n"): "";
+   my $compr = ($FW_httpheader{"Accept-Encoding"} &&
+-               $FW_httpheader{"Accept-Encoding"} =~ m/gzip/ && $FW_use{zlib}) ?
+-                "Content-Encoding: gzip\r\n" : "";
++      $FW_httpheader{"Accept-Encoding"} =~ m/gzip/ && $FW_use{zlib}) ?
++      "Content-Encoding: gzip\r\n" : "";
+   TcpServer_WriteBlocking($FW_chash, "HTTP/1.1 200 OK\r\n".
+-                  $compr . $expires . $FW_headerlines . $etag .
+-                  "Transfer-Encoding: chunked\r\n" .
+-                  "Content-Type: $type; charset=$FW_encoding\r\n\r\n");
++      $compr . $expires . $FW_headerlines . $etag .
++      "Transfer-Encoding: chunked\r\n" .
++      "Content-Type: $type; charset=$FW_encoding\r\n\r\n");
+ 
+   my $d = Compress::Zlib::deflateInit(-WindowBits=>31) if($compr);
+   FW_outputChunk($FW_chash, $FW_RET, $d);
+   FW_outputChunk($FW_chash, "<a name='top'></a>".
+-        "<a href='#end_of_file'>jump to the end</a><br><br>", $d)
+-    if($doEsc && $sz > 2048);
++      "<a href='#end_of_file'>jump to the end</a><br><br>", $d)
++      if($doEsc && $sz > 2048);
+   my $buf;
+   while(sysread(FH, $buf, 2048)) {
+     if($doEsc) { # FileLog special
+@@ -2182,15 +2183,15 @@ FW_returnFileAsStream($$$$$)
+   }
+   close(FH);
+   FW_outputChunk($FW_chash, "<br/><a name='end_of_file'></a>".
+-        "<a href='#top'>jump to the top</a><br/><br/>", $d)
+-    if($doEsc && $sz > 2048);
++      "<a href='#top'>jump to the top</a><br/><br/>", $d)
++      if($doEsc && $sz > 2048);
+   FW_outputChunk($FW_chash, $suffix, $d);
+ 
+   if($compr) {
+     $buf = $d->flush();
+     if($buf){
+       TcpServer_WriteBlocking($FW_chash,
+-                sprintf("%x\r\n",length($buf)) .$buf."\r\n");
++          sprintf("%x\r\n",length($buf)) .$buf."\r\n");
+     }
+   }
+   TcpServer_WriteBlocking($FW_chash, "0\r\n\r\n");
+@@ -2245,7 +2246,7 @@ FW_textfieldv($$$$)
+   $v=" value='$value'" if(defined($value));
+   return if($FW_hiddenroom{input});
+   my $s = "<input type='text' name='$n' class='$class' size='$z'$v ".
+-            "autocorrect='off' autocapitalize='off'/>";
++      "autocorrect='off' autocapitalize='off'/>";
+   return $s;
+ }
+ 
+@@ -2319,11 +2320,11 @@ FW_fileNameToPath($)
+ }
+ 
+ sub FW_confFiles($) {
+-   my ($param) = @_;
+-   # create and return regexp for editFileList
+-   return "(".join ( "|" , sort keys %{$data{confFiles}} ).")" if $param == 1;
+-   # create and return array with filenames
+-   return sort keys %{$data{confFiles}} if $param == 2;
++  my ($param) = @_;
++  # create and return regexp for editFileList
++  return "(".join ( "|" , sort keys %{$data{confFiles}} ).")" if $param == 1;
++  # create and return array with filenames
++  return sort keys %{$data{confFiles}} if $param == 2;
+ }
+ 
+ ##################
+@@ -2338,7 +2339,7 @@ FW_style($$)
+ 
+   my $start = '><table><tr><td';
+   my $end   = "</td></tr></table></div>";
+-  
++
+   if($a[1] eq "list") {
+     FW_addContent($start);
+     FW_pO "$msg<br><br>" if($msg);
+@@ -2346,14 +2347,14 @@ FW_style($$)
+     $attr{global}{configfile} =~ m,([^/]*)$,;
+     my $cfgFileName = $1;
+     FW_displayFileList("config file", $cfgFileName)
+-                                if(!configDBUsed());
++        if(!configDBUsed());
+ 
+     my $efl = AttrVal($FW_wname, 'editFileList',
+-      "Own modules and helper files:\$MW_dir:^(.*sh|[0-9][0-9].*Util.*pm|".
+-                        ".*cfg|.*\.holiday|myUtilsTemplate.pm|.*layout)\$\n".
+-      "Config files for external programs:\$FW_confdir:^".FW_confFiles(1)."\$\n".
+-      "Gplot files:\$FW_gplotdir:^.*gplot\$\n".
+-      "Style files:\$FW_cssdir:^.*(css|svg)\$");
++        "Own modules and helper files:\$MW_dir:^(.*sh|[0-9][0-9].*Util.*pm|".
++            ".*cfg|.*\.holiday|myUtilsTemplate.pm|.*layout)\$\n".
++            "Config files for external programs:\$FW_confdir:^".FW_confFiles(1)."\$\n".
++            "Gplot files:\$FW_gplotdir:^.*gplot\$\n".
++            "Style files:\$FW_cssdir:^.*(css|svg)\$");
+     foreach my $l (split(/[\r\n]/, $efl)) {
+       my ($t, $v, $re) = split(":", $l, 3);
+       $v = eval $v;
+@@ -2373,7 +2374,7 @@ FW_style($$)
+ 
+   } elsif($a[1] eq "select") {
+     my @fl = grep { $_ !~ m/(floorplan|dashboard)/ }
+-                        FW_fileList("$FW_cssdir/.*style.css");
++        FW_fileList("$FW_cssdir/.*style.css");
+     FW_addContent($start);
+     FW_pO "<div class='fileList styles'>Styles</div>";
+     FW_pO "<table class='block wide fileList'>";
+@@ -2397,7 +2398,7 @@ FW_style($$)
+     FW_pO "Reload the page in the browser.$end";
+ 
+   } elsif($a[1] eq "edit") {
+-    my $fileName = $a[2]; 
++    my $fileName = $a[2];
+     my $data = "";
+     my $cfgDB = defined($a[3]) ? $a[3] : "";
+     my $forceType = ($cfgDB eq 'configDB') ? $cfgDB : "file";
+@@ -2414,7 +2415,7 @@ FW_style($$)
+ 
+     $attr{global}{configfile} =~ m,([^/]*)$,;
+     my $readOnly = (AttrVal($FW_wname, "editConfig", ($1 ne $fileName)) ?
+-                        "" : "readonly");
++        "" : "readonly");
+ 
+     my $ncols = $FW_ss ? 40 : 80;
+     FW_addContent();
+@@ -2432,7 +2433,7 @@ FW_style($$)
+     }
+     FW_pO FW_hidden("cmd", "style save $fileName $cfgDB");
+     FW_pO "<textarea $readOnly name=\"data\" cols=\"$ncols\" rows=\"30\">" .
+-            "$data</textarea>";
++        "$data</textarea>";
+     FW_pO "</form>";
+     FW_pO "</div>";
+ 
+@@ -2450,10 +2451,10 @@ FW_style($$)
+     my $err;
+     if($fileName =~ m,\.png$,) {
+       $err = FileWrite({FileName=>$filePath,ForceType=>$forceType,NoNL=>1},
+-                       $FW_data);
++          $FW_data);
+     } else {
+       $err = FileWrite({ FileName=>$filePath, ForceType=>$forceType },
+-                        split("\n", $FW_data));
++          split("\n", $FW_data));
+     }
+ 
+     if($err) {
+@@ -2478,7 +2479,7 @@ FW_style($$)
+ 
+   } elsif($a[1] eq "showDSI") {
+     FW_iconTable("devStateIcon", "",
+-                 "style addDSI $a[2] %s", "Enter value/regexp for STATE");
++        "style addDSI $a[2] %s", "Enter value/regexp for STATE");
+ 
+   } elsif($a[1] eq "addDSI") {
+     my $dsi = AttrVal($a[2], "devStateIcon", "");
+@@ -2488,14 +2489,14 @@ FW_style($$)
+ 
+   } elsif($a[1] eq "eventMonitor") {
+     FW_pO "<script type=\"text/javascript\" src=\"$FW_ME/pgm2/console.js\">".
+-          "</script>";
++        "</script>";
+     FW_addContent();
+     my $filter = $a[2] ? ($a[2] eq "log" ? "global" : $a[2]) : ".*";
+     FW_pO "Events (Filter: <a href=\"#\" id=\"eventFilter\">$filter</a>) ".
+-          "&nbsp;&nbsp;<span class='fhemlog'>FHEM log ".
+-                "<input id='eventWithLog' type='checkbox'".
+-                ($a[2] && $a[2] eq "log" ? " checked":"")."></span>".
+-          "&nbsp;&nbsp;<button id='eventReset'>Reset</button><br><br>\n";
++        "&nbsp;&nbsp;<span class='fhemlog'>FHEM log ".
++        "<input id='eventWithLog' type='checkbox'".
++        ($a[2] && $a[2] eq "log" ? " checked":"")."></span>".
++        "&nbsp;&nbsp;<button id='eventReset'>Reset</button><br><br>\n";
+     FW_pO "<div id=\"console\"></div>";
+     FW_pO "</div>";
+ 
+@@ -2529,7 +2530,7 @@ FW_iconTable($$$$)
+   }
+   foreach my $i (sort keys %icoList) {
+     FW_pF "<button title='%s' type='submit' class='dist' name='cmd' ".
+-              "value='$cmdFmt'>%s</button>", $i, $i, FW_makeImage($i,$i,$class);
++        "value='$cmdFmt'>%s</button>", $i, $i, FW_makeImage($i,$i,$class);
+   }
+   FW_pO "</form>";
+   FW_pO "</div>";
+@@ -2555,12 +2556,12 @@ FW_pH(@)
+   my $ret;
+ 
+   $link .= $FW_CSRF if($link =~ m/cmd/ &&
+-                       $link !~m/cmd=style%20(list|select|eventMonitor)/);
++      $link !~m/cmd=style%20(list|select|eventMonitor)/);
+   $link = ($link =~ m,^/,) ? $link : "$FW_ME$FW_subdir?$link";
+-  
++
+   # Using onclick, as href starts safari in a webapp.
+   # Known issue: the pointer won't change
+-  if($FW_ss || $FW_tp) { 
++  if($FW_ss || $FW_tp) {
+     $ret = "<a onClick=\"location.href='$link'\">$txt</a>";
+   } else {
+     $ret = "<a href=\"$link\">$txt</a>";
+@@ -2650,7 +2651,7 @@ FW_makeImage(@)
+ 
+ ####
+ sub
+-FW_IconURL($) 
++FW_IconURL($)
+ {
+   my ($name)= @_;
+   return "$FW_ME/icons/$name";
+@@ -2720,7 +2721,7 @@ FW_Attr(@)
+     AnalyzeCommand(undef, "attr $aName validFor $devName");
+     AnalyzeCommand(undef, "attr $aName $attrName ".join(" ",@param));
+     return "$devName: ".($exists ? "modifying":"creating").
+-                " device $aName for attribute $attrName";
++        " device $aName for attribute $attrName";
+   }
+ 
+   if($attrName eq "iconPath" && $type eq "set") {
+@@ -2761,7 +2762,7 @@ FW_Attr(@)
+     foreach my $room (split(/ |\n/, $param[0])) {
+       next if(!$room || $room =~ /^#/);
+       return "Bad extraRooms entry $room, not name=<name>:devspec=<devspec>"
+-        if($room !~ m/name=([^:]+):devspec=([^\s]+)/);
++          if($room !~ m/name=([^:]+):devspec=([^\s]+)/);
+     }
+   }
+ 
+@@ -2791,7 +2792,7 @@ FW_readIconsFrom($$)
+   foreach my $entry (@entries) {
+     if( -d "$FW_icondir/$ldir/$entry" ) {  # directory -> recurse
+       FW_readIconsFrom($dir, $subdir ? "$subdir/$entry" : $entry)
+-        unless($entry eq "." || $entry eq ".." || $entry eq ".svn");
++          unless($entry eq "." || $entry eq ".." || $entry eq ".svn");
+ 
+     } else {
+       if($entry =~ m/^iconalias.txt$/i && open(FH, "$FW_icondir/$ldir/$entry")){
+@@ -2937,7 +2938,7 @@ FW_makeEdit($$$)
+   my $cmd = "modify";
+   my $ncols = $FW_ss ? 30 : 60;
+   FW_pO      "<textarea name=\"val.${cmd}$name\" ".
+-                "cols=\"$ncols\" rows=\"10\">$val</textarea>";
++      "cols=\"$ncols\" rows=\"10\">$val</textarea>";
+   FW_pO     "<br>" . FW_submit("cmd.${cmd}$name", "$cmd $name",($psc?"psc":""));
+   FW_pO   "</form></div>";
+   FW_pO  "</td>";
+@@ -2951,8 +2952,8 @@ FW_longpollInfo($@)
+   if($fmt && $fmt eq "JSON") {
+     my @a;
+     map { my $x = $_; #Forum 57377, ASCII 0-19 \ "
+-          $x=~ s/([\x00-\x1f\x22\x5c\x7f])/sprintf '\u%04x', ord($1)/ge;
+-          push @a,$x; } @_;
++      $x=~ s/([\x00-\x1f\x22\x5c\x7f])/sprintf '\u%04x', ord($1)/ge;
++      push @a,$x; } @_;
+     return '["'.join('","', @a).'"]';
+   } else {
+     return join('<<', @_);
+@@ -2978,7 +2979,7 @@ FW_roomStatesForInform($$)
+     my ($allSet, $cmdlist, $txt) = FW_devState($dn, "", \%extPage);
+     if($defs{$dn} && $defs{$dn}{STATE} && $defs{$dn}{TYPE} ne "weblink") {
+       push @data,
+-           FW_longpollInfo($me->{inform}{fmt}, $dn, $defs{$dn}{STATE}, $txt);
++          FW_longpollInfo($me->{inform}{fmt}, $dn, $defs{$dn}{STATE}, $txt);
+     }
+   }
+   my $data = join("\n", map { s/\n/ /gm; $_ } @data)."\n";
+@@ -3029,8 +3030,8 @@ FW_Notify($$)
+   }
+ 
+   if($dn eq $ntfy->{SNAME} &&
+-     $dev->{CHANGED} &&
+-     $dev->{CHANGED}->[0] =~ m/^JS(#([^:]*))?:(.*)$/) {
++      $dev->{CHANGED} &&
++      $dev->{CHANGED}->[0] =~ m/^JS(#([^:]*))?:(.*)$/) {
+     my $data = $3;
+     return if( $2 && $ntfy->{PEER} !~ m/$2/ );
+     $data = FW_longpollInfo($h->{fmt}, "#FHEMWEB:$ntfy->{NAME}",$data,"");
+@@ -3044,7 +3045,7 @@ FW_Notify($$)
+   my %extPage;
+   my $isRaw = ($h->{type} =~ m/raw/);
+   $events = deviceEvents($dev, AttrVal($FW_wname, "addStateEvent",!$isRaw))
+-        if(!$events);
++      if(!$events);
+ 
+   if($isStatus) {
+     # Why is saving this stuff needed? FLOORPLAN?
+@@ -3058,7 +3059,7 @@ FW_Notify($$)
+     $FW_tp = ($FW_sp =~ m/smallscreen|touchpad/);
+     my $spDir = ($FW_sp eq "default" ? "" : "$FW_sp:");
+     @FW_iconDirs = grep { $_ } split(":", AttrVal($FW_wname, "iconPath",
+-                                "${spDir}fhemSVG:openautomation:default"));
++        "${spDir}fhemSVG:openautomation:default"));
+     if($h->{iconPath}) {
+       unshift @FW_iconDirs, $h->{iconPath};
+       FW_readIcons($h->{iconPath});
+@@ -3087,7 +3088,7 @@ FW_Notify($$)
+         my ($readingName,$readingVal) = split(": ",$events->[$i],2);
+         next if($readingName !~ m/^[A-Za-z\d_\.\-\/:]+$/); # Forum #70608,70844
+         push @data, FW_longpollInfo($h->{fmt},
+-                                "$dn-$readingName", $readingVal,$readingVal);
++            "$dn-$readingName", $readingVal,$readingVal);
+         push @data, FW_longpollInfo($h->{fmt}, "$dn-$readingName-ts", $tn, $tn);
+       }
+     }
+@@ -3104,11 +3105,11 @@ FW_Notify($$)
+       my $dt = $dev->{TYPE};
+       for(my $i = 0; $i < $max; $i++) {
+         my $line = "$tn $dt $dn ".$events->[$i]."<br>";
+-        eval { 
++        eval {
+           my $ok;
+           if($h->{filterType} && $h->{filterType} eq "notify") {
+             $ok = ($dn =~ m/^$h->{filter}$/ ||
+-                   "$dn:$events->[$i]" =~ m/^$h->{filter}$/) ;
++                "$dn:$events->[$i]" =~ m/^$h->{filter}$/) ;
+           } else {
+             $ok = ($line =~ m/$h->{filter}/) ;
+           }
+@@ -3120,7 +3121,7 @@ FW_Notify($$)
+ 
+   if(@data){
+     if(!FW_addToWritebuffer($ntfy,
+-                join("\n", map { s/\n/ /gm; $_ } @data)."\n") ){
++        join("\n", map { s/\n/ /gm; $_ } @data)."\n") ){
+       my $name = $ntfy->{NAME};
+       Log3 $name, 4, "Closing connection $name due to full buffer in FW_Notify";
+       TcpServer_Close($ntfy, 1);
+@@ -3141,12 +3142,12 @@ FW_directNotify($@) # Notify without the event overhead (Forum #31293)
+   my $dev = $_[0];
+   foreach my $ntfy (values(%defs)) {
+     next if(!$ntfy->{TYPE} ||
+-            $ntfy->{TYPE} ne "FHEMWEB" ||
+-            !$ntfy->{inform} ||
+-            !$ntfy->{inform}{devices}{$dev} ||
+-            $ntfy->{inform}{type} ne "status");
++        $ntfy->{TYPE} ne "FHEMWEB" ||
++        !$ntfy->{inform} ||
++        !$ntfy->{inform}{devices}{$dev} ||
++        $ntfy->{inform}{type} ne "status");
+     next if($filter && $ntfy->{inform}{filter} !~ m/$filter/);
+-    if(!FW_addToWritebuffer($ntfy, 
++    if(!FW_addToWritebuffer($ntfy,
+         FW_longpollInfo($ntfy->{inform}{fmt}, @_)."\n")) {
+       my $name = $ntfy->{NAME};
+       Log3 $name, 4, "Closing connection $name due to full buffer in FW_Notify";
+@@ -3175,7 +3176,7 @@ FW_devState($$@)
+   my $dsi = ($attr{$d} && ($attr{$d}{stateFormat} || $attr{$d}{devStateIcon}));
+ 
+   $hasOnOff = ($allSets =~ m/(^| )on(:[^ ]*)?( |$)/i &&
+-               $allSets =~ m/(^| )off(:[^ ]*)?( |$)/i);
++      $allSets =~ m/(^| )off(:[^ ]*)?( |$)/i);
+   if(AttrVal($d, "showtime", undef)) {
+     my $v = $defs{$d}{READINGS}{state}{TIME};
+     $txt = $v if(defined($v));
+@@ -3208,7 +3209,7 @@ FW_devState($$@)
+           foreach my $fn (sort keys %{$data{webCmdFn}}) {
+             no strict "refs";
+             $htmlTxt = &{$data{webCmdFn}{$fn}}($FW_wname,
+-                                             $d, $FW_room, $cmd, $values);
++                $d, $FW_room, $cmd, $values);
+             use strict "refs";
+             last if(defined($htmlTxt));
+           }
+@@ -3229,12 +3230,12 @@ FW_devState($$@)
+ 
+       if($hasOnOff) {
+         my $isUpperCase = ($allSets =~ m/(^| )ON(:[^ ]*)?( |$)/ &&
+-                           $allSets =~ m/(^| )OFF(:[^ ]*)?( |$)/);
++            $allSets =~ m/(^| )OFF(:[^ ]*)?( |$)/);
+         # Have to cover: "on:An off:Aus", "A0:Aus AI:An Aus:off An:on"
+         my $on  = ReplaceEventMap($d, $isUpperCase ? "ON" :"on" , 1);
+         my $off = ReplaceEventMap($d, $isUpperCase ? "OFF":"off", 1);
+         $link = "cmd.$d=set $d " . ($state eq $on ? $off : $on)
+-                if(!defined($link));
++            if(!defined($link));
+         $cmdList = "$on:$off" if(!$cmdList);
+       }
+ 
+@@ -3249,7 +3250,7 @@ FW_devState($$@)
+           $link .= "&room=".urlEncode($room);
+         }
+         $txt = "<a href=\"$FW_ME$FW_subdir?$link$rf$FW_CSRF\">$txt</a>"
+-           if($link !~ m/ noFhemwebLink\b/);
++            if($link !~ m/ noFhemwebLink\b/);
+       }
+       $html .= ' ' if( $html );
+       $html .= $txt;
+@@ -3267,8 +3268,8 @@ FW_devState($$@)
+   my $sfn = $modules{$type}{FW_summaryFn};
+   if($sfn) {
+     if(!defined($extPage)) {
+-       my %hash;
+-       $extPage = \%hash;
++      my %hash;
++      $extPage = \%hash;
+     }
+     no strict "refs";
+     my $newtxt = &{$sfn}($FW_wname, $d, $FW_room, $extPage);
+@@ -3296,9 +3297,9 @@ FW_Get($@)
+ 
+   } elsif($arg eq "pathlist") {
+     return "web server root:      $FW_dir\n".
+-           "icon directory:       $FW_icondir\n".
+-           "css directory:        $FW_cssdir\n".
+-           "gplot directory:      $FW_gplotdir";
++        "icon directory:       $FW_icondir\n".
++        "css directory:        $FW_cssdir\n".
++        "gplot directory:      $FW_gplotdir";
+ 
+   } else {
+     return "Unknown argument $arg choose one of icon pathlist:noArg";
+@@ -3316,8 +3317,8 @@ FW_Set($@)
+ 
+   return "no set value specified" if(@a < 2);
+   return ("Unknown argument $a[1], choose one of ".
+-        join(" ", map { "$_:noArg" } sort keys %cmd))
+-    if(!$cmd{$a[1]});
++      join(" ", map { "$_:noArg" } sort keys %cmd))
++      if(!$cmd{$a[1]});
+ 
+   if($a[1] eq "rereadicons") {
+     my @dirs = keys %FW_icons;
+@@ -3345,8 +3346,8 @@ FW_closeInactiveClients()
+   my $now = time();
+   foreach my $dev (keys %defs) {
+     next if(!$defs{$dev}{TYPE} || $defs{$dev}{TYPE} ne "FHEMWEB" ||
+-            !$defs{$dev}{LASTACCESS} || $defs{$dev}{inform} ||
+-            ($now - $defs{$dev}{LASTACCESS}) < 60);
++        !$defs{$dev}{LASTACCESS} || $defs{$dev}{inform} ||
++        ($now - $defs{$dev}{LASTACCESS}) < 60);
+     Log3 $FW_wname, 4, "Closing inactive connection $dev";
+     FW_Undef($defs{$dev}, undef);
+     delete $defs{$dev};
+@@ -3363,13 +3364,13 @@ FW_htmlEscape($)
+   $txt =~ s/</&lt;/g;
+   $txt =~ s/>/&gt;/g;
+   $txt =~ s/'/&apos;/g;
+-#  $txt =~ s/\n/<br>/g;
++  #  $txt =~ s/\n/<br>/g;
+   return $txt;
+ }
+ 
+ ###########################
+ # Widgets START
+-sub 
++sub
+ FW_widgetFallbackFn()
+ {
+   my ($FW_wname, $d, $FW_room, $cmd, $values) = @_;
+@@ -3394,7 +3395,7 @@ FW_widgetFallbackFn()
+     $current = ReplaceEventMap($d, $current, 1);
+   }
+   return "<td><div class='fhemWidget' cmd='$cmd' reading='$reading' ".
+-                "dev='$d' arg='$values' current='$current'></div></td>";
++      "dev='$d' arg='$values' current='$current'></div></td>";
+ }
+ # Widgets END
+ ###########################
+@@ -3402,25 +3403,25 @@ FW_widgetFallbackFn()
+ sub
+ FW_visibleDevices(;$)
+ {
+-  my($FW_wname) = @_; 
++  my($FW_wname) = @_;
+ 
+-  my %devices = (); 
++  my %devices = ();
+   foreach my $d (sort keys %defs) {
+     next if(!defined($defs{$d}));
+     my $h = $defs{$d};
+     next if(!$h->{TEMPORARY});
+     next if($h->{TYPE} ne "FHEMWEB");
+     next if(defined($FW_wname) && $h->{SNAME} ne $FW_wname);
+- 
++
+     next if(!defined($h->{inform}));
+- 
+-    @devices{ keys %{$h->{inform}->{devices}} } = 
+-                values %{$h->{inform}->{devices}};
++
++    @devices{ keys %{$h->{inform}->{devices}} } =
++        values %{$h->{inform}->{devices}};
+   }
+   return %devices;
+ }
+ 
+-sub 
++sub
+ FW_ActivateInform($;$)
+ {
+   my ($cl, $arg) = @_;
