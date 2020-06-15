@@ -1,0 +1,28 @@
+diff --git a/fhem/FHEM/37_echodevice.pm b/fhem/FHEM/37_echodevice.pm
+index 0c62d91fc..c173ce594 100644
+--- a/fhem/FHEM/37_echodevice.pm
++++ b/fhem/FHEM/37_echodevice.pm
+@@ -4246,23 +4246,6 @@ sub echodevice_Attr($$$) {
+ 
+ sub echodevice_anonymize($$) {
+ 	my ($hash, $string) = @_;
+-	my $s1 = $hash->{helper}{".SERIAL"};
+-	my $s2 = $hash->{helper}{".CUSTOMER"};
+-	my $s3 = $hash->{helper}{HOMEGROUP};
+-	my $s4 = $hash->{helper}{".COMMSID"};
+-	my $s5;
+-	$s5 = echodevice_decrypt($hash->{helper}{".USER"}) if(defined($hash->{helper}{".USER"}));
+-	$s5 = echodevice_decrypt($hash->{IODev}->{helper}{".USER"}) if(defined($hash->{IODev}->{helper}{".USER"}));;
+-	$s1 = "SERIAL" if(!defined($s1));
+-	$s2 = "CUSTOMER" if(!defined($s2));
+-	$s3 = "HOMEGROUP" if(!defined($s3));
+-	$s4 = "COMMSID" if(!defined($s4));
+-	$s5 = "USER" if(!defined($s5));
+-	$string =~ s/$s1/SERIAL/g;
+-	$string =~ s/$s2/CUSTOMER/g;
+-	$string =~ s/$s3/HOMEGROUP/g;
+-	$string =~ s/$s4/COMMSID/g;
+-	$string =~ s%$s5%USER%g;
+ 	return $string;
+ }
+ 
