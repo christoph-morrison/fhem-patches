@@ -1,0 +1,12 @@
+diff --git a/fhem/FHEM/01_FHEMWEB.pm b/fhem/FHEM/01_FHEMWEB.pm
+index 4ffd1112b..73cdf01b6 100644
+--- a/fhem/FHEM/01_FHEMWEB.pm
++++ b/fhem/FHEM/01_FHEMWEB.pm
+@@ -1548,6 +1548,7 @@ FW_doDetail($)
+   FW_pH "cmd=style iconFor $d", "Select icon",         undef, "detLink iconFor";
+   FW_pH "cmd=style showDSI $d", "Extend devStateIcon", undef, "detLink showDSI";
+   FW_pH "cmd=rawDef $d", "Raw definition", undef, "detLink rawDef";
++  FW_pH "cmd=defmod $d.at at 00:00:00 $d", "Create at for $d", undef, "detLink createAt";
+   FW_pH "cmd=delete $d", "Delete this device ($d)",    undef, "detLink delDev"
+          if($d ne "global");
+   my $sfx = AttrVal("global", "language", "EN");
