@@ -1,0 +1,13 @@
+Index: FHEM/01_FHEMWEB.pm
+===================================================================
+--- FHEM/01_FHEMWEB.pm	(Revision 23459)
++++ FHEM/01_FHEMWEB.pm	(Arbeitskopie)
+@@ -206,7 +206,7 @@
+     smallscreenCommands:0,1
+     stylesheetPrefix
+     styleData:textField-long
+-    title
++    title:textField-long
+     touchpad:unused
+     viewport
+     webname

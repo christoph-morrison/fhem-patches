@@ -1,0 +1,12 @@
+Index: FHEM/01_FHEMWEB.pm
+===================================================================
+--- FHEM/01_FHEMWEB.pm	(Revision 23459)
++++ FHEM/01_FHEMWEB.pm	(Arbeitskopie)
+@@ -199,6 +199,7 @@
+     reverseLogs:0,1
+     roomIcons
+     showUsedFiles:0,1
++    stateFormat:textField-long
+     sortRooms
+     sslVersion
+     sslCertPrefix
