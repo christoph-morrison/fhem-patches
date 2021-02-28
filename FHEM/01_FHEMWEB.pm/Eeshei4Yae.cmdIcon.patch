@@ -1,0 +1,45 @@
+Index: 01_FHEMWEB.pm
+===================================================================
+--- 01_FHEMWEB.pm	(Revision 23860)
++++ 01_FHEMWEB.pm	(Arbeitskopie)
+@@ -218,7 +218,7 @@
+   ###############
+   # Initialize internal structures
+   map { addToAttrList($_) } (
+-    "cmdIcon",
++    "cmdIcon:textField-long",
+     "devStateIcon:textField-long",
+     "devStateStyle",
+     "icon",
+@@ -1855,11 +1855,18 @@
+   # Commands, slider, dropdown
+   my $smallscreenCommands = AttrVal($FW_wname, "smallscreenCommands", "");
+   if((!$FW_ss || $smallscreenCommands) && $cmdlist) {
+-    my @a = split("[: ]", AttrVal($d, "cmdIcon",
+-                                $defs{$d}{cmdIcon} ? $defs{$d}{cmdIcon} : ""));
+-    Log 1, "ERROR: bad cmdIcon definition for $d" if(@a % 2);
+-    my %cmdIcon = @a;
++    my $cmdIcon_def = ::AttrVal($d, q{cmdIcon}, undef);
++    my %cmdIcon;
+ 
++    if (defined $cmdIcon_def) {
++      my @cmdIcons = grep { $_ ne q{} } split(
++          qr{[:\s]+}, $cmdIcon_def
++      );
++
++      Log3($d, 1, qq{ERROR: invalid cmdIcon definition for $d: '@cmdIcons'}) if(@cmdIcons % 2);
++      %cmdIcon = @cmdIcons;
++    }
++
+     my @cl = split(":", $cmdlist);
+     my $wclDefault = $defs{$d}{webCmdLabel} ? $defs{$d}{webCmdLabel} : "";
+     my @wcl = split(":", AttrVal($d, "webCmdLabel", $wclDefault));
+@@ -1885,8 +1892,7 @@
+       if($htmlTxt) {
+         $htmlTxt =~ s,^<td[^>]*>(.*)</td>$,$1,;
+       } else {
+-        my $nCmd = $cmdIcon{$cmd} ?
+-                      FW_makeImage($cmdIcon{$cmd},$cmd,"webCmd") : $cmd;
++        my $nCmd = $cmdIcon{$cmd} ? FW_makeImage($cmdIcon{$cmd},$cmd,"webCmd") : $cmd;
+         $htmlTxt = FW_pH "cmd.$d=set $d $cmd$rf", $nCmd, 0, "", 1, 1;
+       }
