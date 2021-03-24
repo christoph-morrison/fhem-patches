@@ -1,0 +1,30 @@
+Index: 48_BlinkCamera.pm
+===================================================================
+--- 48_BlinkCamera.pm	(Revision 24071)
++++ 48_BlinkCamera.pm	(Arbeitskopie)
+@@ -1687,7 +1687,7 @@
+       } else {
+         $readTemplate = AttrVal($name,"imgTemplate",$BlinkCamera_imgTemplate);
+         $readName = "networkCamera".$param->{par1}."Img";
+-        
++
+         # Store which thumbnail file is loaded already
+         $hash->{"thumbnail".$par1."Url"} = $hash->{"thumbnail".$par1."Req"};
+         # set the thumbnail reading after receiving the file
+@@ -1965,11 +1965,11 @@
+ 
+   $hash->{STATE} = "Undefined";
+ 
+-  # remove all readings ebside eventTimestamp to avoid addtl notifications
+-  my $eventTime =  ReadingsVal($name,"eventTimestamp",undef);
+-  Log3 $name, 4, "BlinkCamera_Setup $name: init eventtimestamp with ".$eventTime;
+-  CommandDeleteReading(undef, "$name .*");
+-  readingsSingleUpdate($hash, "eventTimestamp", $eventTime, 0 ) if ( defined( $eventTime ) );
++  # remove all readings beside eventTimestamp to avoid addtl notifications
++  my $eventTime =  ::ReadingsVal($name, q{eventTimestamp}, undef);
++  ::Log3($name, 4, qq{BlinkCamera_Setup $name: init eventtimestamp with $eventTime}) if ( defined $eventTime );
++  ::CommandDeleteReading(undef, "$name .*");
++  ::readingsSingleUpdate($hash, q{eventTimestamp}, $eventTime, 0 ) if ( defined $eventTime );
+ 
+   foreach my $aKey ( keys  %{$hash} ) {
+     # "thumbnail".$device->{device_id}."Req"
